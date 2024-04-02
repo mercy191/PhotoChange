@@ -23,7 +23,7 @@ namespace PhotoChange
             None
         }
         public bool AllowUserResize { get; set; }
-        public Color BackColor { get; set; } = Color.DimGray;
+        public Color BackColor { get; set; } = Color.Gray;
         public ContextMenuStrip ContextMenuForm { get; set; }
 
         // Кнопки
@@ -34,6 +34,8 @@ namespace PhotoChange
         public Color HeaderColor { get; set; } = Color.Gray;
         public Font HeaderTextFont { get; set; } = new Font("Arial", 8.75F, FontStyle.Regular);
         public Color HeaderTextColor { get; set; } = Color.White;
+        public int BorderWidth { get; set; } = 4;
+        public Color BorderColor { get; set; } = Color.Gray;
         public Image IconImage { get; set; }
 
         #endregion
@@ -75,7 +77,7 @@ namespace PhotoChange
         private int ResizeStartRight = 0;
         private int ResizeStartBottom = 0;
         private int ResizeBorderSize = 4;
-        private int ResizeAngleBorderOffset = 15;
+        private int ResizeAngleBorderOffset = 16;
         private bool IsResizing = false;
         private bool FormNeedReposition = false;
 
@@ -146,7 +148,7 @@ namespace PhotoChange
         {
             MainContainer = new Panel();
             MainContainer.BackColor = Form.BackColor;
-            MainContainer.Location = new Point(1, 1);
+            MainContainer.Location = new Point(BorderWidth + 1, 1);
             ChangeMainContainerSize();
 
             if (FormControls.Count == 0)
@@ -162,7 +164,7 @@ namespace PhotoChange
 
         private void ChangeMainContainerSize()
         {
-            MainContainer.Size = new Size(Form.Width - 2, Form.Height - HeaderHeight - 2);
+            MainContainer.Size = new Size(Form.Width - 2 * BorderWidth, Form.Height - HeaderHeight - BorderWidth);
         }
 
         #region -- Form Events --
@@ -554,7 +556,7 @@ namespace PhotoChange
 
             // Шапка
             RectangleHeader = new Rectangle(0,0, Form.Width - 1, HeaderHeight);
-            RectangleBorder = new Rectangle(0,0, Form.Width - 1, Form.Height - 1);
+            RectangleBorder = new Rectangle(0, 0, Form.Width - 1, Form.Height - 1);
             RectangleTitleText = new Rectangle(RectangleHeader.X + IconSize.Width * 2, RectangleHeader.Y, RectangleHeader.Width,RectangleHeader.Height);
 
             // Иконка
@@ -597,8 +599,9 @@ namespace PhotoChange
             // Шапка
             graphics.DrawRectangle(new Pen(HeaderColor), RectangleHeader);
             graphics.FillRectangle(new SolidBrush(HeaderColor), RectangleHeader);
-            graphics.DrawRectangle(new Pen(HeaderColor), RectangleBorder);
-            
+            graphics.DrawRectangle(new Pen(BorderColor, BorderWidth), RectangleBorder);
+
+
             if (IconImage != null)
             {
                 graphics.DrawImage(IconImage, RectangleIconImage);
