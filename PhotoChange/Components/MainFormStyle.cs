@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Drawing.Drawing2D;
 
-
 namespace PhotoChange
 {
     public partial class MainFormStyle : Component

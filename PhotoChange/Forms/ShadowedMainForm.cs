@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PhotoChange.Controls
+namespace PhotoChange.Forms
 {
     public class ShadowedMainForm : Form
     {
