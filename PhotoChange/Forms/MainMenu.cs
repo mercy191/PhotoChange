@@ -1,11 +1,4 @@
-﻿//Bitmap bmp = new Bitmap(pictureBox.Image);
-
-
-//Image = bmp;
-//pictureBox.Image = Image;
-
-//ImageEditList.Add(bmp);
-//ImageEditListIterator += 1;
+﻿
 
 namespace PhotoChange
 {   
@@ -30,7 +23,7 @@ namespace PhotoChange
                 Path = openFileDialog.FileName;
                 Image = new Bitmap(openFileDialog.FileName);
                 ImageEditList = new List<Image>();
-                ImageEditList.Add(Image);
+                ImageEditList.Add(new Bitmap(Image));
                 pictureBox.Image = Image;
             }
         }
@@ -181,7 +174,8 @@ namespace PhotoChange
         {
             if (ImageEditList == null || ImageEditListIterator == 0) return;
 
-            Image = ImageEditList[--ImageEditListIterator];
+            Image = new Bitmap(ImageEditList[--ImageEditListIterator]);
+            pictureBox.Image.Dispose();
             pictureBox.Image = Image;
         }
 
@@ -189,7 +183,8 @@ namespace PhotoChange
         {
             if (ImageEditList == null || ImageEditListIterator == ImageEditList.Count - 1) return;
 
-            Image = ImageEditList[++ImageEditListIterator];
+            Image = new Bitmap(ImageEditList[++ImageEditListIterator]);
+            pictureBox.Image.Dispose();
             pictureBox.Image = Image;
         }
 

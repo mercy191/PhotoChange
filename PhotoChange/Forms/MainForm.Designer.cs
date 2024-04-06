@@ -31,21 +31,33 @@ namespace PhotoChange
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            mainFormStyle = new MainFormStyle(components);
             contextMenuIcon = new ContextMenuStrip(components);
             mainToolsPanel = new ToolStrip();
             mainToolsPanelHomeButton = new ToolStripButton();
             mainToolsPanelSeparator1 = new ToolStripSeparator();
-            mainToolsPanelBrushPaletteButton = new ToolStripButton();
+            mainToolsPanelSizeSplitButton = new ToolStripSplitButton();
+            size3MainToolsPanelItem = new ToolStripMenuItem();
+            size4MainToolsPanelItem = new ToolStripMenuItem();
+            size5MainToolsPanelItem = new ToolStripMenuItem();
+            size20MainToolsPanelItem = new ToolStripMenuItem();
             mainToolsPanelSeparator2 = new ToolStripSeparator();
-            mainToolsPanelBrushSizeButton = new ToolStripButton();
+            mainToolsPanelColorButton = new ToolStripButton();
+            mainToolsPanelSeparator3 = new ToolStripSeparator();
+            mainToolsPanelSizeModeLabel = new ToolStripLabel();
+            mainToolsPanelSizeModeSplitButton = new ToolStripSplitButton();
+            normalMainToolsPanelItem = new ToolStripMenuItem();
+            zoomMainToolsPanelItem = new ToolStripMenuItem();
             drawingToolsPanel = new ToolStrip();
+            drawingToolsPanelCursorButton = new ToolStripButton();
             drawingToolsPanelBrushButton = new ToolStripButton();
             drawingToolsPanelEraserButton = new ToolStripButton();
             drawingToolsPanelPipetteButton = new ToolStripButton();
             drawingToolsPanelFillingButton = new ToolStripButton();
+            drawingToolsPanelLineButton = new ToolStripButton();
+            drawingToolsPanelEllipseButton = new ToolStripButton();
             splitContainer = new SplitContainer();
             pictureBox = new PictureBox();
+            cursorPosition = new Label();
             mainMenu = new MenuStrip();
             fileMainMenuItem = new ToolStripMenuItem();
             openMainMenuItem = new ToolStripMenuItem();
@@ -88,11 +100,11 @@ namespace PhotoChange
             greenChannelMainMenuItem = new ToolStripMenuItem();
             blueChannelMainMenuItem = new ToolStripMenuItem();
             invertNegativeMainMenuItem = new ToolStripMenuItem();
-            allChannelToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator13 = new ToolStripSeparator();
-            redToolStripMenuItem = new ToolStripMenuItem();
-            greenToolStripMenuItem = new ToolStripMenuItem();
-            blueToolStripMenuItem = new ToolStripMenuItem();
+            allChannelMainMenuItem = new ToolStripMenuItem();
+            mainMenuSeparator12 = new ToolStripSeparator();
+            redMainMenuItem = new ToolStripMenuItem();
+            greenMainMenuItem = new ToolStripMenuItem();
+            blueMainMenuItem = new ToolStripMenuItem();
             colorCorrectionMainMenuItem = new ToolStripMenuItem();
             histogramMainMenuItem = new ToolStripMenuItem();
             replaceColorMainMenuItem = new ToolStripMenuItem();
@@ -112,30 +124,16 @@ namespace PhotoChange
             saveFileDialog = new SaveFileDialog();
             folderBrowserDialog = new FolderBrowserDialog();
             colorDialog = new ColorDialog();
+            mainFormStyle = new MainFormStyle(components);
             mainToolsPanel.SuspendLayout();
             drawingToolsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
             splitContainer.Panel1.SuspendLayout();
+            splitContainer.Panel2.SuspendLayout();
             splitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             mainMenu.SuspendLayout();
             SuspendLayout();
-            // 
-            // mainFormStyle
-            // 
-            mainFormStyle.AllowUserResize = true;
-            mainFormStyle.BackColor = Color.Gray;
-            mainFormStyle.BorderColor = Color.Gray;
-            mainFormStyle.BorderWidth = 4;
-            mainFormStyle.ContextMenuForm = contextMenuIcon;
-            mainFormStyle.ControlBoxButtonsWidth = 40;
-            mainFormStyle.Form = this;
-            mainFormStyle.FormStyle = MainFormStyle.Style.None;
-            mainFormStyle.HeaderColor = Color.Gray;
-            mainFormStyle.HeaderHeight = 28;
-            mainFormStyle.HeaderTextColor = Color.White;
-            mainFormStyle.HeaderTextFont = new Font("Arial", 8.75F);
-            mainFormStyle.IconImage = null;
             // 
             // contextMenuIcon
             // 
@@ -147,7 +145,7 @@ namespace PhotoChange
             // 
             mainToolsPanel.BackColor = SystemColors.Control;
             mainToolsPanel.ImageScalingSize = new Size(30, 25);
-            mainToolsPanel.Items.AddRange(new ToolStripItem[] { mainToolsPanelHomeButton, mainToolsPanelSeparator1, mainToolsPanelBrushPaletteButton, mainToolsPanelSeparator2, mainToolsPanelBrushSizeButton });
+            mainToolsPanel.Items.AddRange(new ToolStripItem[] { mainToolsPanelHomeButton, mainToolsPanelSeparator1, mainToolsPanelSizeSplitButton, mainToolsPanelSeparator2, mainToolsPanelColorButton, mainToolsPanelSeparator3, mainToolsPanelSizeModeLabel, mainToolsPanelSizeModeSplitButton });
             mainToolsPanel.Location = new Point(0, 24);
             mainToolsPanel.Name = "mainToolsPanel";
             mainToolsPanel.Size = new Size(1113, 25);
@@ -162,45 +160,126 @@ namespace PhotoChange
             mainToolsPanelHomeButton.Size = new Size(23, 22);
             mainToolsPanelHomeButton.Text = "toolStripButton1";
             mainToolsPanelHomeButton.ToolTipText = "Home Button";
+            mainToolsPanelHomeButton.Click += MainToolsPanelHomeButton_Click;
             // 
             // mainToolsPanelSeparator1
             // 
             mainToolsPanelSeparator1.Name = "mainToolsPanelSeparator1";
             mainToolsPanelSeparator1.Size = new Size(6, 25);
             // 
-            // mainToolsPanelBrushPaletteButton
+            // mainToolsPanelSizeSplitButton
             // 
-            mainToolsPanelBrushPaletteButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            mainToolsPanelBrushPaletteButton.ImageTransparentColor = Color.Magenta;
-            mainToolsPanelBrushPaletteButton.Name = "mainToolsPanelBrushPaletteButton";
-            mainToolsPanelBrushPaletteButton.Size = new Size(23, 22);
-            mainToolsPanelBrushPaletteButton.Text = "Palette";
+            mainToolsPanelSizeSplitButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            mainToolsPanelSizeSplitButton.DropDownItems.AddRange(new ToolStripItem[] { size3MainToolsPanelItem, size4MainToolsPanelItem, size5MainToolsPanelItem, size20MainToolsPanelItem });
+            mainToolsPanelSizeSplitButton.Enabled = false;
+            mainToolsPanelSizeSplitButton.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            mainToolsPanelSizeSplitButton.ImageTransparentColor = Color.Magenta;
+            mainToolsPanelSizeSplitButton.Name = "mainToolsPanelSizeSplitButton";
+            mainToolsPanelSizeSplitButton.Size = new Size(31, 22);
+            mainToolsPanelSizeSplitButton.Text = "0";
+            mainToolsPanelSizeSplitButton.TextImageRelation = TextImageRelation.TextAboveImage;
+            mainToolsPanelSizeSplitButton.ToolTipText = "Size";
+            // 
+            // size3MainToolsPanelItem
+            // 
+            size3MainToolsPanelItem.Name = "size3MainToolsPanelItem";
+            size3MainToolsPanelItem.Size = new Size(180, 22);
+            size3MainToolsPanelItem.Text = "3";
+            size3MainToolsPanelItem.Click += Size3MainToolsPanelItem_Click;
+            // 
+            // size4MainToolsPanelItem
+            // 
+            size4MainToolsPanelItem.Name = "size4MainToolsPanelItem";
+            size4MainToolsPanelItem.Size = new Size(180, 22);
+            size4MainToolsPanelItem.Text = "4";
+            size4MainToolsPanelItem.Click += Size4MainToolsPanelItem_Click;
+            // 
+            // size5MainToolsPanelItem
+            // 
+            size5MainToolsPanelItem.Name = "size5MainToolsPanelItem";
+            size5MainToolsPanelItem.Size = new Size(180, 22);
+            size5MainToolsPanelItem.Text = "5";
+            size5MainToolsPanelItem.Click += Size5MainToolsPanelItem_Click;
+            // 
+            // size20MainToolsPanelItem
+            // 
+            size20MainToolsPanelItem.Name = "size20MainToolsPanelItem";
+            size20MainToolsPanelItem.Size = new Size(180, 22);
+            size20MainToolsPanelItem.Text = "20";
+            size20MainToolsPanelItem.Click += Size20MainToolsPanelItem_Click;
             // 
             // mainToolsPanelSeparator2
             // 
             mainToolsPanelSeparator2.Name = "mainToolsPanelSeparator2";
             mainToolsPanelSeparator2.Size = new Size(6, 25);
             // 
-            // mainToolsPanelBrushSizeButton
+            // mainToolsPanelColorButton
             // 
-            mainToolsPanelBrushSizeButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            mainToolsPanelBrushSizeButton.ImageTransparentColor = Color.Magenta;
-            mainToolsPanelBrushSizeButton.Name = "mainToolsPanelBrushSizeButton";
-            mainToolsPanelBrushSizeButton.Size = new Size(23, 22);
-            mainToolsPanelBrushSizeButton.Text = "Brush Size";
+            mainToolsPanelColorButton.BackColor = SystemColors.ControlText;
+            mainToolsPanelColorButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            mainToolsPanelColorButton.Enabled = false;
+            mainToolsPanelColorButton.ImageTransparentColor = Color.Magenta;
+            mainToolsPanelColorButton.Name = "mainToolsPanelColorButton";
+            mainToolsPanelColorButton.Size = new Size(23, 22);
+            mainToolsPanelColorButton.Text = "Color";
+            mainToolsPanelColorButton.Click += MainToolsPanelColorButton_Click;
+            // 
+            // mainToolsPanelSeparator3
+            // 
+            mainToolsPanelSeparator3.Name = "mainToolsPanelSeparator3";
+            mainToolsPanelSeparator3.Size = new Size(6, 25);
+            // 
+            // mainToolsPanelSizeModeLabel
+            // 
+            mainToolsPanelSizeModeLabel.Name = "mainToolsPanelSizeModeLabel";
+            mainToolsPanelSizeModeLabel.Size = new Size(41, 22);
+            mainToolsPanelSizeModeLabel.Text = "Mode:";
+            // 
+            // mainToolsPanelSizeModeSplitButton
+            // 
+            mainToolsPanelSizeModeSplitButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            mainToolsPanelSizeModeSplitButton.DropDownItems.AddRange(new ToolStripItem[] { normalMainToolsPanelItem, zoomMainToolsPanelItem });
+            mainToolsPanelSizeModeSplitButton.Image = (Image)resources.GetObject("mainToolsPanelSizeModeSplitButton.Image");
+            mainToolsPanelSizeModeSplitButton.ImageTransparentColor = Color.Magenta;
+            mainToolsPanelSizeModeSplitButton.Name = "mainToolsPanelSizeModeSplitButton";
+            mainToolsPanelSizeModeSplitButton.Size = new Size(16, 22);
+            // 
+            // normalMainToolsPanelItem
+            // 
+            normalMainToolsPanelItem.Name = "normalMainToolsPanelItem";
+            normalMainToolsPanelItem.Size = new Size(114, 22);
+            normalMainToolsPanelItem.Text = "Normal";
+            normalMainToolsPanelItem.Click += NormalMainToolsPanelItem_Click;
+            // 
+            // zoomMainToolsPanelItem
+            // 
+            zoomMainToolsPanelItem.Name = "zoomMainToolsPanelItem";
+            zoomMainToolsPanelItem.Size = new Size(114, 22);
+            zoomMainToolsPanelItem.Text = "Zoom";
+            zoomMainToolsPanelItem.Click += ZoomMainToolsPanelItem_Click;
             // 
             // drawingToolsPanel
             // 
             drawingToolsPanel.BackColor = SystemColors.Control;
             drawingToolsPanel.Dock = DockStyle.Left;
             drawingToolsPanel.ImageScalingSize = new Size(20, 20);
-            drawingToolsPanel.Items.AddRange(new ToolStripItem[] { drawingToolsPanelBrushButton, drawingToolsPanelEraserButton, drawingToolsPanelPipetteButton, drawingToolsPanelFillingButton });
+            drawingToolsPanel.Items.AddRange(new ToolStripItem[] { drawingToolsPanelCursorButton, drawingToolsPanelBrushButton, drawingToolsPanelEraserButton, drawingToolsPanelPipetteButton, drawingToolsPanelFillingButton, drawingToolsPanelLineButton, drawingToolsPanelEllipseButton });
             drawingToolsPanel.LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow;
             drawingToolsPanel.Location = new Point(0, 49);
             drawingToolsPanel.Name = "drawingToolsPanel";
             drawingToolsPanel.Size = new Size(25, 545);
             drawingToolsPanel.TabIndex = 1;
             drawingToolsPanel.Text = "toolStrip2";
+            // 
+            // drawingToolsPanelCursorButton
+            // 
+            drawingToolsPanelCursorButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            drawingToolsPanelCursorButton.Image = (Image)resources.GetObject("drawingToolsPanelCursorButton.Image");
+            drawingToolsPanelCursorButton.ImageTransparentColor = Color.Magenta;
+            drawingToolsPanelCursorButton.Name = "drawingToolsPanelCursorButton";
+            drawingToolsPanelCursorButton.Size = new Size(22, 24);
+            drawingToolsPanelCursorButton.Text = "Cursor";
+            drawingToolsPanelCursorButton.Click += DrawingToolsPanelCursorButton_Click;
             // 
             // drawingToolsPanelBrushButton
             // 
@@ -242,6 +321,26 @@ namespace PhotoChange
             drawingToolsPanelFillingButton.Text = "Filling";
             drawingToolsPanelFillingButton.Click += DrawingToolsPanelFillingButton_Click;
             // 
+            // drawingToolsPanelLineButton
+            // 
+            drawingToolsPanelLineButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            drawingToolsPanelLineButton.Image = (Image)resources.GetObject("drawingToolsPanelLineButton.Image");
+            drawingToolsPanelLineButton.ImageTransparentColor = Color.Magenta;
+            drawingToolsPanelLineButton.Name = "drawingToolsPanelLineButton";
+            drawingToolsPanelLineButton.Size = new Size(22, 24);
+            drawingToolsPanelLineButton.Text = "Line";
+            drawingToolsPanelLineButton.Click += DrawingToolsPanelLineButton_Click;
+            // 
+            // drawingToolsPanelEllipseButton
+            // 
+            drawingToolsPanelEllipseButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            drawingToolsPanelEllipseButton.Image = (Image)resources.GetObject("drawingToolsPanelEllipseButton.Image");
+            drawingToolsPanelEllipseButton.ImageTransparentColor = Color.Magenta;
+            drawingToolsPanelEllipseButton.Name = "drawingToolsPanelEllipseButton";
+            drawingToolsPanelEllipseButton.Size = new Size(22, 24);
+            drawingToolsPanelEllipseButton.Text = "Ellipse";
+            drawingToolsPanelEllipseButton.Click += DrawingToolsPanelEllipseButton_Click;
+            // 
             // splitContainer
             // 
             splitContainer.BorderStyle = BorderStyle.Fixed3D;
@@ -252,8 +351,12 @@ namespace PhotoChange
             // splitContainer.Panel1
             // 
             splitContainer.Panel1.Controls.Add(pictureBox);
+            // 
+            // splitContainer.Panel2
+            // 
+            splitContainer.Panel2.Controls.Add(cursorPosition);
             splitContainer.Size = new Size(1088, 545);
-            splitContainer.SplitterDistance = 809;
+            splitContainer.SplitterDistance = 806;
             splitContainer.TabIndex = 2;
             // 
             // pictureBox
@@ -261,11 +364,22 @@ namespace PhotoChange
             pictureBox.Dock = DockStyle.Fill;
             pictureBox.Location = new Point(0, 0);
             pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(805, 541);
-            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox.Size = new Size(802, 541);
             pictureBox.TabIndex = 0;
             pictureBox.TabStop = false;
+            pictureBox.Paint += PictureBox_Paint;
+            pictureBox.MouseClick += PictureBox_MouseClick;
             pictureBox.MouseDown += PictureBox_MouseDown;
+            pictureBox.MouseMove += PictureBox_MouseMove;
+            pictureBox.MouseUp += PictureBox_MouseUp;
+            // 
+            // cursorPosition
+            // 
+            cursorPosition.AutoSize = true;
+            cursorPosition.Location = new Point(52, 37);
+            cursorPosition.Name = "cursorPosition";
+            cursorPosition.Size = new Size(0, 15);
+            cursorPosition.TabIndex = 0;
             // 
             // mainMenu
             // 
@@ -528,39 +642,39 @@ namespace PhotoChange
             // 
             // invertNegativeMainMenuItem
             // 
-            invertNegativeMainMenuItem.DropDownItems.AddRange(new ToolStripItem[] { allChannelToolStripMenuItem, toolStripSeparator13, redToolStripMenuItem, greenToolStripMenuItem, blueToolStripMenuItem });
+            invertNegativeMainMenuItem.DropDownItems.AddRange(new ToolStripItem[] { allChannelMainMenuItem, mainMenuSeparator12, redMainMenuItem, greenMainMenuItem, blueMainMenuItem });
             invertNegativeMainMenuItem.Name = "invertNegativeMainMenuItem";
             invertNegativeMainMenuItem.Size = new Size(210, 22);
             invertNegativeMainMenuItem.Text = "Invert (to the negative)";
             // 
-            // allChannelToolStripMenuItem
+            // allChannelMainMenuItem
             // 
-            allChannelToolStripMenuItem.Name = "allChannelToolStripMenuItem";
-            allChannelToolStripMenuItem.Size = new Size(133, 22);
-            allChannelToolStripMenuItem.Text = "All channel";
+            allChannelMainMenuItem.Name = "allChannelMainMenuItem";
+            allChannelMainMenuItem.Size = new Size(133, 22);
+            allChannelMainMenuItem.Text = "All channel";
             // 
-            // toolStripSeparator13
+            // mainMenuSeparator12
             // 
-            toolStripSeparator13.Name = "toolStripSeparator13";
-            toolStripSeparator13.Size = new Size(130, 6);
+            mainMenuSeparator12.Name = "mainMenuSeparator12";
+            mainMenuSeparator12.Size = new Size(130, 6);
             // 
-            // redToolStripMenuItem
+            // redMainMenuItem
             // 
-            redToolStripMenuItem.Name = "redToolStripMenuItem";
-            redToolStripMenuItem.Size = new Size(133, 22);
-            redToolStripMenuItem.Text = "Red";
+            redMainMenuItem.Name = "redMainMenuItem";
+            redMainMenuItem.Size = new Size(133, 22);
+            redMainMenuItem.Text = "Red";
             // 
-            // greenToolStripMenuItem
+            // greenMainMenuItem
             // 
-            greenToolStripMenuItem.Name = "greenToolStripMenuItem";
-            greenToolStripMenuItem.Size = new Size(133, 22);
-            greenToolStripMenuItem.Text = "Green";
+            greenMainMenuItem.Name = "greenMainMenuItem";
+            greenMainMenuItem.Size = new Size(133, 22);
+            greenMainMenuItem.Text = "Green";
             // 
-            // blueToolStripMenuItem
+            // blueMainMenuItem
             // 
-            blueToolStripMenuItem.Name = "blueToolStripMenuItem";
-            blueToolStripMenuItem.Size = new Size(133, 22);
-            blueToolStripMenuItem.Text = "Blue";
+            blueMainMenuItem.Name = "blueMainMenuItem";
+            blueMainMenuItem.Size = new Size(133, 22);
+            blueMainMenuItem.Text = "Blue";
             // 
             // colorCorrectionMainMenuItem
             // 
@@ -660,6 +774,22 @@ namespace PhotoChange
             // 
             saveFileDialog.Filter = "Images|*.bmp;*.jpg;*.png";
             // 
+            // mainFormStyle
+            // 
+            mainFormStyle.AllowUserResize = false;
+            mainFormStyle.BackColor = Color.Gray;
+            mainFormStyle.BorderColor = Color.Gray;
+            mainFormStyle.BorderWidth = 4;
+            mainFormStyle.ContextMenuForm = null;
+            mainFormStyle.ControlBoxButtonsWidth = 40;
+            mainFormStyle.Form = this;
+            mainFormStyle.FormStyle = MainFormStyle.Style.None;
+            mainFormStyle.HeaderColor = Color.Gray;
+            mainFormStyle.HeaderHeight = 28;
+            mainFormStyle.HeaderTextColor = Color.White;
+            mainFormStyle.HeaderTextFont = new Font("Arial", 8.75F);
+            mainFormStyle.IconImage = null;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -678,6 +808,8 @@ namespace PhotoChange
             drawingToolsPanel.ResumeLayout(false);
             drawingToolsPanel.PerformLayout();
             splitContainer.Panel1.ResumeLayout(false);
+            splitContainer.Panel2.ResumeLayout(false);
+            splitContainer.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer).EndInit();
             splitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
@@ -699,12 +831,16 @@ namespace PhotoChange
         private MenuStrip mainMenu;
 
         private ToolStripButton mainToolsPanelHomeButton;
-        private ToolStripButton mainToolsPanelBrushPaletteButton;
-        private ToolStripButton mainToolsPanelBrushSizeButton;
+        private ToolStripButton mainToolsPanelColorButton;
+        private ToolStripSplitButton mainToolsPanelSizeSplitButton;
+        private ToolStripSplitButton mainToolsPanelSizeModeSplitButton;
         private ToolStripButton drawingToolsPanelEraserButton;
         private ToolStripButton drawingToolsPanelPipetteButton;
         private ToolStripButton drawingToolsPanelFillingButton;
         private ToolStripButton drawingToolsPanelBrushButton;
+        private ToolStripButton drawingToolsPanelLineButton;
+        private ToolStripButton drawingToolsPanelEllipseButton;
+        private ToolStripButton drawingToolsPanelCursorButton;
 
         private ToolStripMenuItem fileMainMenuItem;
         private ToolStripMenuItem editMainMenuItem;
@@ -738,10 +874,10 @@ namespace PhotoChange
         private ToolStripMenuItem greenChannelMainMenuItem;
         private ToolStripMenuItem blueChannelMainMenuItem;
         private ToolStripMenuItem invertNegativeMainMenuItem;
-        private ToolStripMenuItem allChannelToolStripMenuItem;
-        private ToolStripMenuItem redToolStripMenuItem;
-        private ToolStripMenuItem greenToolStripMenuItem;
-        private ToolStripMenuItem blueToolStripMenuItem;
+        private ToolStripMenuItem allChannelMainMenuItem;
+        private ToolStripMenuItem redMainMenuItem;
+        private ToolStripMenuItem greenMainMenuItem;
+        private ToolStripMenuItem blueMainMenuItem;
         private ToolStripMenuItem colorCorrectionMainMenuItem;
         private ToolStripMenuItem histogramMainMenuItem;
         private ToolStripMenuItem replaceColorMainMenuItem;
@@ -755,9 +891,15 @@ namespace PhotoChange
         private ToolStripMenuItem RGBtoGBRMainMenuItem;
         private ToolStripMenuItem paletteMainMenuItem;
         private ToolStripMenuItem helpMainMenuItem;
+        private ToolStripMenuItem size3MainToolsPanelItem;
+        private ToolStripMenuItem size4MainToolsPanelItem;
+        private ToolStripMenuItem size5MainToolsPanelItem;
+        private ToolStripMenuItem normalMainToolsPanelItem;
+        private ToolStripMenuItem zoomMainToolsPanelItem;
 
         private ToolStripSeparator mainToolsPanelSeparator1;
         private ToolStripSeparator mainToolsPanelSeparator2;
+        private ToolStripSeparator mainToolsPanelSeparator3;
         private ToolStripSeparator mainMenuSeparator1;
         private ToolStripSeparator mainMenuSeparator2;
         private ToolStripSeparator mainMenuSeparator3;
@@ -769,11 +911,15 @@ namespace PhotoChange
         private ToolStripSeparator mainMenuSeparator9;
         private ToolStripSeparator mainMenuSeparator10;
         private ToolStripSeparator mainMenuSeparator11;
-        private ToolStripSeparator toolStripSeparator13;
+        private ToolStripSeparator mainMenuSeparator12;
 
         private OpenFileDialog openFileDialog;
         private SaveFileDialog saveFileDialog;
         private FolderBrowserDialog folderBrowserDialog;
         private ColorDialog colorDialog;
+
+        private Label cursorPosition;        
+        private ToolStripLabel mainToolsPanelSizeModeLabel;
+        private ToolStripMenuItem size20MainToolsPanelItem;
     }
 }
