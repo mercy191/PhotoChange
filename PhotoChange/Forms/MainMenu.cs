@@ -6,8 +6,8 @@ namespace PhotoChange
     {
         #region -- Main Menu Items --
         public Image? Image { get; set; } = null;
-        public List<Image>? ImageEditList { get; set; } = null;
-        public int ImageEditListIterator { get; set; } = 0;
+        public List<Image>? LayoutList { get; set; } = null;
+        public int LayoutListIterator { get; set; } = 0;
         public string? Path { get; set; } = null;
         static public string? NewName { get; set; } = null;
         static public string? NewExpansion { get; set; } = null;
@@ -22,8 +22,8 @@ namespace PhotoChange
             {
                 Path = openFileDialog.FileName;
                 Image = new Bitmap(openFileDialog.FileName);
-                ImageEditList = new List<Image>();
-                ImageEditList.Add(new Bitmap(Image));
+                LayoutList = new List<Image>();
+                LayoutList.Add(new Bitmap(Image));
                 pictureBox.Image = Image;
             }
         }
@@ -109,7 +109,7 @@ namespace PhotoChange
 
             Image = null;
             Path = null;
-            ImageEditList = null;
+            LayoutList = null;
         }
 
         private void SaveMainMenuItem_Click(object sender, EventArgs e)
@@ -172,18 +172,18 @@ namespace PhotoChange
 
         private void CancelMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (ImageEditList == null || ImageEditListIterator == 0) return;
+            if (LayoutList == null || LayoutListIterator == 0) return;
 
-            Image = new Bitmap(ImageEditList[--ImageEditListIterator]);
+            Image = new Bitmap(LayoutList[--LayoutListIterator]);
             pictureBox.Image.Dispose();
             pictureBox.Image = Image;
         }
 
         private void ReturnMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (ImageEditList == null || ImageEditListIterator == ImageEditList.Count - 1) return;
+            if (LayoutList == null || LayoutListIterator == LayoutList.Count - 1) return;
 
-            Image = new Bitmap(ImageEditList[++ImageEditListIterator]);
+            Image = new Bitmap(LayoutList[++LayoutListIterator]);
             pictureBox.Image.Dispose();
             pictureBox.Image = Image;
         }

@@ -13,7 +13,8 @@ namespace PhotoChange
 
         public bool IsMousePrressed { get; set; } = false;
         public Bitmap? Bitmap { get; set; } = null;
-        public Graphics? Graphics { get; set; } = null;
+        public Graphics? BitmapGraphics { get; set; } = null;
+        public Graphics? VisualGraphics { get; set; } = null;
         public float ScaleImage { get; set; } = 1;
         public float StepWidthImage { get; set; } = 0;
         public float StepHeightImage { get; set; } = 0;
@@ -70,7 +71,8 @@ namespace PhotoChange
                 Bitmap = new Bitmap(pictureBox.Image);
                 pictureBox.Image.Dispose();
                 pictureBox.Image = Bitmap;
-                Graphics = Graphics.FromImage(pictureBox.Image);               
+                BitmapGraphics = Graphics.FromImage(Bitmap);
+                VisualGraphics = pictureBox.CreateGraphics();
             }                      
         }
 
@@ -79,16 +81,15 @@ namespace PhotoChange
             cursorPosition.Text = string.Format("{0}, {1}", (e.Location.X - StepWidthImage) * ScaleImage, (e.Location.Y - StepHeightImage) * ScaleImage);
             
             if (IsMousePrressed && pictureBox.Image != null)
-            {
+            {                
                 switch (Tool)
                 {
                     case DrawingTools.Cursor:
                         break;
 
-                    case DrawingTools.Brush:
-                        
-                        Graphics?.DrawEllipse(new Pen(BrushColor, BrushSize), (e.Location.X - StepWidthImage) * ScaleImage, (e.Location.Y - StepHeightImage) * ScaleImage, BrushSize, BrushSize);
-                        pictureBox.Refresh();
+                    case DrawingTools.Brush:                       
+                        BitmapGraphics?.DrawEllipse(new Pen(BrushColor, BrushSize), (e.Location.X - StepWidthImage) * ScaleImage, (e.Location.Y - StepHeightImage) * ScaleImage, BrushSize, BrushSize);
+                        VisualGraphics?.DrawEllipse(new Pen(BrushColor, BrushSize / ScaleImage), e.Location.X, e.Location.Y, BrushSize / ScaleImage, BrushSize / ScaleImage);
                         break;
 
                     case DrawingTools.Eraser:
@@ -113,10 +114,10 @@ namespace PhotoChange
             if (pictureBox.Image != null && IsDrawing)
             {
                 Image = pictureBox.Image;
-                Graphics?.Dispose();
+                BitmapGraphics?.Dispose();
 
-                ImageEditList?.Add(new Bitmap(Image));
-                ImageEditListIterator += 1;
+                LayoutList?.Add(new Bitmap(Image));
+                LayoutListIterator += 1;
             }           
         }
 
