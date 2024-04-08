@@ -39,15 +39,15 @@
             }
         }
 
-        private void NormalMainToolsPanelItem_Click(object sender, EventArgs e)
+        private void TileMainToolsPanelItem_Click(object sender, EventArgs e)
         {
-            pictureBox.SizeMode = PictureBoxSizeMode.Normal;
+            pictureBox.BackgroundImageLayout = ImageLayout.Tile;
             mainToolsPanelSizeModeSplitButton.Text = pictureBox.SizeMode.ToString();
         }
 
         private void ZoomMainToolsPanelItem_Click(object sender, EventArgs e)
         {
-            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox.BackgroundImageLayout = ImageLayout.Zoom;
             mainToolsPanelSizeModeSplitButton.Text = pictureBox.SizeMode.ToString();
         }
 

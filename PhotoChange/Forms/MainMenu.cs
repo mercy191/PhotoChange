@@ -5,12 +5,35 @@ namespace PhotoChange
     public partial class MainForm
     {
         #region -- Main Menu Items --
-        public Image? Image { get; set; } = null;
-        public List<Image>? LayoutList { get; set; } = null;
-        public int LayoutListIterator { get; set; } = 0;
+        public Bitmap? Image { get; set; } = null;
+        public Bitmap? OriginalImage { get; set; } = null;
+        public List<Bitmap>? LayersList { get; set; } = null;
+        public int LayersListIterator { get; set; } = -1;
         public string? Path { get; set; } = null;
         static public string? NewName { get; set; } = null;
         static public string? NewExpansion { get; set; } = null;
+
+        #endregion
+
+
+        #region -- MainForm Events --
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Z:
+                        CancelMainMenuItem_Click(sender, e);
+                        break;
+
+                    case Keys.J:
+                        ReturnMainMenuItem_Click(sender, e);
+                        break;
+                }
+            }               
+        }
 
         #endregion
 
@@ -22,15 +45,15 @@ namespace PhotoChange
             {
                 Path = openFileDialog.FileName;
                 Image = new Bitmap(openFileDialog.FileName);
-                LayoutList = new List<Image>();
-                LayoutList.Add(new Bitmap(Image));
-                pictureBox.Image = Image;
+                OriginalImage = new Bitmap(Image);
+                LayersList = new List<Bitmap>();
+                pictureBox.BackgroundImage = Image;
             }
         }
 
         private void RenameMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (Path == null || Image == null) return;
+            if (Path == null || pictureBox.BackgroundImage == null) return;
 
             RenameForm renameForm = new()
             { };
@@ -41,9 +64,9 @@ namespace PhotoChange
                 {
                     string newPath = string.Concat(Path.AsSpan(0, Path.LastIndexOf('\\') + 1), NewName, ".", NewExpansion);
 
-                    Image = new Bitmap(pictureBox.Image);
-                    pictureBox.Image.Dispose();
-                    pictureBox.Image = null;
+                    Image = new Bitmap(pictureBox.BackgroundImage);
+                    pictureBox.BackgroundImage.Dispose();
+                    pictureBox.BackgroundImage = null;
 
                     File.Delete(Path);
                     Image.Save(Path);
@@ -52,69 +75,69 @@ namespace PhotoChange
                     Path = newPath;
                     NewName = null;
                     NewExpansion = null;
-                    pictureBox.Image = Image;
+                    pictureBox.BackgroundImage = Image;
                 }
             }
         }
 
         private void MoveFileMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (Path == null || Image == null) return;
+            if (Path == null || pictureBox.BackgroundImage == null) return;
 
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 string newPath = folderBrowserDialog.SelectedPath + string.Concat("\\", Path.Substring(Path.LastIndexOf('\\') + 1));
 
-                Image = new Bitmap(pictureBox.Image);
-                pictureBox.Image.Dispose();
-                pictureBox.Image = null;
+                Image = new Bitmap(pictureBox.BackgroundImage);
+                pictureBox.BackgroundImage.Dispose();
+                pictureBox.BackgroundImage = null;
 
                 File.Delete(Path);
                 Image.Save(Path);
                 File.Move(Path, newPath);
 
                 Path = newPath;
-                pictureBox.Image = Image;
+                pictureBox.BackgroundImage = Image;
             }
         }
 
 
         private void CopyFileMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (Path == null || Image == null) return;
+            if (Path == null || pictureBox.BackgroundImage == null) return;
 
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 string newPath = folderBrowserDialog.SelectedPath + string.Concat("\\", Path.Substring(Path.LastIndexOf('\\') + 1));
 
-                Image = new Bitmap(pictureBox.Image);
-                pictureBox.Image.Dispose();
-                pictureBox.Image = null;
+                Image = new Bitmap(pictureBox.BackgroundImage);
+                pictureBox.BackgroundImage.Dispose();
+                pictureBox.BackgroundImage = null;
 
                 File.Delete(Path);
                 Image.Save(Path);
                 File.Copy(Path, newPath);
 
-                pictureBox.Image = Image;
+                pictureBox.BackgroundImage = Image;
             }
         }
 
         private void DeleteFileMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (Path == null || Image == null) return;
+            if (Path == null || pictureBox.BackgroundImage == null) return;
 
-            pictureBox.Image.Dispose();
-            pictureBox.Image = null;
+            pictureBox.BackgroundImage.Dispose();
+            pictureBox.BackgroundImage = null;
             File.Delete(Path);
 
             Image = null;
             Path = null;
-            LayoutList = null;
+            LayersList = null;
         }
 
         private void SaveMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (Image == null) return;
+            if (pictureBox.BackgroundImage == null) return;
 
             else if (Path == null)
             {
@@ -122,34 +145,34 @@ namespace PhotoChange
                 return;
             }
 
-            Image = new Bitmap(pictureBox.Image);
-            pictureBox.Image.Dispose();
-            pictureBox.Image = null;
+            Image = new Bitmap(pictureBox.BackgroundImage);
+            pictureBox.BackgroundImage.Dispose();
+            pictureBox.BackgroundImage = null;
 
             File.Delete(Path);
             Image.Save(Path, Image.RawFormat);
 
-            pictureBox.Image = Image;
+            pictureBox.BackgroundImage = Image;
         }
 
         private void SaveAsMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (Image == null) return;
+            if (pictureBox.BackgroundImage == null) return;
 
             if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
             {
                 if (saveFileDialog.FileName != "")
                 {
-                    Image = new Bitmap(pictureBox.Image);
-                    pictureBox.Image.Dispose();
-                    pictureBox.Image = null;
+                    Image = new Bitmap(pictureBox.BackgroundImage);
+                    pictureBox.BackgroundImage.Dispose();
+                    pictureBox.BackgroundImage = null;
 
 
                     if (Path != null)
                         File.Delete(Path);
                     Image.Save(saveFileDialog.FileName, Image.RawFormat);
 
-                    pictureBox.Image = Image;
+                    pictureBox.BackgroundImage = Image;
                 }
             }
         }
@@ -172,40 +195,64 @@ namespace PhotoChange
 
         private void CancelMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (LayoutList == null || LayoutListIterator == 0) return;
+            if (LayersList == null || LayersListIterator == -1 || pictureBox.BackgroundImage == null || OriginalImage == null) return;
 
-            Image = new Bitmap(LayoutList[--LayoutListIterator]);
-            pictureBox.Image.Dispose();
-            pictureBox.Image = Image;
+            Image = new Bitmap(OriginalImage);
+
+            if (LayersListIterator != 0)
+            {
+                Graphics g = Graphics.FromImage(Image);
+                g.DrawImage(LayersList[--LayersListIterator], 0, 0);
+                g.Dispose();
+            }
+            else
+            {
+                --LayersListIterator;
+            }
+          
+            pictureBox.BackgroundImage.Dispose();
+            pictureBox.BackgroundImage = Image;
         }
 
         private void ReturnMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (LayoutList == null || LayoutListIterator == LayoutList.Count - 1) return;
+            if (LayersList == null || LayersListIterator == LayersList.Count - 1 || pictureBox.BackgroundImage == null) return;
 
-            Image = new Bitmap(LayoutList[++LayoutListIterator]);
-            pictureBox.Image.Dispose();
-            pictureBox.Image = Image;
+            Image = new Bitmap(pictureBox.BackgroundImage);
+
+            Graphics g = Graphics.FromImage(Image);
+            g.DrawImage(LayersList[++LayersListIterator], 0, 0);
+            g.Dispose();         
+
+            pictureBox.BackgroundImage.Dispose();
+            pictureBox.BackgroundImage = Image;
         }
 
         private void CopyMainMenuItem_Click(object sender, EventArgs e)
         {
-            Clipboard.SetImage(pictureBox.Image);
+            if (pictureBox.BackgroundImage != null) 
+                Clipboard.SetImage(pictureBox.BackgroundImage);
         }
 
         private void PasteMainMenuItem_Click(object sender, EventArgs e)
         {
-            pictureBox.Image = Clipboard.GetImage();
+            pictureBox.BackgroundImage = Clipboard.GetImage();
 
-            if (pictureBox.Image != null)
-                Image = new Bitmap(pictureBox.Image);
+            if (pictureBox.BackgroundImage != null)
+                Image = new Bitmap(pictureBox.BackgroundImage);
         }
 
         private void DeleteImageMainMenuItem_Click(object sender, EventArgs e)
         {
             Image = null;
-            pictureBox.Image.Dispose();
-            pictureBox.Image = null;
+            if (pictureBox.BackgroundImage != null)
+            {
+                LayersList?.Clear();
+                Image?.Dispose();
+                OriginalImage?.Dispose();
+                pictureBox.BackgroundImage.Dispose();
+            }
+           
         }
 
         #endregion

@@ -45,7 +45,7 @@ namespace PhotoChange
             mainToolsPanelSeparator3 = new ToolStripSeparator();
             mainToolsPanelSizeModeLabel = new ToolStripLabel();
             mainToolsPanelSizeModeSplitButton = new ToolStripSplitButton();
-            normalMainToolsPanelItem = new ToolStripMenuItem();
+            tileMainToolsPanelItem = new ToolStripMenuItem();
             zoomMainToolsPanelItem = new ToolStripMenuItem();
             drawingToolsPanel = new ToolStrip();
             drawingToolsPanelCursorButton = new ToolStripButton();
@@ -183,28 +183,28 @@ namespace PhotoChange
             // size3MainToolsPanelItem
             // 
             size3MainToolsPanelItem.Name = "size3MainToolsPanelItem";
-            size3MainToolsPanelItem.Size = new Size(180, 22);
+            size3MainToolsPanelItem.Size = new Size(90, 22);
             size3MainToolsPanelItem.Text = "3";
             size3MainToolsPanelItem.Click += Size3MainToolsPanelItem_Click;
             // 
             // size4MainToolsPanelItem
             // 
             size4MainToolsPanelItem.Name = "size4MainToolsPanelItem";
-            size4MainToolsPanelItem.Size = new Size(180, 22);
+            size4MainToolsPanelItem.Size = new Size(90, 22);
             size4MainToolsPanelItem.Text = "4";
             size4MainToolsPanelItem.Click += Size4MainToolsPanelItem_Click;
             // 
             // size5MainToolsPanelItem
             // 
             size5MainToolsPanelItem.Name = "size5MainToolsPanelItem";
-            size5MainToolsPanelItem.Size = new Size(180, 22);
+            size5MainToolsPanelItem.Size = new Size(90, 22);
             size5MainToolsPanelItem.Text = "5";
             size5MainToolsPanelItem.Click += Size5MainToolsPanelItem_Click;
             // 
             // size20MainToolsPanelItem
             // 
             size20MainToolsPanelItem.Name = "size20MainToolsPanelItem";
-            size20MainToolsPanelItem.Size = new Size(180, 22);
+            size20MainToolsPanelItem.Size = new Size(90, 22);
             size20MainToolsPanelItem.Text = "20";
             size20MainToolsPanelItem.Click += Size20MainToolsPanelItem_Click;
             // 
@@ -238,23 +238,23 @@ namespace PhotoChange
             // mainToolsPanelSizeModeSplitButton
             // 
             mainToolsPanelSizeModeSplitButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            mainToolsPanelSizeModeSplitButton.DropDownItems.AddRange(new ToolStripItem[] { normalMainToolsPanelItem, zoomMainToolsPanelItem });
+            mainToolsPanelSizeModeSplitButton.DropDownItems.AddRange(new ToolStripItem[] { tileMainToolsPanelItem, zoomMainToolsPanelItem });
             mainToolsPanelSizeModeSplitButton.Image = (Image)resources.GetObject("mainToolsPanelSizeModeSplitButton.Image");
             mainToolsPanelSizeModeSplitButton.ImageTransparentColor = Color.Magenta;
             mainToolsPanelSizeModeSplitButton.Name = "mainToolsPanelSizeModeSplitButton";
             mainToolsPanelSizeModeSplitButton.Size = new Size(16, 22);
             // 
-            // normalMainToolsPanelItem
+            // tileMainToolsPanelItem
             // 
-            normalMainToolsPanelItem.Name = "normalMainToolsPanelItem";
-            normalMainToolsPanelItem.Size = new Size(114, 22);
-            normalMainToolsPanelItem.Text = "Normal";
-            normalMainToolsPanelItem.Click += NormalMainToolsPanelItem_Click;
+            tileMainToolsPanelItem.Name = "tileMainToolsPanelItem";
+            tileMainToolsPanelItem.Size = new Size(106, 22);
+            tileMainToolsPanelItem.Text = "Tile";
+            tileMainToolsPanelItem.Click += TileMainToolsPanelItem_Click;
             // 
             // zoomMainToolsPanelItem
             // 
             zoomMainToolsPanelItem.Name = "zoomMainToolsPanelItem";
-            zoomMainToolsPanelItem.Size = new Size(114, 22);
+            zoomMainToolsPanelItem.Size = new Size(106, 22);
             zoomMainToolsPanelItem.Text = "Zoom";
             zoomMainToolsPanelItem.Click += ZoomMainToolsPanelItem_Click;
             // 
@@ -799,10 +799,12 @@ namespace PhotoChange
             Controls.Add(drawingToolsPanel);
             Controls.Add(mainToolsPanel);
             Controls.Add(mainMenu);
+            KeyPreview = true;
             MainMenuStrip = mainMenu;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "PhotoChange";
+            KeyDown += MainForm_KeyDown;
             mainToolsPanel.ResumeLayout(false);
             mainToolsPanel.PerformLayout();
             drawingToolsPanel.ResumeLayout(false);
@@ -894,7 +896,8 @@ namespace PhotoChange
         private ToolStripMenuItem size3MainToolsPanelItem;
         private ToolStripMenuItem size4MainToolsPanelItem;
         private ToolStripMenuItem size5MainToolsPanelItem;
-        private ToolStripMenuItem normalMainToolsPanelItem;
+        private ToolStripMenuItem size20MainToolsPanelItem;
+        private ToolStripMenuItem tileMainToolsPanelItem;
         private ToolStripMenuItem zoomMainToolsPanelItem;
 
         private ToolStripSeparator mainToolsPanelSeparator1;
@@ -920,6 +923,5 @@ namespace PhotoChange
 
         private Label cursorPosition;        
         private ToolStripLabel mainToolsPanelSizeModeLabel;
-        private ToolStripMenuItem size20MainToolsPanelItem;
     }
 }

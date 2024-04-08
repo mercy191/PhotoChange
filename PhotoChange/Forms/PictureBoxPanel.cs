@@ -12,8 +12,8 @@ namespace PhotoChange
         #region -- Picture Box Panel Items --
 
         public bool IsMousePrressed { get; set; } = false;
-        public Bitmap? Bitmap { get; set; } = null;
-        public Graphics? BitmapGraphics { get; set; } = null;
+        public Bitmap? Layer { get; set; } = null;
+        public Graphics? LayerGraphics { get; set; } = null;
         public Graphics? VisualGraphics { get; set; } = null;
         public float ScaleImage { get; set; } = 1;
         public float StepWidthImage { get; set; } = 0;
@@ -24,22 +24,22 @@ namespace PhotoChange
         #region -- Picture Box Panel Events --
 
         private void PictureBox_Paint(object sender, PaintEventArgs e)
-        {
-            mainToolsPanelSizeModeSplitButton.Text = pictureBox.SizeMode.ToString();
-
-            if (pictureBox.Image != null)
+        {         
+            if (pictureBox.BackgroundImage != null)
             {
-                switch (pictureBox.SizeMode)
-                {
-                    case PictureBoxSizeMode.Zoom:
-                        ScaleImage = ((float)pictureBox.Image.Width / pictureBox.Width > (float)pictureBox.Image.Height / pictureBox.Height)
-                            ? (float)pictureBox.Image.Width / pictureBox.Width : (float)pictureBox.Image.Height / pictureBox.Height;
+                mainToolsPanelSizeModeSplitButton.Text = pictureBox.BackgroundImageLayout.ToString();
 
-                        StepWidthImage = (pictureBox.Width - pictureBox.Image.Width / ScaleImage) / 2;
-                        StepHeightImage = (pictureBox.Height - pictureBox.Image.Height / ScaleImage) / 2;
+                switch (pictureBox.BackgroundImageLayout)
+                {
+                    case ImageLayout.Zoom:
+                        ScaleImage = ((float)pictureBox.BackgroundImage.Width / pictureBox.Width > (float)pictureBox.BackgroundImage.Height / pictureBox.Height)
+                            ? (float)pictureBox.BackgroundImage.Width / pictureBox.Width : (float)pictureBox.BackgroundImage.Height / pictureBox.Height;
+
+                        StepWidthImage = (pictureBox.Width - pictureBox.BackgroundImage.Width / ScaleImage) / 2;
+                        StepHeightImage = (pictureBox.Height - pictureBox.BackgroundImage.Height / ScaleImage) / 2;
                         break;
 
-                    case PictureBoxSizeMode.Normal:
+                    case ImageLayout.Tile:
                         ScaleImage = 1;
                         StepWidthImage = 0;
                         StepHeightImage = 0;
@@ -50,28 +50,26 @@ namespace PhotoChange
 
         private void PictureBox_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && pictureBox.Image != null && !IsDrawing)
+            if (e.Button == MouseButtons.Left && Image != null && !IsDrawing)
             {               
                 if (Tool == DrawingTools.Pipette)
                 {
-                    Bitmap = (Bitmap)pictureBox.Image;
-                    PipetteColor = Bitmap.GetPixel((int)((e.Location.X - StepWidthImage) * ScaleImage), (int)((e.Location.Y - StepHeightImage) * ScaleImage));
+                    Layer = new Bitmap(Image);
+                    PipetteColor = Layer.GetPixel((int)((e.Location.X - StepWidthImage) * ScaleImage), (int)((e.Location.Y - StepHeightImage) * ScaleImage));
                     mainToolsPanelColorButton.BackColor = PipetteColor;
-                    Bitmap = null;
+                    Layer?.Dispose();
                 }
             }
         }
 
         private void PictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && pictureBox.Image != null && IsDrawing)
+            if (e.Button == MouseButtons.Left && Image != null && IsDrawing)
             {
                 IsMousePrressed = true;
 
-                Bitmap = new Bitmap(pictureBox.Image);
-                pictureBox.Image.Dispose();
-                pictureBox.Image = Bitmap;
-                BitmapGraphics = Graphics.FromImage(Bitmap);
+                Layer = new Bitmap(Image.Width, Image.Height); // Create new layer for drawing
+                LayerGraphics = Graphics.FromImage(Layer);
                 VisualGraphics = pictureBox.CreateGraphics();
             }                      
         }
@@ -80,7 +78,7 @@ namespace PhotoChange
         {
             cursorPosition.Text = string.Format("{0}, {1}", (e.Location.X - StepWidthImage) * ScaleImage, (e.Location.Y - StepHeightImage) * ScaleImage);
             
-            if (IsMousePrressed && pictureBox.Image != null)
+            if (IsMousePrressed)
             {                
                 switch (Tool)
                 {
@@ -88,7 +86,7 @@ namespace PhotoChange
                         break;
 
                     case DrawingTools.Brush:                       
-                        BitmapGraphics?.DrawEllipse(new Pen(BrushColor, BrushSize), (e.Location.X - StepWidthImage) * ScaleImage, (e.Location.Y - StepHeightImage) * ScaleImage, BrushSize, BrushSize);
+                        LayerGraphics?.DrawEllipse(new Pen(BrushColor, BrushSize), (e.Location.X - StepWidthImage) * ScaleImage, (e.Location.Y - StepHeightImage) * ScaleImage, BrushSize, BrushSize);
                         VisualGraphics?.DrawEllipse(new Pen(BrushColor, BrushSize / ScaleImage), e.Location.X, e.Location.Y, BrushSize / ScaleImage, BrushSize / ScaleImage);
                         break;
 
@@ -111,13 +109,32 @@ namespace PhotoChange
         {
             IsMousePrressed = false;
 
-            if (pictureBox.Image != null && IsDrawing)
+            if (Layer != null && Image != null && LayersList != null && IsDrawing)
             {
-                Image = pictureBox.Image;
-                BitmapGraphics?.Dispose();
+                Graphics g = Graphics.FromImage(Image); // Add new layer on current Image
+                g.DrawImage(Layer, 0, 0);
+                g.Dispose();
 
-                LayoutList?.Add(new Bitmap(Image));
-                LayoutListIterator += 1;
+                if (LayersList.Count != 0)
+                {
+                    Bitmap lastLayout = new Bitmap(LayersList[^1]); // Add current layer on last layer
+                    g = Graphics.FromImage(lastLayout);
+                    g.DrawImage(Layer, 0, 0);
+                    g.Dispose();
+
+                    LayersList?.Add(lastLayout); // Add new layer 
+                }
+                else
+                {
+                    LayersList?.Add(new Bitmap(Layer)); // Add new layer from bitmap
+                }
+                               
+                LayersListIterator += 1;
+                VisualGraphics?.Dispose();
+                LayerGraphics?.Dispose();              
+                Layer?.Dispose();
+                
+                pictureBox.BackgroundImage = Image; // View current image on Background                          
             }           
         }
 
