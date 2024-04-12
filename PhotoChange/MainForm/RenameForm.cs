@@ -19,8 +19,8 @@ namespace PhotoChange
 
         private void OkCopyFormButton_Click(object? sender, EventArgs e)
         { 
-            MainForm.NewName = newNameTextBox.Text;
-            MainForm.NewExpansion = NewExpansionTextBox.Text;
+            MainForm._newName = newNameTextBox.Text;
+            MainForm._newExpansion = NewExpansionTextBox.Text;
             Close();
         }
 
