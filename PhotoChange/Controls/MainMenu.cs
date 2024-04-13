@@ -1,4 +1,4 @@
-﻿using PhotoChange.Entities;
+﻿using PhotoChange.Renderer;
 
 namespace PhotoChange
 {   

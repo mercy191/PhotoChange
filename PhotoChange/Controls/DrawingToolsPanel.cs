@@ -1,4 +1,4 @@
-﻿using PhotoChange.Entities;
+﻿using PhotoChange.Renderer;
 
 namespace PhotoChange
 {
@@ -8,8 +8,8 @@ namespace PhotoChange
 
         private void DrawingToolsPanelCursorButton_Click(object sender, EventArgs e)
         {
-            _draw.Tool = Draw.DrawingTools.Cursor;
-            _draw.IsDrawing = false;
+            _imageDrawing.Tool = ImageDrawing.DrawingTools.Cursor;
+            _selectionController.IsDrawing = false;
             Cursor.Current = Cursors.Default;
             mainToolsPanelColorButton.Enabled = false;
             mainToolsPanelSizeSplitButton.Enabled = false;
@@ -19,76 +19,66 @@ namespace PhotoChange
 
         private void DrawingToolsPanelBrushButton_Click(object sender, EventArgs e)
         {
-            _draw.Tool = Draw.DrawingTools.Brush;
-            _draw.IsDrawing = true;
+            _imageDrawing.Tool = ImageDrawing.DrawingTools.Brush;
+            _selectionController.IsDrawing = true;
             Cursor.Current = Cursors.Cross;
             mainToolsPanelColorButton.Enabled = true;
             mainToolsPanelSizeSplitButton.Enabled = true;
-            mainToolsPanelSizeSplitButton.Text = _draw.BrushSize.ToString();
-            mainToolsPanelColorButton.BackColor = _draw.BrushColor;           
+            mainToolsPanelSizeSplitButton.Text = _imageDrawing.BrushSize.ToString();
+            mainToolsPanelColorButton.BackColor = _imageDrawing.BrushColor;           
         }
 
         private void DrawingToolsPanelEraserButton_Click(object sender, EventArgs e)
         {
-            _draw.Tool = Draw.DrawingTools.Eraser;
-            _draw.IsDrawing = true;
+            _imageDrawing.Tool = ImageDrawing.DrawingTools.Eraser;
+            _selectionController.IsDrawing = true;
+            _imageDrawing.ErazerColor = pictureBoxCanvas.BackColor;
             mainToolsPanelColorButton.Enabled = false;
             mainToolsPanelSizeSplitButton.Enabled = true;
-            mainToolsPanelSizeSplitButton.Text = _draw.ErazerSize.ToString();
-            mainToolsPanelColorButton.BackColor = pictureBoxCanvas.BackColor;
+            mainToolsPanelSizeSplitButton.Text = _imageDrawing.ErazerSize.ToString();
+            mainToolsPanelColorButton.BackColor = _imageDrawing.ErazerColor;
         }
 
         private void DrawingToolsPanelPipetteButton_Click(object sender, EventArgs e)
         {
-            _draw.Tool = Draw.DrawingTools.Pipette;
-            _draw.IsDrawing = false;
+            _imageDrawing.Tool = ImageDrawing.DrawingTools.Pipette;
+            _selectionController.IsDrawing = false;
             mainToolsPanelColorButton.Enabled = false;
             mainToolsPanelSizeSplitButton.Enabled = false;
             mainToolsPanelSizeSplitButton.Text = "0";
-            mainToolsPanelColorButton.BackColor = _draw.PipetteColor;
+            mainToolsPanelColorButton.BackColor = _imageDrawing.PipetteColor;
         }
 
         private void DrawingToolsPanelFillingButton_Click(object sender, EventArgs e)
         {
-            _draw.Tool = Draw.DrawingTools.Filling;
-            _draw.IsDrawing = false;
+            _imageDrawing.Tool = ImageDrawing.DrawingTools.Filling;
+            _selectionController.IsDrawing = false;
             mainToolsPanelColorButton.Enabled = true;
             mainToolsPanelSizeSplitButton.Enabled = false;
             mainToolsPanelSizeSplitButton.Text = "0";
-            mainToolsPanelColorButton.BackColor = _draw.FillingColor;
-        }
-
-        private void DrawingToolsPanelPointButton_Click(object sender, EventArgs e)
-        {
-            _draw.Tool = Draw.DrawingTools.Point;
-            _draw.IsDrawing = true;
-            Cursor.Current = Cursors.Cross;
-            mainToolsPanelColorButton.Enabled = true;
-            mainToolsPanelSizeSplitButton.Enabled = true;
-            mainToolsPanelSizeSplitButton.Text = _draw.BrushSize.ToString();
-            mainToolsPanelColorButton.BackColor = _draw.BrushColor;
+            mainToolsPanelColorButton.BackColor = _imageDrawing.FillingColor;
         }
 
         private void DrawingToolsPanelLineButton_Click(object sender, EventArgs e)
         {
-            _draw.Tool = Draw.DrawingTools.Line;
-            _draw.IsDrawing = true;
+            _imageDrawing.Tool = ImageDrawing.DrawingTools.Line;
+            _selectionController.IsDrawing = true;
             Cursor.Current = Cursors.Cross;
             mainToolsPanelColorButton.Enabled = true;
             mainToolsPanelSizeSplitButton.Enabled = true;
-            mainToolsPanelSizeSplitButton.Text = _draw.BrushSize.ToString();
-            mainToolsPanelColorButton.BackColor = _draw.BrushColor;
+            mainToolsPanelSizeSplitButton.Text = _imageDrawing.BrushSize.ToString();
+            mainToolsPanelColorButton.BackColor = _imageDrawing.BrushColor;
         }
 
         private void DrawingToolsPanelEllipseButton_Click(object sender, EventArgs e)
         {
-            _draw.Tool = Draw.DrawingTools.Ellipse;
-            _draw.IsDrawing = true;
+            _imageDrawing.Tool = ImageDrawing.DrawingTools.Ellipse;
+            _selectionController.IsDrawing = true;
             Cursor.Current = Cursors.Cross;
             mainToolsPanelColorButton.Enabled = true;
             mainToolsPanelSizeSplitButton.Enabled = true;
-            mainToolsPanelSizeSplitButton.Text = _draw.BrushSize.ToString();
-            mainToolsPanelColorButton.BackColor = _draw.BrushColor;
+            mainToolsPanelSizeSplitButton.Text = _imageDrawing.BrushSize.ToString();
+            mainToolsPanelColorButton.BackColor = _imageDrawing.BrushColor;
         }
 
         #endregion

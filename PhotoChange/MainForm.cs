@@ -1,11 +1,14 @@
-﻿using PhotoChange.Entities;
+﻿using PhotoChange.Renderer;
+using PhotoChange.Controllers;
 
 namespace PhotoChange
 {
     public partial class MainForm : Form
     {
         ImageRenderer _imageRenderer;
-        Draw _draw;
+        ImageDrawing _imageDrawing;
+
+        SelectionController _selectionController;
 
         static public string _newName;
         static public string _newExpansion;
@@ -14,7 +17,8 @@ namespace PhotoChange
         {
             InitializeComponent();
             _imageRenderer = new ImageRenderer();
-            _draw = new Draw();
+            _imageDrawing = new ImageDrawing();
+            _selectionController = new SelectionController();
 
             _newName = "";
             _newExpansion = "";

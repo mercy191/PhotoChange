@@ -53,7 +53,6 @@ namespace PhotoChange
             drawingToolsPanelEraserButton = new ToolStripButton();
             drawingToolsPanelPipetteButton = new ToolStripButton();
             drawingToolsPanelFillingButton = new ToolStripButton();
-            drawingToolsPanelPointButton = new ToolStripButton();
             drawingToolsPanelLineButton = new ToolStripButton();
             drawingToolsPanelEllipseButton = new ToolStripButton();
             splitContainer = new SplitContainer();
@@ -264,7 +263,7 @@ namespace PhotoChange
             drawingToolsPanel.BackColor = SystemColors.Control;
             drawingToolsPanel.Dock = DockStyle.Left;
             drawingToolsPanel.ImageScalingSize = new Size(20, 20);
-            drawingToolsPanel.Items.AddRange(new ToolStripItem[] { drawingToolsPanelCursorButton, drawingToolsPanelBrushButton, drawingToolsPanelEraserButton, drawingToolsPanelPipetteButton, drawingToolsPanelFillingButton, drawingToolsPanelPointButton, drawingToolsPanelLineButton, drawingToolsPanelEllipseButton });
+            drawingToolsPanel.Items.AddRange(new ToolStripItem[] { drawingToolsPanelCursorButton, drawingToolsPanelBrushButton, drawingToolsPanelEraserButton, drawingToolsPanelPipetteButton, drawingToolsPanelFillingButton, drawingToolsPanelLineButton, drawingToolsPanelEllipseButton });
             drawingToolsPanel.LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow;
             drawingToolsPanel.Location = new Point(0, 49);
             drawingToolsPanel.Name = "drawingToolsPanel";
@@ -322,16 +321,6 @@ namespace PhotoChange
             drawingToolsPanelFillingButton.Text = "Filling";
             drawingToolsPanelFillingButton.Click += DrawingToolsPanelFillingButton_Click;
             // 
-            // drawingToolsPanelPointButton
-            // 
-            drawingToolsPanelPointButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            drawingToolsPanelPointButton.Image = (Image)resources.GetObject("drawingToolsPanelPointButton.Image");
-            drawingToolsPanelPointButton.ImageTransparentColor = Color.Magenta;
-            drawingToolsPanelPointButton.Name = "drawingToolsPanelPointButton";
-            drawingToolsPanelPointButton.Size = new Size(29, 24);
-            drawingToolsPanelPointButton.Text = "toolStripButton1";
-            drawingToolsPanelPointButton.Click += DrawingToolsPanelPointButton_Click;
-            // 
             // drawingToolsPanelLineButton
             // 
             drawingToolsPanelLineButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
@@ -367,16 +356,16 @@ namespace PhotoChange
             // 
             splitContainer.Panel2.Controls.Add(cursorPosition);
             splitContainer.Size = new Size(1113, 581);
-            splitContainer.SplitterDistance = 821;
+            splitContainer.SplitterDistance = 819;
             splitContainer.TabIndex = 2;
             // 
             // pictureBoxCanvas
             // 
-            pictureBoxCanvas.BackColor = SystemColors.AppWorkspace;
+            pictureBoxCanvas.BackColor = Color.Transparent;
             pictureBoxCanvas.Dock = DockStyle.Fill;
             pictureBoxCanvas.Location = new Point(0, 0);
             pictureBoxCanvas.Name = "pictureBoxCanvas";
-            pictureBoxCanvas.Size = new Size(817, 577);
+            pictureBoxCanvas.Size = new Size(815, 577);
             pictureBoxCanvas.TabIndex = 0;
             pictureBoxCanvas.TabStop = false;
             pictureBoxCanvas.Paint += PictureBoxCanvas_Paint;
@@ -936,6 +925,5 @@ namespace PhotoChange
 
         private Label cursorPosition;        
         private ToolStripLabel mainToolsPanelSizeModeLabel;
-        private ToolStripButton drawingToolsPanelPointButton;
     }
 }
