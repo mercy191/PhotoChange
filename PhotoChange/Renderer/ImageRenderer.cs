@@ -37,7 +37,13 @@
         /// </summary>
         public Bitmap Image
         {
-            get => _image; set => _image = value;
+            get => _image; 
+            set
+            {
+                if (_image != null && _image != value ) 
+                    _image.Dispose();
+                _image = value;
+            }
         }
 
         /// <summary>
@@ -142,5 +148,14 @@
             return (y - HeightRetreat) * ScaleFactor;
         }
 
+        public void Dispose()
+        {
+            foreach (var item in _editList)
+                item.Dispose();
+            _editList.Clear();
+            _editListIterator = -1;
+            _image.Dispose();
+            _originalImage.Dispose();
+        }
     }
 }

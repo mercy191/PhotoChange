@@ -4,7 +4,6 @@ namespace PhotoChange
 {
     public partial class MainForm
     {
-
         #region -- Main Tools Panel Events --
 
         private void MainToolsPanelHomeButton_Click(object sender, EventArgs e)

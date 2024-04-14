@@ -267,7 +267,7 @@ namespace PhotoChange
             drawingToolsPanel.LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow;
             drawingToolsPanel.Location = new Point(0, 49);
             drawingToolsPanel.Name = "drawingToolsPanel";
-            drawingToolsPanel.Size = new Size(32, 581);
+            drawingToolsPanel.Size = new Size(25, 581);
             drawingToolsPanel.TabIndex = 1;
             drawingToolsPanel.Text = "toolStrip2";
             // 
@@ -277,7 +277,7 @@ namespace PhotoChange
             drawingToolsPanelCursorButton.Image = (Image)resources.GetObject("drawingToolsPanelCursorButton.Image");
             drawingToolsPanelCursorButton.ImageTransparentColor = Color.Magenta;
             drawingToolsPanelCursorButton.Name = "drawingToolsPanelCursorButton";
-            drawingToolsPanelCursorButton.Size = new Size(29, 24);
+            drawingToolsPanelCursorButton.Size = new Size(22, 24);
             drawingToolsPanelCursorButton.Text = "Cursor";
             drawingToolsPanelCursorButton.Click += DrawingToolsPanelCursorButton_Click;
             // 
@@ -287,7 +287,7 @@ namespace PhotoChange
             drawingToolsPanelBrushButton.Image = (Image)resources.GetObject("drawingToolsPanelBrushButton.Image");
             drawingToolsPanelBrushButton.ImageTransparentColor = Color.Magenta;
             drawingToolsPanelBrushButton.Name = "drawingToolsPanelBrushButton";
-            drawingToolsPanelBrushButton.Size = new Size(29, 24);
+            drawingToolsPanelBrushButton.Size = new Size(22, 24);
             drawingToolsPanelBrushButton.Text = "Brush";
             drawingToolsPanelBrushButton.Click += DrawingToolsPanelBrushButton_Click;
             // 
@@ -297,7 +297,7 @@ namespace PhotoChange
             drawingToolsPanelEraserButton.Image = (Image)resources.GetObject("drawingToolsPanelEraserButton.Image");
             drawingToolsPanelEraserButton.ImageTransparentColor = Color.Magenta;
             drawingToolsPanelEraserButton.Name = "drawingToolsPanelEraserButton";
-            drawingToolsPanelEraserButton.Size = new Size(29, 24);
+            drawingToolsPanelEraserButton.Size = new Size(22, 24);
             drawingToolsPanelEraserButton.Text = "Eraser";
             drawingToolsPanelEraserButton.Click += DrawingToolsPanelEraserButton_Click;
             // 
@@ -307,7 +307,7 @@ namespace PhotoChange
             drawingToolsPanelPipetteButton.Image = (Image)resources.GetObject("drawingToolsPanelPipetteButton.Image");
             drawingToolsPanelPipetteButton.ImageTransparentColor = Color.Magenta;
             drawingToolsPanelPipetteButton.Name = "drawingToolsPanelPipetteButton";
-            drawingToolsPanelPipetteButton.Size = new Size(29, 24);
+            drawingToolsPanelPipetteButton.Size = new Size(22, 24);
             drawingToolsPanelPipetteButton.Text = "Pipette";
             drawingToolsPanelPipetteButton.Click += DrawingToolsPanelPipetteButton_Click;
             // 
@@ -317,7 +317,7 @@ namespace PhotoChange
             drawingToolsPanelFillingButton.Image = (Image)resources.GetObject("drawingToolsPanelFillingButton.Image");
             drawingToolsPanelFillingButton.ImageTransparentColor = Color.Magenta;
             drawingToolsPanelFillingButton.Name = "drawingToolsPanelFillingButton";
-            drawingToolsPanelFillingButton.Size = new Size(29, 24);
+            drawingToolsPanelFillingButton.Size = new Size(22, 24);
             drawingToolsPanelFillingButton.Text = "Filling";
             drawingToolsPanelFillingButton.Click += DrawingToolsPanelFillingButton_Click;
             // 
@@ -327,7 +327,7 @@ namespace PhotoChange
             drawingToolsPanelLineButton.Image = (Image)resources.GetObject("drawingToolsPanelLineButton.Image");
             drawingToolsPanelLineButton.ImageTransparentColor = Color.Magenta;
             drawingToolsPanelLineButton.Name = "drawingToolsPanelLineButton";
-            drawingToolsPanelLineButton.Size = new Size(29, 24);
+            drawingToolsPanelLineButton.Size = new Size(22, 24);
             drawingToolsPanelLineButton.Text = "Line";
             drawingToolsPanelLineButton.Click += DrawingToolsPanelLineButton_Click;
             // 
@@ -337,7 +337,7 @@ namespace PhotoChange
             drawingToolsPanelEllipseButton.Image = (Image)resources.GetObject("drawingToolsPanelEllipseButton.Image");
             drawingToolsPanelEllipseButton.ImageTransparentColor = Color.Magenta;
             drawingToolsPanelEllipseButton.Name = "drawingToolsPanelEllipseButton";
-            drawingToolsPanelEllipseButton.Size = new Size(29, 24);
+            drawingToolsPanelEllipseButton.Size = new Size(22, 24);
             drawingToolsPanelEllipseButton.Text = "Ellipse";
             drawingToolsPanelEllipseButton.Click += DrawingToolsPanelEllipseButton_Click;
             // 
@@ -345,7 +345,7 @@ namespace PhotoChange
             // 
             splitContainer.BorderStyle = BorderStyle.Fixed3D;
             splitContainer.Dock = DockStyle.Fill;
-            splitContainer.Location = new Point(32, 49);
+            splitContainer.Location = new Point(25, 49);
             splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
@@ -355,8 +355,8 @@ namespace PhotoChange
             // splitContainer.Panel2
             // 
             splitContainer.Panel2.Controls.Add(cursorPosition);
-            splitContainer.Size = new Size(1113, 581);
-            splitContainer.SplitterDistance = 819;
+            splitContainer.Size = new Size(1120, 581);
+            splitContainer.SplitterDistance = 824;
             splitContainer.TabIndex = 2;
             // 
             // pictureBoxCanvas
@@ -365,7 +365,7 @@ namespace PhotoChange
             pictureBoxCanvas.Dock = DockStyle.Fill;
             pictureBoxCanvas.Location = new Point(0, 0);
             pictureBoxCanvas.Name = "pictureBoxCanvas";
-            pictureBoxCanvas.Size = new Size(815, 577);
+            pictureBoxCanvas.Size = new Size(820, 577);
             pictureBoxCanvas.TabIndex = 0;
             pictureBoxCanvas.TabStop = false;
             pictureBoxCanvas.Paint += PictureBoxCanvas_Paint;
@@ -531,6 +531,7 @@ namespace PhotoChange
             imagePropertiesMainMenuItem.Name = "imagePropertiesMainMenuItem";
             imagePropertiesMainMenuItem.Size = new Size(210, 22);
             imagePropertiesMainMenuItem.Text = "Image properties...";
+            imagePropertiesMainMenuItem.Click += ImagePropertiesMainMenuItem_Click;
             // 
             // mainMenuSeparator5
             // 

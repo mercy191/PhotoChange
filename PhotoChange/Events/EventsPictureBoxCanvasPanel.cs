@@ -4,15 +4,7 @@ namespace PhotoChange
 {
     public partial class MainForm
     {
-        #region -- Picture Box Panel Items --
-
-        public Bitmap? EditBitmap { get; protected set; } = null;
-        public Graphics? BitmapGraphics { get; protected set; } = null;
-        public Graphics? VisualGraphics { get; protected set; } = null;
-        
-        #endregion
-
-        #region -- Picture Box Panel Events --
+        #region -- Picture Box Canvas Panel Events --
 
         private void PictureBoxCanvas_Paint(object sender, PaintEventArgs e)
         {         
@@ -41,13 +33,21 @@ namespace PhotoChange
             if (e.Button == MouseButtons.Left)
             {              
                 if (_selectionController.IsDrawing)
-                {                  
-                    EditBitmap = new Bitmap(_imageRenderer.Image.Width, _imageRenderer.Image.Height); // Create new bitmap for drawing
-                    BitmapGraphics = Graphics.FromImage(EditBitmap);
-                    VisualGraphics = pictureBoxCanvas.CreateGraphics();
+                {
+                    _graphicsController.EditBitmap = new Bitmap(_imageRenderer.Image.Width, _imageRenderer.Image.Height); // Create new bitmap for drawing
+                    _graphicsController.BitmapGraphics = Graphics.FromImage(_graphicsController.EditBitmap);
+                    _graphicsController.VisualGraphics = pictureBoxCanvas.CreateGraphics();
 
                     switch (_imageDrawing.Tool)
                     {
+                        case ImageDrawing.DrawingTools.Brush:
+                            _selectionController.IsMouseDown = true;
+                            break;
+
+                        case ImageDrawing.DrawingTools.Eraser:
+                            _selectionController.IsMouseDown = true;
+                            break;
+
                         case ImageDrawing.DrawingTools.Filling:
                             _selectionController.IsMouseDown = true;
                             break;
@@ -60,13 +60,13 @@ namespace PhotoChange
                                     _selectionController.MouseClickNum = 2;
                                     break;
                                 case 2:
-                                    BitmapGraphics?.DrawLine
+                                    _graphicsController.BitmapGraphics.DrawLine
                                         (
                                         new Pen(_imageDrawing.BrushColor, _imageDrawing.BrushSize),
                                         _imageRenderer.ConvertToProportions(_selectionController.MouseLastDownPosition),
                                         _imageRenderer.ConvertToProportions(e.Location)
                                         );
-                                    VisualGraphics?.DrawLine
+                                    _graphicsController.VisualGraphics.DrawLine
                                         (
                                         new Pen(_imageDrawing.BrushColor, _imageDrawing.BrushSize / _imageRenderer.ScaleFactor),
                                         _selectionController.MouseLastDownPosition,
@@ -87,7 +87,7 @@ namespace PhotoChange
                                     _selectionController.MouseClickNum = 2;
                                     break;
                                 case 2:
-                                    BitmapGraphics?.DrawEllipse
+                                    _graphicsController.BitmapGraphics.DrawEllipse
                                         (
                                         new Pen(_imageDrawing.BrushColor, _imageDrawing.BrushSize),
                                         new RectangleF
@@ -98,7 +98,7 @@ namespace PhotoChange
                                             _imageRenderer.ConvertYToProportions(e.Location.Y) - _imageRenderer.ConvertYToProportions(_selectionController.MouseLastDownPosition.Y)   
                                             )
                                         );
-                                    VisualGraphics?.DrawEllipse
+                                    _graphicsController.VisualGraphics.DrawEllipse
                                         (
                                         new Pen(_imageDrawing.BrushColor, _imageDrawing.BrushSize / _imageRenderer.ScaleFactor),
                                         new RectangleF
@@ -136,12 +136,12 @@ namespace PhotoChange
         {
             cursorPosition.Text = string.Format("{0}, {1}", _imageRenderer.ConvertXToProportions(e.Location.X), _imageRenderer.ConvertYToProportions(e.Location.Y));
             
-            if (_selectionController.IsDrawing)
+            if (_selectionController.IsDrawing && _selectionController.IsMouseDown)
             {                
                 switch (_imageDrawing.Tool)
                 {
                     case ImageDrawing.DrawingTools.Brush:                       
-                        BitmapGraphics?.DrawEllipse
+                        _graphicsController.BitmapGraphics.DrawEllipse
                             (
                             new Pen(_imageDrawing.BrushColor, _imageDrawing.BrushSize), 
                             _imageRenderer.ConvertXToProportions(e.Location.X),
@@ -149,7 +149,7 @@ namespace PhotoChange
                             _imageDrawing.BrushSize,
                             _imageDrawing.BrushSize
                             );
-                        VisualGraphics?.DrawEllipse
+                        _graphicsController.VisualGraphics.DrawEllipse
                             (
                             new Pen(_imageDrawing.BrushColor, _imageDrawing.BrushSize / _imageRenderer.ScaleFactor), 
                             e.Location.X, 
@@ -160,7 +160,7 @@ namespace PhotoChange
                         break;
 
                     case ImageDrawing.DrawingTools.Eraser:
-                        BitmapGraphics?.DrawEllipse
+                        _graphicsController.BitmapGraphics.DrawEllipse
                             (
                             new Pen(_imageDrawing.ErazerColor, _imageDrawing.ErazerSize),
                             _imageRenderer.ConvertXToProportions(e.Location.X),
@@ -168,7 +168,7 @@ namespace PhotoChange
                             _imageDrawing.ErazerSize,
                             _imageDrawing.ErazerSize
                             );
-                        VisualGraphics?.DrawEllipse
+                        _graphicsController.VisualGraphics.DrawEllipse
                             (
                             new Pen(pictureBoxCanvas.BackColor, _imageDrawing.ErazerSize / _imageRenderer.ScaleFactor), 
                             e.Location.X, 
@@ -183,36 +183,32 @@ namespace PhotoChange
 
         private void PictureBoxCanvas_MouseUp(object sender, MouseEventArgs e)
         {
-            if (_selectionController.IsDrawing && _selectionController.IsMouseDown && EditBitmap != null)
+            if (_selectionController.IsDrawing && _selectionController.IsMouseDown)
             {
                 Graphics g = Graphics.FromImage(_imageRenderer.Image); // Add new bitmap on current Image
-                g.DrawImage(EditBitmap, 0, 0);
+                g.DrawImage(_graphicsController.EditBitmap, 0, 0);
                 g.Dispose();
 
                 if (_imageRenderer.EditList.Count != 0)
                 {
                     Bitmap lastBitmap = new Bitmap(_imageRenderer.EditList[^1]); // Add current bitmap on last bitmap
                     g = Graphics.FromImage(lastBitmap);
-                    g.DrawImage(EditBitmap, 0, 0);
+                    g.DrawImage(_graphicsController.EditBitmap, 0, 0);
                     g.Dispose();
 
                     _imageRenderer.EditList.Add(lastBitmap); // Add new bitmap
                 }
                 else
                 {
-                    _imageRenderer.EditList.Add(new Bitmap(EditBitmap)); // Add new bitmap
+                    _imageRenderer.EditList.Add(new Bitmap(_graphicsController.EditBitmap)); // Add new bitmap
                 }
-
+               
                 _selectionController.IsMouseDown = false;
                 _imageRenderer.EditListIterator += 1;
-                VisualGraphics?.Dispose();
-                BitmapGraphics?.Dispose();
-                EditBitmap.Dispose();
 
                 pictureBoxCanvas.BackgroundImage = _imageRenderer.Image; // View current image on Background
                 undoMainMenuItem.Enabled = true;
             }
-         
         }
 
         #endregion

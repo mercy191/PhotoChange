@@ -1,4 +1,5 @@
-﻿using PhotoChange.Renderer;
+﻿using PhotoChange.Controls;
+using PhotoChange.Renderer;
 
 namespace PhotoChange
 {   
@@ -223,19 +224,27 @@ namespace PhotoChange
         {
             if (pictureBoxCanvas.BackgroundImage != null)
             {
-                _imageRenderer.EditList.Clear();
-                _imageRenderer.EditListIterator = -1;
-                _imageRenderer.Image.Dispose();
-                _imageRenderer.OriginalImage.Dispose();
-                pictureBoxCanvas.BackgroundImage.Dispose();
+                _imageRenderer.Dispose();            
+                _graphicsController.Dispose();
+                _selectionController.IsDrawing = false;
                 redoMainMenuItem.Enabled = false;
                 undoMainMenuItem.Enabled = false;
+
+                pictureBoxCanvas.BackgroundImage = null;
             }          
         }
 
         #endregion
 
         #region -- Image Events --
+
+        private void ImagePropertiesMainMenuItem_Click(object sender, EventArgs e)
+        {
+            splitContainer.Panel2.Controls.Clear();
+            ImagePropertiesControl control = new ImagePropertiesControl();
+
+            splitContainer.Panel2.Controls.Add(control);
+        }
 
         #endregion
     }

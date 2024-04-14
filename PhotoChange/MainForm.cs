@@ -1,5 +1,6 @@
 ﻿using PhotoChange.Renderer;
 using PhotoChange.Controllers;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace PhotoChange
 {
@@ -9,6 +10,7 @@ namespace PhotoChange
         ImageDrawing _imageDrawing;
 
         SelectionController _selectionController;
+        GraphicsController _graphicsController;
 
         static public string _newName;
         static public string _newExpansion;
@@ -19,6 +21,7 @@ namespace PhotoChange
             _imageRenderer = new ImageRenderer();
             _imageDrawing = new ImageDrawing();
             _selectionController = new SelectionController();
+            _graphicsController = new GraphicsController();
 
             _newName = "";
             _newExpansion = "";
