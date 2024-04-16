@@ -1,13 +1,12 @@
 ﻿using PhotoChange.Renderer;
 using PhotoChange.Controllers;
-using System.Runtime.InteropServices.Marshalling;
+using PhotoChange.Common;
 
 namespace PhotoChange
 {
     public partial class MainForm : Form
     {
-        ImageRenderer _imageRenderer;
-        ImageDrawing _imageDrawing;
+        List<Layer> _layers;
 
         SelectionController _selectionController;
         GraphicsController _graphicsController;
@@ -18,8 +17,8 @@ namespace PhotoChange
         public MainForm()
         {
             InitializeComponent();
-            _imageRenderer = new ImageRenderer();
-            _imageDrawing = new ImageDrawing();
+            _layers = new List<Layer>();
+
             _selectionController = new SelectionController();
             _graphicsController = new GraphicsController();
 

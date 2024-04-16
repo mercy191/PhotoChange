@@ -55,8 +55,9 @@ namespace PhotoChange
             drawingToolsPanelFillingButton = new ToolStripButton();
             drawingToolsPanelLineButton = new ToolStripButton();
             drawingToolsPanelEllipseButton = new ToolStripButton();
-            splitContainer = new SplitContainer();
+            splitContainer1 = new SplitContainer();
             pictureBoxCanvas = new PictureBox();
+            splitContainer2 = new SplitContainer();
             cursorPosition = new Label();
             mainMenu = new MenuStrip();
             fileMainMenuItem = new ToolStripMenuItem();
@@ -127,11 +128,13 @@ namespace PhotoChange
             mainFormStyle = new MainFormStyle(components);
             mainToolsPanel.SuspendLayout();
             drawingToolsPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
-            splitContainer.Panel1.SuspendLayout();
-            splitContainer.Panel2.SuspendLayout();
-            splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxCanvas).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.SuspendLayout();
             mainMenu.SuspendLayout();
             SuspendLayout();
             // 
@@ -341,23 +344,25 @@ namespace PhotoChange
             drawingToolsPanelEllipseButton.Text = "Ellipse";
             drawingToolsPanelEllipseButton.Click += DrawingToolsPanelEllipseButton_Click;
             // 
-            // splitContainer
+            // splitContainer1
             // 
-            splitContainer.BorderStyle = BorderStyle.Fixed3D;
-            splitContainer.Dock = DockStyle.Fill;
-            splitContainer.Location = new Point(25, 49);
-            splitContainer.Name = "splitContainer";
+            splitContainer1.BorderStyle = BorderStyle.Fixed3D;
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.IsSplitterFixed = true;
+            splitContainer1.Location = new Point(25, 49);
+            splitContainer1.Name = "splitContainer1";
             // 
-            // splitContainer.Panel1
+            // splitContainer1.Panel1
             // 
-            splitContainer.Panel1.Controls.Add(pictureBoxCanvas);
+            splitContainer1.Panel1.Controls.Add(pictureBoxCanvas);
             // 
-            // splitContainer.Panel2
+            // splitContainer1.Panel2
             // 
-            splitContainer.Panel2.Controls.Add(cursorPosition);
-            splitContainer.Size = new Size(1120, 581);
-            splitContainer.SplitterDistance = 824;
-            splitContainer.TabIndex = 2;
+            splitContainer1.Panel2.Controls.Add(splitContainer2);
+            splitContainer1.Panel2.Controls.Add(cursorPosition);
+            splitContainer1.Size = new Size(1120, 581);
+            splitContainer1.SplitterDistance = 824;
+            splitContainer1.TabIndex = 2;
             // 
             // pictureBoxCanvas
             // 
@@ -373,10 +378,22 @@ namespace PhotoChange
             pictureBoxCanvas.MouseMove += PictureBoxCanvas_MouseMove;
             pictureBoxCanvas.MouseUp += PictureBoxCanvas_MouseUp;
             // 
+            // splitContainer2
+            // 
+            splitContainer2.BorderStyle = BorderStyle.Fixed3D;
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.IsSplitterFixed = true;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Name = "splitContainer2";
+            splitContainer2.Orientation = Orientation.Horizontal;
+            splitContainer2.Size = new Size(292, 581);
+            splitContainer2.SplitterDistance = 287;
+            splitContainer2.TabIndex = 1;
+            // 
             // cursorPosition
             // 
             cursorPosition.AutoSize = true;
-            cursorPosition.Location = new Point(52, 37);
+            cursorPosition.Location = new Point(41, 367);
             cursorPosition.Name = "cursorPosition";
             cursorPosition.Size = new Size(0, 15);
             cursorPosition.TabIndex = 0;
@@ -554,30 +571,35 @@ namespace PhotoChange
             rotateLeftMainMenuItem.Name = "rotateLeftMainMenuItem";
             rotateLeftMainMenuItem.Size = new Size(210, 22);
             rotateLeftMainMenuItem.Text = "Rotate 90 to the left";
+            rotateLeftMainMenuItem.Click += RotateLeftMainMenuItem_Click;
             // 
             // rotateRightMainMenuItem
             // 
             rotateRightMainMenuItem.Name = "rotateRightMainMenuItem";
             rotateRightMainMenuItem.Size = new Size(210, 22);
             rotateRightMainMenuItem.Text = "Rotate 90 to the right";
+            rotateRightMainMenuItem.Click += RotateRightMainMenuItem_Click;
             // 
             // rotateMainMenuItem
             // 
             rotateMainMenuItem.Name = "rotateMainMenuItem";
             rotateMainMenuItem.Size = new Size(210, 22);
             rotateMainMenuItem.Text = "Rotate...";
+            rotateMainMenuItem.Click += RotateMainMenuItem_Click;
             // 
             // flipVerticallyMainMenuItem
             // 
             flipVerticallyMainMenuItem.Name = "flipVerticallyMainMenuItem";
             flipVerticallyMainMenuItem.Size = new Size(210, 22);
             flipVerticallyMainMenuItem.Text = "Flip vertically";
+            flipVerticallyMainMenuItem.Click += FlipVerticallyMainMenuItem_Click;
             // 
             // flipHorizontallyMainMenuItem
             // 
             flipHorizontallyMainMenuItem.Name = "flipHorizontallyMainMenuItem";
             flipHorizontallyMainMenuItem.Size = new Size(210, 22);
             flipHorizontallyMainMenuItem.Text = "Flip horizontally";
+            flipHorizontallyMainMenuItem.Click += FlipHorizontallyMainMenuItem_Click;
             // 
             // mainMenuSeparator7
             // 
@@ -589,6 +611,7 @@ namespace PhotoChange
             editImageSizeMainMenuItem.Name = "editImageSizeMainMenuItem";
             editImageSizeMainMenuItem.Size = new Size(210, 22);
             editImageSizeMainMenuItem.Text = "Edit image size...";
+            editImageSizeMainMenuItem.Click += EditImageSizeMainMenuItem_Click;
             // 
             // mainMenuSeparator8
             // 
@@ -617,6 +640,7 @@ namespace PhotoChange
             inShadesOfGreyMainMenuItem.Name = "inShadesOfGreyMainMenuItem";
             inShadesOfGreyMainMenuItem.Size = new Size(210, 22);
             inShadesOfGreyMainMenuItem.Text = "In shades of grey";
+            inShadesOfGreyMainMenuItem.Click += InShadesOfGreyMainMenuItem_Click;
             // 
             // showChannelMainMenuItem
             // 
@@ -630,18 +654,21 @@ namespace PhotoChange
             redChannelMainMenuItem.Name = "redChannelMainMenuItem";
             redChannelMainMenuItem.Size = new Size(105, 22);
             redChannelMainMenuItem.Text = "Red";
+            redChannelMainMenuItem.Click += RedChannelMainMenuItem_Click;
             // 
             // greenChannelMainMenuItem
             // 
             greenChannelMainMenuItem.Name = "greenChannelMainMenuItem";
             greenChannelMainMenuItem.Size = new Size(105, 22);
             greenChannelMainMenuItem.Text = "Green";
+            greenChannelMainMenuItem.Click += GreenChannelMainMenuItem_Click;
             // 
             // blueChannelMainMenuItem
             // 
             blueChannelMainMenuItem.Name = "blueChannelMainMenuItem";
             blueChannelMainMenuItem.Size = new Size(105, 22);
             blueChannelMainMenuItem.Text = "Blue";
+            blueChannelMainMenuItem.Click += BlueChannelMainMenuItem_Click;
             // 
             // invertNegativeMainMenuItem
             // 
@@ -655,6 +682,7 @@ namespace PhotoChange
             allChannelMainMenuItem.Name = "allChannelMainMenuItem";
             allChannelMainMenuItem.Size = new Size(133, 22);
             allChannelMainMenuItem.Text = "All channel";
+            allChannelMainMenuItem.Click += AllChannelMainMenuItem_Click;
             // 
             // mainMenuSeparator12
             // 
@@ -666,18 +694,21 @@ namespace PhotoChange
             redMainMenuItem.Name = "redMainMenuItem";
             redMainMenuItem.Size = new Size(133, 22);
             redMainMenuItem.Text = "Red";
+            redMainMenuItem.Click += RedMainMenuItem_Click;
             // 
             // greenMainMenuItem
             // 
             greenMainMenuItem.Name = "greenMainMenuItem";
             greenMainMenuItem.Size = new Size(133, 22);
             greenMainMenuItem.Text = "Green";
+            greenMainMenuItem.Click += GreenMainMenuItem_Click;
             // 
             // blueMainMenuItem
             // 
             blueMainMenuItem.Name = "blueMainMenuItem";
             blueMainMenuItem.Size = new Size(133, 22);
             blueMainMenuItem.Text = "Blue";
+            blueMainMenuItem.Click += BlueMainMenuItem_Click;
             // 
             // colorCorrectionMainMenuItem
             // 
@@ -798,7 +829,7 @@ namespace PhotoChange
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1145, 630);
-            Controls.Add(splitContainer);
+            Controls.Add(splitContainer1);
             Controls.Add(drawingToolsPanel);
             Controls.Add(mainToolsPanel);
             Controls.Add(mainMenu);
@@ -812,12 +843,14 @@ namespace PhotoChange
             mainToolsPanel.PerformLayout();
             drawingToolsPanel.ResumeLayout(false);
             drawingToolsPanel.PerformLayout();
-            splitContainer.Panel1.ResumeLayout(false);
-            splitContainer.Panel2.ResumeLayout(false);
-            splitContainer.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainer).EndInit();
-            splitContainer.ResumeLayout(false);
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBoxCanvas).EndInit();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
             mainMenu.ResumeLayout(false);
             mainMenu.PerformLayout();
             ResumeLayout(false);
@@ -827,7 +860,8 @@ namespace PhotoChange
         #endregion
 
         private MainFormStyle mainFormStyle;
-        private SplitContainer splitContainer;
+        private SplitContainer splitContainer1;
+        private SplitContainer splitContainer2;
         private PictureBox pictureBoxCanvas;
 
         private ContextMenuStrip contextMenuIcon;

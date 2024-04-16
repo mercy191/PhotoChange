@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PhotoChange.Controllers
+﻿namespace PhotoChange.Controllers
 {
+    /// <summary>
+    /// Graphic display.
+    /// </summary>
     public class GraphicsController
     {
         public GraphicsController() 
