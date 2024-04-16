@@ -38,8 +38,7 @@ namespace PhotoChange.Controllers
         {
             get => _mouseLastDownPosition; set => _mouseLastDownPosition = value;
         }
-
-
+     
         private Layer _currentLayer;
         private int _currentLayerNumber = 0;
         private bool _isMouseDown = false;

@@ -9,6 +9,7 @@ namespace PhotoChange.Common
             _imageRenderer = imageRenderer;
             _imageDrawing = imageDrawing;
             _imageInfo = imageInfo;
+            _layerName = imageInfo.FileName;
         }
 
         public ImageRenderer ImageRenderer 
@@ -29,8 +30,15 @@ namespace PhotoChange.Common
             set { _imageInfo = value; }
         }
 
+        public string LayerName
+        {
+            get { return _layerName; }
+            set { _layerName = value; }
+        }
+
         private ImageRenderer _imageRenderer;
         private ImageDrawing _imageDrawing;
         private ImageInfo _imageInfo;
+        private string _layerName;
     }
 }

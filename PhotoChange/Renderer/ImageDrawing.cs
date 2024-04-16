@@ -38,9 +38,22 @@
             get => _fillingColor; set => _fillingColor = value;
         }
 
+        public DrawingMode Mode
+        {
+            get => _mode;
+            set => _mode = value;
+        }
+
         public DrawingTools Tool
         {
             get => _tool; set => _tool = value;
+        }
+
+        public enum DrawingMode
+        {
+            None,
+            Drawing,
+            Filling
         }
 
         public enum DrawingTools
@@ -61,6 +74,7 @@
         private Color _erazerColor = Color.Transparent;
         private Color _pipetteColor = Color.Transparent;
         private Color _fillingColor = Color.Transparent;
+        private DrawingMode _mode = DrawingMode.None;
         private DrawingTools _tool = DrawingTools.Cursor;
     }
 

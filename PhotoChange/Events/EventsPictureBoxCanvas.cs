@@ -190,12 +190,11 @@ namespace PhotoChange
             {
                 _selectionController.CurrentLayer.ImageRenderer.Image = new Bitmap(_graphicsController.EditBitmap);
                 _selectionController.CurrentLayer.ImageRenderer.EditList.Add(new Bitmap(_graphicsController.EditBitmap)); // Add new bitmap
-               
+
                 _selectionController.IsMouseDown = false;
                 _selectionController.CurrentLayer.ImageRenderer.EditListIterator += 1;
 
-                pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image; // View current image on Background
-                undoMainMenuItem.Enabled = true;
+                UpdateInterface();
             }
         }
 

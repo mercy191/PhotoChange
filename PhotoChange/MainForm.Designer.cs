@@ -47,6 +47,7 @@ namespace PhotoChange
             mainToolsPanelSizeModeSplitButton = new ToolStripSplitButton();
             tileMainToolsPanelItem = new ToolStripMenuItem();
             zoomMainToolsPanelItem = new ToolStripMenuItem();
+            mainToolsPanelCombineLayersButton = new ToolStripButton();
             drawingToolsPanel = new ToolStrip();
             drawingToolsPanelCursorButton = new ToolStripButton();
             drawingToolsPanelBrushButton = new ToolStripButton();
@@ -58,6 +59,11 @@ namespace PhotoChange
             splitContainer1 = new SplitContainer();
             pictureBoxCanvas = new PictureBox();
             splitContainer2 = new SplitContainer();
+            splitContainer3 = new SplitContainer();
+            layersLayoutPanel = new TableLayoutPanel();
+            layersTextBox = new TextBox();
+            layersListBox = new ListBox();
+            layerPictureBox = new PictureBox();
             cursorPosition = new Label();
             mainMenu = new MenuStrip();
             fileMainMenuItem = new ToolStripMenuItem();
@@ -78,7 +84,6 @@ namespace PhotoChange
             mainMenuSeparator4 = new ToolStripSeparator();
             copyMainMenuItem = new ToolStripMenuItem();
             pasteMainMenuItem = new ToolStripMenuItem();
-            deleteImageMainMenuItem = new ToolStripMenuItem();
             imageMainMenuItem = new ToolStripMenuItem();
             imagePropertiesMainMenuItem = new ToolStripMenuItem();
             mainMenuSeparator5 = new ToolStripSeparator();
@@ -134,7 +139,14 @@ namespace PhotoChange
             splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxCanvas).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
             splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer3).BeginInit();
+            splitContainer3.Panel1.SuspendLayout();
+            splitContainer3.Panel2.SuspendLayout();
+            splitContainer3.SuspendLayout();
+            layersLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)layerPictureBox).BeginInit();
             mainMenu.SuspendLayout();
             SuspendLayout();
             // 
@@ -148,7 +160,7 @@ namespace PhotoChange
             // 
             mainToolsPanel.BackColor = SystemColors.Control;
             mainToolsPanel.ImageScalingSize = new Size(30, 25);
-            mainToolsPanel.Items.AddRange(new ToolStripItem[] { mainToolsPanelHomeButton, mainToolsPanelSeparator1, mainToolsPanelSizeSplitButton, mainToolsPanelSeparator2, mainToolsPanelColorButton, mainToolsPanelSeparator3, mainToolsPanelSizeModeLabel, mainToolsPanelSizeModeSplitButton });
+            mainToolsPanel.Items.AddRange(new ToolStripItem[] { mainToolsPanelHomeButton, mainToolsPanelSeparator1, mainToolsPanelSizeSplitButton, mainToolsPanelSeparator2, mainToolsPanelColorButton, mainToolsPanelSeparator3, mainToolsPanelSizeModeLabel, mainToolsPanelSizeModeSplitButton, mainToolsPanelCombineLayersButton });
             mainToolsPanel.Location = new Point(0, 24);
             mainToolsPanel.Name = "mainToolsPanel";
             mainToolsPanel.Size = new Size(1145, 25);
@@ -260,6 +272,14 @@ namespace PhotoChange
             zoomMainToolsPanelItem.Size = new Size(106, 22);
             zoomMainToolsPanelItem.Text = "Zoom";
             zoomMainToolsPanelItem.Click += ZoomMainToolsPanelItem_Click;
+            // 
+            // mainToolsPanelCombineLayersButton
+            // 
+            mainToolsPanelCombineLayersButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            mainToolsPanelCombineLayersButton.ImageTransparentColor = Color.Magenta;
+            mainToolsPanelCombineLayersButton.Name = "mainToolsPanelCombineLayersButton";
+            mainToolsPanelCombineLayersButton.Size = new Size(23, 22);
+            mainToolsPanelCombineLayersButton.Text = "Combine layers";
             // 
             // drawingToolsPanel
             // 
@@ -386,9 +406,88 @@ namespace PhotoChange
             splitContainer2.Location = new Point(0, 0);
             splitContainer2.Name = "splitContainer2";
             splitContainer2.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            splitContainer2.Panel1.Controls.Add(splitContainer3);
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.BackColor = SystemColors.Window;
             splitContainer2.Size = new Size(292, 581);
-            splitContainer2.SplitterDistance = 287;
+            splitContainer2.SplitterDistance = 349;
             splitContainer2.TabIndex = 1;
+            // 
+            // splitContainer3
+            // 
+            splitContainer3.BorderStyle = BorderStyle.Fixed3D;
+            splitContainer3.Dock = DockStyle.Fill;
+            splitContainer3.Location = new Point(0, 0);
+            splitContainer3.Name = "splitContainer3";
+            splitContainer3.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer3.Panel1
+            // 
+            splitContainer3.Panel1.Controls.Add(layersLayoutPanel);
+            // 
+            // splitContainer3.Panel2
+            // 
+            splitContainer3.Panel2.Controls.Add(layerPictureBox);
+            splitContainer3.Size = new Size(292, 349);
+            splitContainer3.SplitterDistance = 258;
+            splitContainer3.SplitterWidth = 1;
+            splitContainer3.TabIndex = 0;
+            // 
+            // layersLayoutPanel
+            // 
+            layersLayoutPanel.ColumnCount = 1;
+            layersLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            layersLayoutPanel.Controls.Add(layersTextBox, 0, 0);
+            layersLayoutPanel.Controls.Add(layersListBox, 0, 1);
+            layersLayoutPanel.Dock = DockStyle.Fill;
+            layersLayoutPanel.Location = new Point(0, 0);
+            layersLayoutPanel.Margin = new Padding(0);
+            layersLayoutPanel.Name = "layersLayoutPanel";
+            layersLayoutPanel.RowCount = 2;
+            layersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 11.328125F));
+            layersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 88.671875F));
+            layersLayoutPanel.Size = new Size(288, 254);
+            layersLayoutPanel.TabIndex = 0;
+            // 
+            // layersTextBox
+            // 
+            layersTextBox.Dock = DockStyle.Fill;
+            layersTextBox.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            layersTextBox.Location = new Point(3, 3);
+            layersTextBox.Name = "layersTextBox";
+            layersTextBox.Size = new Size(282, 29);
+            layersTextBox.TabIndex = 1;
+            layersTextBox.Text = "Layers:";
+            // 
+            // layersListBox
+            // 
+            layersListBox.Dock = DockStyle.Fill;
+            layersListBox.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            layersListBox.FormattingEnabled = true;
+            layersListBox.ItemHeight = 25;
+            layersListBox.Location = new Point(3, 31);
+            layersListBox.Name = "layersListBox";
+            layersListBox.SelectionMode = SelectionMode.MultiExtended;
+            layersListBox.Size = new Size(282, 220);
+            layersListBox.TabIndex = 0;
+            layersListBox.MouseDoubleClick += LayersListBox_MouseDoubleClick;
+            layersListBox.MouseDown += LayersListBox_MouseDown;
+            // 
+            // layerPictureBox
+            // 
+            layerPictureBox.BackColor = SystemColors.Window;
+            layerPictureBox.Dock = DockStyle.Fill;
+            layerPictureBox.Location = new Point(0, 0);
+            layerPictureBox.Name = "layerPictureBox";
+            layerPictureBox.Size = new Size(288, 86);
+            layerPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            layerPictureBox.TabIndex = 0;
+            layerPictureBox.TabStop = false;
             // 
             // cursorPosition
             // 
@@ -489,7 +588,7 @@ namespace PhotoChange
             // 
             // editMainMenuItem
             // 
-            editMainMenuItem.DropDownItems.AddRange(new ToolStripItem[] { undoMainMenuItem, redoMainMenuItem, mainMenuSeparator4, copyMainMenuItem, pasteMainMenuItem, deleteImageMainMenuItem });
+            editMainMenuItem.DropDownItems.AddRange(new ToolStripItem[] { undoMainMenuItem, redoMainMenuItem, mainMenuSeparator4, copyMainMenuItem, pasteMainMenuItem });
             editMainMenuItem.Name = "editMainMenuItem";
             editMainMenuItem.Size = new Size(39, 20);
             editMainMenuItem.Text = "Edit";
@@ -498,7 +597,7 @@ namespace PhotoChange
             // 
             undoMainMenuItem.Enabled = false;
             undoMainMenuItem.Name = "undoMainMenuItem";
-            undoMainMenuItem.Size = new Size(143, 22);
+            undoMainMenuItem.Size = new Size(110, 22);
             undoMainMenuItem.Text = "Cancel";
             undoMainMenuItem.Click += UndoMainMenuItem_Click;
             // 
@@ -506,35 +605,28 @@ namespace PhotoChange
             // 
             redoMainMenuItem.Enabled = false;
             redoMainMenuItem.Name = "redoMainMenuItem";
-            redoMainMenuItem.Size = new Size(143, 22);
+            redoMainMenuItem.Size = new Size(110, 22);
             redoMainMenuItem.Text = "Return";
             redoMainMenuItem.Click += RedoMainMenuItem_Click;
             // 
             // mainMenuSeparator4
             // 
             mainMenuSeparator4.Name = "mainMenuSeparator4";
-            mainMenuSeparator4.Size = new Size(140, 6);
+            mainMenuSeparator4.Size = new Size(107, 6);
             // 
             // copyMainMenuItem
             // 
             copyMainMenuItem.Name = "copyMainMenuItem";
-            copyMainMenuItem.Size = new Size(143, 22);
+            copyMainMenuItem.Size = new Size(110, 22);
             copyMainMenuItem.Text = "Copy";
             copyMainMenuItem.Click += CopyMainMenuItem_Click;
             // 
             // pasteMainMenuItem
             // 
             pasteMainMenuItem.Name = "pasteMainMenuItem";
-            pasteMainMenuItem.Size = new Size(143, 22);
+            pasteMainMenuItem.Size = new Size(110, 22);
             pasteMainMenuItem.Text = "Paste";
             pasteMainMenuItem.Click += PasteMainMenuItem_Click;
-            // 
-            // deleteImageMainMenuItem
-            // 
-            deleteImageMainMenuItem.Name = "deleteImageMainMenuItem";
-            deleteImageMainMenuItem.Size = new Size(143, 22);
-            deleteImageMainMenuItem.Text = "Delete image";
-            deleteImageMainMenuItem.Click += DeleteImageMainMenuItem_Click;
             // 
             // imageMainMenuItem
             // 
@@ -654,21 +746,21 @@ namespace PhotoChange
             redChannelMainMenuItem.Name = "redChannelMainMenuItem";
             redChannelMainMenuItem.Size = new Size(105, 22);
             redChannelMainMenuItem.Text = "Red";
-            redChannelMainMenuItem.Click += RedChannelMainMenuItem_Click;
+            redChannelMainMenuItem.Click += ShowChannelMainMenuItemClick;
             // 
             // greenChannelMainMenuItem
             // 
             greenChannelMainMenuItem.Name = "greenChannelMainMenuItem";
             greenChannelMainMenuItem.Size = new Size(105, 22);
             greenChannelMainMenuItem.Text = "Green";
-            greenChannelMainMenuItem.Click += GreenChannelMainMenuItem_Click;
+            greenChannelMainMenuItem.Click += ShowChannelMainMenuItemClick;
             // 
             // blueChannelMainMenuItem
             // 
             blueChannelMainMenuItem.Name = "blueChannelMainMenuItem";
             blueChannelMainMenuItem.Size = new Size(105, 22);
             blueChannelMainMenuItem.Text = "Blue";
-            blueChannelMainMenuItem.Click += BlueChannelMainMenuItem_Click;
+            blueChannelMainMenuItem.Click += ShowChannelMainMenuItemClick;
             // 
             // invertNegativeMainMenuItem
             // 
@@ -682,7 +774,7 @@ namespace PhotoChange
             allChannelMainMenuItem.Name = "allChannelMainMenuItem";
             allChannelMainMenuItem.Size = new Size(133, 22);
             allChannelMainMenuItem.Text = "All channel";
-            allChannelMainMenuItem.Click += AllChannelMainMenuItem_Click;
+            allChannelMainMenuItem.Click += InvertMainMenuItem_Click;
             // 
             // mainMenuSeparator12
             // 
@@ -694,21 +786,21 @@ namespace PhotoChange
             redMainMenuItem.Name = "redMainMenuItem";
             redMainMenuItem.Size = new Size(133, 22);
             redMainMenuItem.Text = "Red";
-            redMainMenuItem.Click += RedMainMenuItem_Click;
+            redMainMenuItem.Click += InvertMainMenuItem_Click;
             // 
             // greenMainMenuItem
             // 
             greenMainMenuItem.Name = "greenMainMenuItem";
             greenMainMenuItem.Size = new Size(133, 22);
             greenMainMenuItem.Text = "Green";
-            greenMainMenuItem.Click += GreenMainMenuItem_Click;
+            greenMainMenuItem.Click += InvertMainMenuItem_Click;
             // 
             // blueMainMenuItem
             // 
             blueMainMenuItem.Name = "blueMainMenuItem";
             blueMainMenuItem.Size = new Size(133, 22);
             blueMainMenuItem.Text = "Blue";
-            blueMainMenuItem.Click += BlueMainMenuItem_Click;
+            blueMainMenuItem.Click += InvertMainMenuItem_Click;
             // 
             // colorCorrectionMainMenuItem
             // 
@@ -849,8 +941,16 @@ namespace PhotoChange
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBoxCanvas).EndInit();
+            splitContainer2.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
+            splitContainer3.Panel1.ResumeLayout(false);
+            splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer3).EndInit();
+            splitContainer3.ResumeLayout(false);
+            layersLayoutPanel.ResumeLayout(false);
+            layersLayoutPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)layerPictureBox).EndInit();
             mainMenu.ResumeLayout(false);
             mainMenu.PerformLayout();
             ResumeLayout(false);
@@ -862,6 +962,11 @@ namespace PhotoChange
         private MainFormStyle mainFormStyle;
         private SplitContainer splitContainer1;
         private SplitContainer splitContainer2;
+        private SplitContainer splitContainer3;
+        private TableLayoutPanel layersLayoutPanel;
+        private ListBox layersListBox;
+        private TextBox layersTextBox;
+        private PictureBox layerPictureBox;
         private PictureBox pictureBoxCanvas;
 
         private ContextMenuStrip contextMenuIcon;
@@ -871,6 +976,7 @@ namespace PhotoChange
 
         private ToolStripButton mainToolsPanelHomeButton;
         private ToolStripButton mainToolsPanelColorButton;
+        private ToolStripButton mainToolsPanelCombineLayersButton;
         private ToolStripSplitButton mainToolsPanelSizeSplitButton;
         private ToolStripSplitButton mainToolsPanelSizeModeSplitButton;
         private ToolStripButton drawingToolsPanelEraserButton;
@@ -896,7 +1002,6 @@ namespace PhotoChange
         private ToolStripMenuItem redoMainMenuItem;
         private ToolStripMenuItem copyMainMenuItem;
         private ToolStripMenuItem pasteMainMenuItem;
-        private ToolStripMenuItem deleteImageMainMenuItem;
         private ToolStripMenuItem imagePropertiesMainMenuItem;
         private ToolStripMenuItem createNewImageMainMenuItem;
         private ToolStripMenuItem rotateLeftMainMenuItem;

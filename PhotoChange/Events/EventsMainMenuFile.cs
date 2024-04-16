@@ -18,11 +18,13 @@ namespace PhotoChange
                     (
                     imageRenderer,
                     imageDrawing, 
-                    imageInfo));
+                    imageInfo
+                    ));              
                 _selectionController.CurrentLayer = _layers.Last();
                 _selectionController.CurrentLayerNumber = _layers.LastIndexOf(_selectionController.CurrentLayer);
 
-                pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;            
+                layersListBox.Items.Add(_layers.Last().LayerName);
+                UpdateInterface();
             }
         }
 
@@ -46,7 +48,7 @@ namespace PhotoChange
                 File.Move(_selectionController.CurrentLayer.ImageRenderer.Path, newPath);
 
                 _selectionController.CurrentLayer.ImageRenderer.Path = newPath;
-                pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
+                UpdateInterface();
             }
         }
 
@@ -67,7 +69,7 @@ namespace PhotoChange
                 File.Move(_selectionController.CurrentLayer.ImageRenderer.Path, newPath);
 
                 _selectionController.CurrentLayer.ImageRenderer.Path = newPath;
-                pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
+                UpdateInterface();
             }
         }
 
@@ -88,7 +90,7 @@ namespace PhotoChange
                 _selectionController.CurrentLayer.ImageRenderer.Image.Save(_selectionController.CurrentLayer.ImageRenderer.Path);
                 File.Copy(_selectionController.CurrentLayer.ImageRenderer.Path, newPath);
 
-                pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
+                UpdateInterface();
             }
         }
 
@@ -118,7 +120,7 @@ namespace PhotoChange
             File.Delete(_selectionController.CurrentLayer.ImageRenderer.Path);
             _selectionController.CurrentLayer.ImageRenderer.Image.Save(_selectionController.CurrentLayer.ImageRenderer.Path, _selectionController.CurrentLayer.ImageRenderer.Image.RawFormat);
 
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
+            UpdateInterface();
         }
 
         private void SaveAsMainMenuItem_Click(object sender, EventArgs e)
@@ -138,7 +140,7 @@ namespace PhotoChange
                         File.Delete(_selectionController.CurrentLayer.ImageRenderer.Path);
                     _selectionController.CurrentLayer.ImageRenderer.Image.Save(saveFileDialog.FileName, _selectionController.CurrentLayer.ImageRenderer.Image.RawFormat);
 
-                    pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
+                    UpdateInterface();
                 }
             }
         }

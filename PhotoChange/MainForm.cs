@@ -45,6 +45,61 @@ namespace PhotoChange
             }
         }
 
+        private void UpdateInterface()
+        {
+            if (_selectionController.CurrentLayer.ImageRenderer.EditList.Count == 0)
+            {
+                undoMainMenuItem.Enabled = false;
+                redoMainMenuItem.Enabled = false;
+            }
+            else if (_selectionController.CurrentLayer.ImageRenderer.EditListIterator == -1)
+            {
+                undoMainMenuItem.Enabled = false;
+                redoMainMenuItem.Enabled = true;
+            }
+            else if (_selectionController.CurrentLayer.ImageRenderer.EditListIterator == _selectionController.CurrentLayer.ImageRenderer.EditList.Count - 1)
+            {
+                undoMainMenuItem.Enabled = true;
+                redoMainMenuItem.Enabled = false;
+            }
+            else
+            {
+                undoMainMenuItem.Enabled = true;
+                redoMainMenuItem.Enabled = true;
+            }
+
+            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
+        }
+
+        private void UpdateDrawingControls()
+        {
+            switch (_selectionController.CurrentLayer.ImageDrawing.Mode)
+            {
+                case ImageDrawing.DrawingMode.None:
+                    Cursor.Current = Cursors.Default;
+                    _selectionController.IsDrawing = false;
+                    mainToolsPanelColorButton.Enabled = false;
+                    mainToolsPanelSizeSplitButton.Enabled = false;
+                    mainToolsPanelSizeSplitButton.Text = "0";
+                    break;
+
+                case ImageDrawing.DrawingMode.Drawing:
+                    Cursor.Current = Cursors.Cross;
+                    _selectionController.IsDrawing = true;
+                    mainToolsPanelColorButton.Enabled = true;
+                    mainToolsPanelSizeSplitButton.Enabled = true;
+                    break;
+
+                case ImageDrawing.DrawingMode.Filling:
+                    Cursor.Current = Cursors.Hand;
+                    _selectionController.IsDrawing = false;
+                    mainToolsPanelColorButton.Enabled = true;
+                    mainToolsPanelSizeSplitButton.Enabled = true;
+                    mainToolsPanelSizeSplitButton.Text = "0";
+                    break;
+            }
+        }
+
         #endregion
     }
 }

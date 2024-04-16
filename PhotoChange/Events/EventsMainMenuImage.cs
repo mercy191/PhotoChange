@@ -26,114 +26,82 @@ namespace PhotoChange
         private void RotateMainMenuItem_Click(object sender, EventArgs e)
         {
             _selectionController.CurrentLayer.ImageRenderer.RotateFlip(RotateFlipType.RotateNoneFlipNone);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
+            UpdateInterface();
         }
 
         private void RotateLeftMainMenuItem_Click(object sender, EventArgs e)
         {
             _selectionController.CurrentLayer.ImageRenderer.RotateFlip(RotateFlipType.Rotate90FlipNone);
             _selectionController.CurrentLayer.ImageRenderer.RotateFlip(RotateFlipType.Rotate180FlipNone);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
+            UpdateInterface();
         }
 
         private void RotateRightMainMenuItem_Click(object sender, EventArgs e)
         {
             _selectionController.CurrentLayer.ImageRenderer.RotateFlip(RotateFlipType.Rotate90FlipNone);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
+            UpdateInterface();
         }
 
         private void FlipVerticallyMainMenuItem_Click(object sender, EventArgs e)
         {
             _selectionController.CurrentLayer.ImageRenderer.RotateFlip(RotateFlipType.RotateNoneFlipX);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
+            UpdateInterface();
         }
 
         private void FlipHorizontallyMainMenuItem_Click(object sender, EventArgs e)
         {
             _selectionController.CurrentLayer.ImageRenderer.RotateFlip(RotateFlipType.RotateNoneFlipY);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
+            UpdateInterface();
         }
 
         private void EditImageSizeMainMenuItem_Click(object sender, EventArgs e)
         {
             _selectionController.CurrentLayer.ImageRenderer.Resize(2000, 1000);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
+            UpdateInterface();
         }
 
         private void InShadesOfGreyMainMenuItem_Click(object sender, EventArgs e)
         {
             _selectionController.CurrentLayer.ImageRenderer.SetGrayscale();
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
+            UpdateInterface();
         }
 
-        private void RedChannelMainMenuItem_Click(object sender, EventArgs e)
+        private void ShowChannelMainMenuItemClick(object sender, EventArgs e)
         {
-            _selectionController.CurrentLayer.ImageRenderer.SetColorFilter(ImageRenderer.ColorFilterTypes.Red);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image; 
-            undoMainMenuItem.Enabled = true;
+            if (sender == redChannelMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.SetColorFilter(ImageRenderer.ColorFilterTypes.Red);
+            }
+            else if (sender == greenChannelMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.SetColorFilter(ImageRenderer.ColorFilterTypes.Green);
+            }
+            else if (sender == blueChannelMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.SetColorFilter(ImageRenderer.ColorFilterTypes.Blue);
+            }
+            UpdateInterface();
         }
 
-        private void GreenChannelMainMenuItem_Click(object sender, EventArgs e)
+        private void InvertMainMenuItem_Click(object sender, EventArgs e)
         {
-            _selectionController.CurrentLayer.ImageRenderer.SetColorFilter(ImageRenderer.ColorFilterTypes.Green);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
-        }
-
-        private void BlueChannelMainMenuItem_Click(object sender, EventArgs e)
-        {
-            _selectionController.CurrentLayer.ImageRenderer.SetColorFilter(ImageRenderer.ColorFilterTypes.Blue);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
-        }
-
-        private void AllChannelMainMenuItem_Click(object sender, EventArgs e)
-        {
-            _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.All);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
-        }
-
-        private void RedMainMenuItem_Click(object sender, EventArgs e)
-        {
-            _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.Red);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
-        }
-
-        private void GreenMainMenuItem_Click(object sender, EventArgs e)
-        {
-            _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.Green);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
-        }
-
-        private void BlueMainMenuItem_Click(object sender, EventArgs e)
-        {
-            _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.Blue);
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
-            undoMainMenuItem.Enabled = true;
+            if (sender == allChannelMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.All);
+            }           
+            else if (sender == redMainMenuItem) 
+            {
+                _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.Red);
+            }
+            else if (sender == greenMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.Green);
+            }
+            else if (sender == blueMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.Blue);
+            }
+            UpdateInterface();
         }
 
         #endregion

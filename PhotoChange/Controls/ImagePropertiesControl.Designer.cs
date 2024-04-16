@@ -68,6 +68,7 @@
             // 
             dateTimeTextBox.Location = new Point(115, 155);
             dateTimeTextBox.Name = "dateTimeTextBox";
+            dateTimeTextBox.ReadOnly = true;
             dateTimeTextBox.Size = new Size(126, 23);
             dateTimeTextBox.TabIndex = 11;
             // 
@@ -84,6 +85,7 @@
             // 
             fileSizeTextBox.Location = new Point(115, 126);
             fileSizeTextBox.Name = "fileSizeTextBox";
+            fileSizeTextBox.ReadOnly = true;
             fileSizeTextBox.Size = new Size(126, 23);
             fileSizeTextBox.TabIndex = 9;
             // 
@@ -100,6 +102,7 @@
             // 
             imageSizeTextBox.Location = new Point(115, 97);
             imageSizeTextBox.Name = "imageSizeTextBox";
+            imageSizeTextBox.ReadOnly = true;
             imageSizeTextBox.Size = new Size(126, 23);
             imageSizeTextBox.TabIndex = 7;
             // 
@@ -116,6 +119,7 @@
             // 
             fullPathTextBox.Location = new Point(115, 68);
             fullPathTextBox.Name = "fullPathTextBox";
+            fullPathTextBox.ReadOnly = true;
             fullPathTextBox.Size = new Size(126, 23);
             fullPathTextBox.TabIndex = 5;
             // 
@@ -132,6 +136,7 @@
             // 
             directoryTextBox.Location = new Point(115, 39);
             directoryTextBox.Name = "directoryTextBox";
+            directoryTextBox.ReadOnly = true;
             directoryTextBox.Size = new Size(126, 23);
             directoryTextBox.TabIndex = 3;
             // 
@@ -148,6 +153,7 @@
             // 
             fileNameTextBox.Location = new Point(115, 10);
             fileNameTextBox.Name = "fileNameTextBox";
+            fileNameTextBox.ReadOnly = true;
             fileNameTextBox.Size = new Size(126, 23);
             fileNameTextBox.TabIndex = 1;
             // 
