@@ -33,8 +33,8 @@ namespace PhotoChange
 
         private void TileMainToolsPanelItem_Click(object sender, EventArgs e)
         {
-            pictureBoxCanvas.BackgroundImageLayout = ImageLayout.Tile;
-            mainToolsPanelSizeModeSplitButton.Text = ImageLayout.Tile.ToString();
+            pictureBoxCanvas.BackgroundImageLayout = ImageLayout.None;
+            mainToolsPanelSizeModeSplitButton.Text = ImageLayout.None.ToString();
         }
 
         private void ZoomMainToolsPanelItem_Click(object sender, EventArgs e)

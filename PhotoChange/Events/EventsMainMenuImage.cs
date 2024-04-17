@@ -1,6 +1,7 @@
 ﻿using PhotoChange.Controls;
 using PhotoChange.Renderer;
 using PhotoChange.Common;
+using System.Windows.Forms;
 
 namespace PhotoChange
 {   
@@ -13,6 +14,7 @@ namespace PhotoChange
             splitContainer2.Panel2.Controls.Clear();
             ImagePropertiesControl control = new ImagePropertiesControl();
 
+            control.Dock = DockStyle.Fill;
             control.FileName = _selectionController.CurrentLayer.ImageInfo.FileName;
             control.Directory = _selectionController.CurrentLayer.ImageInfo.Directory;
             control.FullPath = _selectionController.CurrentLayer.ImageInfo.FullPath;
@@ -25,38 +27,37 @@ namespace PhotoChange
 
         private void RotateMainMenuItem_Click(object sender, EventArgs e)
         {
-            _selectionController.CurrentLayer.ImageRenderer.RotateFlip(RotateFlipType.RotateNoneFlipNone);
+            _selectionController.CurrentLayer.ImageRenderer.Rotate(30);
             UpdateInterface();
         }
 
         private void RotateLeftMainMenuItem_Click(object sender, EventArgs e)
         {
-            _selectionController.CurrentLayer.ImageRenderer.RotateFlip(RotateFlipType.Rotate90FlipNone);
-            _selectionController.CurrentLayer.ImageRenderer.RotateFlip(RotateFlipType.Rotate180FlipNone);
+            _selectionController.CurrentLayer.ImageRenderer.Rotate(270);
             UpdateInterface();
         }
 
         private void RotateRightMainMenuItem_Click(object sender, EventArgs e)
         {
-            _selectionController.CurrentLayer.ImageRenderer.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            _selectionController.CurrentLayer.ImageRenderer.Rotate(90);
             UpdateInterface();
         }
 
         private void FlipVerticallyMainMenuItem_Click(object sender, EventArgs e)
         {
-            _selectionController.CurrentLayer.ImageRenderer.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            _selectionController.CurrentLayer.ImageRenderer.Flip(RotateFlipType.RotateNoneFlipX);
             UpdateInterface();
         }
 
         private void FlipHorizontallyMainMenuItem_Click(object sender, EventArgs e)
         {
-            _selectionController.CurrentLayer.ImageRenderer.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            _selectionController.CurrentLayer.ImageRenderer.Flip(RotateFlipType.RotateNoneFlipY);
             UpdateInterface();
         }
 
         private void EditImageSizeMainMenuItem_Click(object sender, EventArgs e)
         {
-            _selectionController.CurrentLayer.ImageRenderer.Resize(2000, 1000);
+            _selectionController.CurrentLayer.ImageRenderer.Resize(800,400);
             UpdateInterface();
         }
 
@@ -102,6 +103,27 @@ namespace PhotoChange
                 _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.Blue);
             }
             UpdateInterface();
+        }
+
+        private void IncreaseColorDepthMainMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateInterface();
+        }
+
+        private void ReduceColorDepthMainMenuItem_Click(object sender, EventArgs e)
+        {
+            _selectionController.CurrentLayer.ImageRenderer.ReduceColorDepth();
+            UpdateInterface();
+        }
+
+        private void HistogramMainMenuItem_Click(object sender, EventArgs e)
+        {
+            splitContainer2.Panel2.Controls.Clear();
+            HistogramControl control = new HistogramControl();
+
+            control.Histogram = _selectionController.CurrentLayer.ImageRenderer.CalculateHistogram();
+
+            splitContainer2.Panel2.Controls.Add(control);
         }
 
         #endregion

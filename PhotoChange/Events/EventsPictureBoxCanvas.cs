@@ -19,7 +19,7 @@ namespace PhotoChange
                         _selectionController.CurrentLayer.ImageRenderer.CalculateRetreat(pictureBoxCanvas.Width, pictureBoxCanvas.Height);
                         break;
 
-                    case ImageLayout.Tile:
+                    case ImageLayout.None:
                         _selectionController.CurrentLayer.ImageRenderer.ScaleFactor = 1;
                         _selectionController.CurrentLayer.ImageRenderer.WidthRetreat = 0;
                         _selectionController.CurrentLayer.ImageRenderer.HeightRetreat = 0;
@@ -136,9 +136,7 @@ namespace PhotoChange
         }
 
         private void PictureBoxCanvas_MouseMove(object sender, MouseEventArgs e)
-        {
-            //cursorPosition.Text = string.Format("{0}, {1}", _selectionController.CurrentLayer.ImageRenderer.ConvertXToProportions(e.Location.X), _selectionController.CurrentLayer.ImageRenderer.ConvertYToProportions(e.Location.Y));
-            
+        {           
             if (_selectionController.IsDrawing && _selectionController.IsMouseDown)
             {                
                 switch (_selectionController.CurrentLayer.ImageDrawing.Tool)

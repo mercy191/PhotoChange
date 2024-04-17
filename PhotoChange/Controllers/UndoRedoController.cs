@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-namespace PhotoChange.Controllers
+﻿namespace PhotoChange.Controllers
 {
     public class UndoRedoController
     {

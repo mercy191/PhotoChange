@@ -7,7 +7,7 @@ namespace PhotoChange.Controllers
     /// </summary>
     public class SelectionController
     {
-        public Layer CurrentLayer 
+        public Layer? CurrentLayer 
         { 
             get => _currentLayer; 
             set => _currentLayer = value;
@@ -39,7 +39,7 @@ namespace PhotoChange.Controllers
             get => _mouseLastDownPosition; set => _mouseLastDownPosition = value;
         }
      
-        private Layer _currentLayer;
+        private Layer? _currentLayer;
         private int _currentLayerNumber = 0;
         private bool _isMouseDown = false;
         private bool _isDrawing = false;

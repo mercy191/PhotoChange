@@ -2,6 +2,9 @@
 
 namespace PhotoChange.Common
 {
+    /// <summary>
+    /// Stores complete layer information.
+    /// </summary>
     public class Layer
     {
         public Layer(ImageRenderer imageRenderer, ImageDrawing imageDrawing, ImageInfo imageInfo) 
@@ -14,26 +17,26 @@ namespace PhotoChange.Common
 
         public ImageRenderer ImageRenderer 
         { 
-            get { return _imageRenderer; } 
-            set { _imageRenderer = value; } 
+            get => _imageRenderer;
+            set => _imageRenderer = value;
         }
 
         public ImageDrawing ImageDrawing
         {
-            get { return _imageDrawing; }
-            set { _imageDrawing = value; }
+            get => _imageDrawing;
+            set => _imageDrawing = value;
         }
 
         public ImageInfo ImageInfo
         {
-            get { return _imageInfo; }
-            set { _imageInfo = value; }
+            get => _imageInfo;
+            set => _imageInfo = value;
         }
 
         public string LayerName
         {
-            get { return _layerName; }
-            set { _layerName = value; }
+            get => _layerName;
+            set => _layerName = value;
         }
 
         private ImageRenderer _imageRenderer;

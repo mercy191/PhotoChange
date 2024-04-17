@@ -34,6 +34,7 @@ namespace PhotoChange
 
             if (pictureBoxCanvas.BackgroundImage != null)
                 _selectionController.CurrentLayer.ImageRenderer.Image = new Bitmap(pictureBoxCanvas.BackgroundImage);
+            UpdateInterface();
         }
 
         #endregion

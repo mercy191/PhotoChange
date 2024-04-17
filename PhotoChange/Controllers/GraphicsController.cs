@@ -11,6 +11,7 @@
             _bitmapGraphics = Graphics.FromImage(_editBitmap);
             _visualGraphics = Graphics.FromImage(_editBitmap);
         }
+
         public Bitmap EditBitmap 
         { 
             get => _editBitmap; 
@@ -22,6 +23,9 @@
             }
         }
 
+        /// <summary>
+        /// Responsible for the graphics in the image.
+        /// </summary>
         public Graphics BitmapGraphics 
         { 
             get => _bitmapGraphics; 
@@ -31,8 +35,11 @@
                     _bitmapGraphics.Dispose();
                 _bitmapGraphics = value;
             }
-        } 
+        }
 
+        /// <summary>
+        /// Responsible for displaying visual graphics.
+        /// </summary>
         public Graphics VisualGraphics 
         { 
             get => _visualGraphics;

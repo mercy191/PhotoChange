@@ -171,6 +171,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panel1);
+            DoubleBuffered = true;
             Name = "ImagePropertiesControl";
             Size = new Size(257, 199);
             panel1.ResumeLayout(false);

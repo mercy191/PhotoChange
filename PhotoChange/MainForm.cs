@@ -11,8 +11,8 @@ namespace PhotoChange
         SelectionController _selectionController;
         GraphicsController _graphicsController;
 
-        static public string _newName;
-        static public string _newExpansion;
+        static public string? _newName;
+        static public string? _newExpansion;
 
         public MainForm()
         {
@@ -68,6 +68,8 @@ namespace PhotoChange
                 redoMainMenuItem.Enabled = true;
             }
 
+            splitContainer2.Panel2.Controls.Clear();
+            pictureBoxCanvas.BackgroundImage = null;
             pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
         }
 
@@ -101,5 +103,8 @@ namespace PhotoChange
         }
 
         #endregion
+
+
+        
     }
 }

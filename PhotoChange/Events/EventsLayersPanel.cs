@@ -3,6 +3,7 @@
     public partial class MainForm
     {
         #region -- Layers Panel Events --
+
         private void LayersListBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             int index = layersListBox.IndexFromPoint(e.Location);
@@ -35,6 +36,7 @@
                     _layers.RemoveAt(index);
                     layersListBox.Items.RemoveAt(index);
                     layerPictureBox.Image = null;
+                    UpdateInterface();
                 }
             }
         }
