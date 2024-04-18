@@ -35,11 +35,11 @@ namespace PhotoChange
                 switch (e.KeyCode)
                 {
                     case Keys.Z:
-                        UndoMainMenuItem_Click(sender, e);
+                        UndoRedoMainMenuItem_Click(sender, e);
                         break;
 
                     case Keys.J:
-                        RedoMainMenuItem_Click(sender, e);
+                        UndoRedoMainMenuItem_Click(sender, e);
                         break;
                 }
             }
@@ -47,12 +47,12 @@ namespace PhotoChange
 
         private void UpdateInterface()
         {
-            if (_selectionController.CurrentLayer.ImageRenderer.EditList.Count == 0)
+            if (_selectionController.CurrentLayer.ImageRenderer.EditList.Count == 1)
             {
                 undoMainMenuItem.Enabled = false;
                 redoMainMenuItem.Enabled = false;
             }
-            else if (_selectionController.CurrentLayer.ImageRenderer.EditListIterator == -1)
+            else if (_selectionController.CurrentLayer.ImageRenderer.EditListIterator == 0)
             {
                 undoMainMenuItem.Enabled = false;
                 redoMainMenuItem.Enabled = true;
@@ -68,6 +68,8 @@ namespace PhotoChange
                 redoMainMenuItem.Enabled = true;
             }
 
+            _selectionController.CurrentLayer.ImageRenderer.EditScale();
+            editScaleMainToolsPanelTextBox.Text = _selectionController.CurrentLayer.ImageRenderer.ScalePercent.ToString();
             splitContainer2.Panel2.Controls.Clear();
             pictureBoxCanvas.BackgroundImage = null;
             pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
@@ -105,6 +107,5 @@ namespace PhotoChange
         #endregion
 
 
-        
     }
 }

@@ -1,7 +1,5 @@
 ﻿using PhotoChange.Controls;
 using PhotoChange.Renderer;
-using PhotoChange.Common;
-using System.Windows.Forms;
 
 namespace PhotoChange
 {   
@@ -27,37 +25,37 @@ namespace PhotoChange
 
         private void RotateMainMenuItem_Click(object sender, EventArgs e)
         {
-            _selectionController.CurrentLayer.ImageRenderer.Rotate(30);
+            if (sender == rotateMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.Rotate(30);
+                
+            }    
+            
+            else if (sender == rotateLeftMainMenuItem) 
+            {
+                _selectionController.CurrentLayer.ImageRenderer.Rotate(270);
+            }
+
+            else if (sender == rotateRightMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.Rotate(90);
+            }
+
             UpdateInterface();
         }
 
-        private void RotateLeftMainMenuItem_Click(object sender, EventArgs e)
+        private void FlipMainMenuItem_Click(object sender, EventArgs e)
         {
-            _selectionController.CurrentLayer.ImageRenderer.Rotate(270);
-            UpdateInterface();
-        }
+            if (sender == flipVerticallyMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.Flip(RotateFlipType.RotateNoneFlipX);              
+            }
 
-        private void RotateRightMainMenuItem_Click(object sender, EventArgs e)
-        {
-            _selectionController.CurrentLayer.ImageRenderer.Rotate(90);
-            UpdateInterface();
-        }
+            else if (sender == flipHorizontallyMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.Flip(RotateFlipType.RotateNoneFlipY);
+            }
 
-        private void FlipVerticallyMainMenuItem_Click(object sender, EventArgs e)
-        {
-            _selectionController.CurrentLayer.ImageRenderer.Flip(RotateFlipType.RotateNoneFlipX);
-            UpdateInterface();
-        }
-
-        private void FlipHorizontallyMainMenuItem_Click(object sender, EventArgs e)
-        {
-            _selectionController.CurrentLayer.ImageRenderer.Flip(RotateFlipType.RotateNoneFlipY);
-            UpdateInterface();
-        }
-
-        private void EditImageSizeMainMenuItem_Click(object sender, EventArgs e)
-        {
-            _selectionController.CurrentLayer.ImageRenderer.Resize(800,400);
             UpdateInterface();
         }
 
@@ -73,10 +71,12 @@ namespace PhotoChange
             {
                 _selectionController.CurrentLayer.ImageRenderer.SetColorFilter(ImageRenderer.ColorFilterTypes.Red);
             }
+
             else if (sender == greenChannelMainMenuItem)
             {
                 _selectionController.CurrentLayer.ImageRenderer.SetColorFilter(ImageRenderer.ColorFilterTypes.Green);
             }
+
             else if (sender == blueChannelMainMenuItem)
             {
                 _selectionController.CurrentLayer.ImageRenderer.SetColorFilter(ImageRenderer.ColorFilterTypes.Blue);
@@ -89,31 +89,41 @@ namespace PhotoChange
             if (sender == allChannelMainMenuItem)
             {
                 _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.All);
-            }           
+            }  
+            
             else if (sender == redMainMenuItem) 
             {
                 _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.Red);
             }
+
             else if (sender == greenMainMenuItem)
             {
                 _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.Green);
             }
+
             else if (sender == blueMainMenuItem)
             {
                 _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.Blue);
             }
+
             UpdateInterface();
         }
 
         private void IncreaseColorDepthMainMenuItem_Click(object sender, EventArgs e)
         {
+            //_selectionController.CurrentLayer.ImageRenderer.IncreaseColorDepth();
             UpdateInterface();
         }
 
         private void ReduceColorDepthMainMenuItem_Click(object sender, EventArgs e)
         {
-            _selectionController.CurrentLayer.ImageRenderer.ReduceColorDepth();
+            //_selectionController.CurrentLayer.ImageRenderer.ReduceColorDepth();
             UpdateInterface();
+        }
+
+        private void ColorCorrectionMainMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void HistogramMainMenuItem_Click(object sender, EventArgs e)
@@ -124,6 +134,41 @@ namespace PhotoChange
             control.Histogram = _selectionController.CurrentLayer.ImageRenderer.CalculateHistogram();
 
             splitContainer2.Panel2.Controls.Add(control);
+        }
+
+        private void ReplaceColorMainMenuItem_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void SwitchColorChannelMainMenuItem_Click(object sender, EventArgs e)
+        {
+            if (sender == RGBtoRBGMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.SwitchColorChannel(ImageRenderer.ColorChannelTypes.RBG);
+            }
+
+            else if (sender == RGBtoBGRMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.SwitchColorChannel(ImageRenderer.ColorChannelTypes.BGR);
+            }
+
+            else if (sender == RGBtoBRGMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.SwitchColorChannel(ImageRenderer.ColorChannelTypes.BRG); ;
+            }
+
+            else if (sender == RGBtoGRBMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.SwitchColorChannel(ImageRenderer.ColorChannelTypes.GRB);
+            }
+
+            else if (sender == RGBtoGBRMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.SwitchColorChannel(ImageRenderer.ColorChannelTypes.GBR);               
+            }
+
+            UpdateInterface();
         }
 
         #endregion

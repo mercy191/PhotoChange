@@ -10,31 +10,17 @@ namespace PhotoChange
         {         
             if (pictureBoxCanvas.BackgroundImage != null)
             {
-                mainToolsPanelSizeModeSplitButton.Text = pictureBoxCanvas.BackgroundImageLayout.ToString();
-
-                switch (pictureBoxCanvas.BackgroundImageLayout)
-                {
-                    case ImageLayout.Zoom:
-                        _selectionController.CurrentLayer.ImageRenderer.CalculateScaleFactor(pictureBoxCanvas.Width, pictureBoxCanvas.Height);
-                        _selectionController.CurrentLayer.ImageRenderer.CalculateRetreat(pictureBoxCanvas.Width, pictureBoxCanvas.Height);
-                        break;
-
-                    case ImageLayout.None:
-                        _selectionController.CurrentLayer.ImageRenderer.ScaleFactor = 1;
-                        _selectionController.CurrentLayer.ImageRenderer.WidthRetreat = 0;
-                        _selectionController.CurrentLayer.ImageRenderer.HeightRetreat = 0;
-                        break;
-                }
+                _selectionController.CurrentLayer.ImageRenderer.CalculateRetreat(pictureBoxCanvas.Width, pictureBoxCanvas.Height);             
             }
         }
 
         private void PictureBoxCanvas_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-            {              
+            {
                 if (_selectionController.IsDrawing)
                 {
-                    _graphicsController.EditBitmap = new Bitmap(_selectionController.CurrentLayer.ImageRenderer.Image); // Create new bitmap for drawing
+                    _graphicsController.EditBitmap = new Bitmap(_selectionController.CurrentLayer.ImageRenderer.OriginalImage); // Create new bitmap for drawing
                     _graphicsController.BitmapGraphics = Graphics.FromImage(_graphicsController.EditBitmap);
                     _graphicsController.VisualGraphics = pictureBoxCanvas.CreateGraphics();
 
@@ -53,7 +39,7 @@ namespace PhotoChange
                             break;
 
                         case ImageDrawing.DrawingTools.Line:
-                            switch(_selectionController.MouseClickNum)
+                            switch (_selectionController.MouseClickNum)
                             {
                                 case 1:
                                     _selectionController.MouseLastDownPosition = new PointF(e.Location.X, e.Location.Y);
@@ -95,7 +81,7 @@ namespace PhotoChange
                                             _selectionController.CurrentLayer.ImageRenderer.ConvertXToProportions(_selectionController.MouseLastDownPosition.X),
                                             _selectionController.CurrentLayer.ImageRenderer.ConvertYToProportions(_selectionController.MouseLastDownPosition.Y),
                                             _selectionController.CurrentLayer.ImageRenderer.ConvertXToProportions(e.Location.X) - _selectionController.CurrentLayer.ImageRenderer.ConvertXToProportions(_selectionController.MouseLastDownPosition.X),
-                                            _selectionController.CurrentLayer.ImageRenderer.ConvertYToProportions(e.Location.Y) - _selectionController.CurrentLayer.ImageRenderer.ConvertYToProportions(_selectionController.MouseLastDownPosition.Y)   
+                                            _selectionController.CurrentLayer.ImageRenderer.ConvertYToProportions(e.Location.Y) - _selectionController.CurrentLayer.ImageRenderer.ConvertYToProportions(_selectionController.MouseLastDownPosition.Y)
                                             )
                                         );
                                     _graphicsController.VisualGraphics.DrawEllipse
@@ -106,7 +92,7 @@ namespace PhotoChange
                                             _selectionController.MouseLastDownPosition.X,
                                             _selectionController.MouseLastDownPosition.Y,
                                             e.Location.X - _selectionController.MouseLastDownPosition.X,
-                                            e.Location.Y - _selectionController.MouseLastDownPosition.Y 
+                                            e.Location.Y - _selectionController.MouseLastDownPosition.Y
                                             )
                                         );
 
@@ -123,9 +109,9 @@ namespace PhotoChange
                     switch (_selectionController.CurrentLayer.ImageDrawing.Tool)
                     {
                         case ImageDrawing.DrawingTools.Pipette:
-                            var bmp = new Bitmap(_selectionController.CurrentLayer.ImageRenderer.Image);
+                            var bmp = new Bitmap(_selectionController.CurrentLayer.ImageRenderer.OriginalImage);
                             _selectionController.CurrentLayer.ImageDrawing.PipetteColor = bmp.GetPixel(
-                                (int)_selectionController.CurrentLayer.ImageRenderer.ConvertXToProportions(e.Location.X), 
+                                (int)_selectionController.CurrentLayer.ImageRenderer.ConvertXToProportions(e.Location.X),
                                 (int)_selectionController.CurrentLayer.ImageRenderer.ConvertYToProportions(e.Location.Y)
                                 );
                             mainToolsPanelColorButton.BackColor = _selectionController.CurrentLayer.ImageDrawing.PipetteColor;
@@ -136,12 +122,12 @@ namespace PhotoChange
         }
 
         private void PictureBoxCanvas_MouseMove(object sender, MouseEventArgs e)
-        {           
+        {
             if (_selectionController.IsDrawing && _selectionController.IsMouseDown)
-            {                
+            {
                 switch (_selectionController.CurrentLayer.ImageDrawing.Tool)
                 {
-                    case ImageDrawing.DrawingTools.Brush:                       
+                    case ImageDrawing.DrawingTools.Brush:
                         _graphicsController.BitmapGraphics.DrawEllipse
                             (
                             new Pen(_selectionController.CurrentLayer.ImageDrawing.BrushColor, _selectionController.CurrentLayer.ImageDrawing.BrushSize),
@@ -152,8 +138,8 @@ namespace PhotoChange
                             );
                         _graphicsController.VisualGraphics.DrawEllipse
                             (
-                            new Pen(_selectionController.CurrentLayer.ImageDrawing.BrushColor, _selectionController.CurrentLayer.ImageDrawing.BrushSize / _selectionController.CurrentLayer.ImageRenderer.ScaleFactor), 
-                            e.Location.X, 
+                            new Pen(_selectionController.CurrentLayer.ImageDrawing.BrushColor, _selectionController.CurrentLayer.ImageDrawing.BrushSize / _selectionController.CurrentLayer.ImageRenderer.ScaleFactor),
+                            e.Location.X,
                             e.Location.Y,
                             _selectionController.CurrentLayer.ImageDrawing.BrushSize / _selectionController.CurrentLayer.ImageRenderer.ScaleFactor,
                             _selectionController.CurrentLayer.ImageDrawing.BrushSize / _selectionController.CurrentLayer.ImageRenderer.ScaleFactor
@@ -171,8 +157,8 @@ namespace PhotoChange
                             );
                         _graphicsController.VisualGraphics.DrawEllipse
                             (
-                            new Pen(pictureBoxCanvas.BackColor, _selectionController.CurrentLayer.ImageDrawing.ErazerSize / _selectionController.CurrentLayer.ImageRenderer.ScaleFactor), 
-                            e.Location.X, 
+                            new Pen(pictureBoxCanvas.BackColor, _selectionController.CurrentLayer.ImageDrawing.ErazerSize / _selectionController.CurrentLayer.ImageRenderer.ScaleFactor),
+                            e.Location.X,
                             e.Location.Y,
                             _selectionController.CurrentLayer.ImageDrawing.ErazerSize / _selectionController.CurrentLayer.ImageRenderer.ScaleFactor,
                             _selectionController.CurrentLayer.ImageDrawing.ErazerSize / _selectionController.CurrentLayer.ImageRenderer.ScaleFactor
@@ -186,9 +172,8 @@ namespace PhotoChange
         {
             if (_selectionController.IsDrawing && _selectionController.IsMouseDown)
             {
-                _selectionController.CurrentLayer.ImageRenderer.Image = new Bitmap(_graphicsController.EditBitmap);
-                _selectionController.CurrentLayer.ImageRenderer.EditList.Add(new Bitmap(_graphicsController.EditBitmap)); // Add new bitmap
-
+                _selectionController.CurrentLayer.ImageRenderer.OriginalImage = new Bitmap(_graphicsController.EditBitmap);               
+                _selectionController.CurrentLayer.ImageRenderer.EditList.Add(new Bitmap(_graphicsController.EditBitmap));
                 _selectionController.IsMouseDown = false;
                 _selectionController.CurrentLayer.ImageRenderer.EditListIterator += 1;
 

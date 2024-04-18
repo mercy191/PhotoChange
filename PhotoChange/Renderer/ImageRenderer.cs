@@ -1,4 +1,7 @@
 ﻿using PhotoChange.Common;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using static PhotoChange.Renderer.ImageRenderer;
 
 namespace PhotoChange.Renderer
 {
@@ -11,35 +14,49 @@ namespace PhotoChange.Renderer
         public ImageRenderer()
         {
             _path = "";
-            _image = new Bitmap(1, 1);
             _originalImage = new Bitmap(1, 1);
+            _image = new Bitmap(1, 1);
             _editList = new List<Bitmap>();
             _editListIterator = -1;
             _scaleFactor = 1;
+            _scalePercent = 100;
             _widthRetreat = 0;
             _heightRetreat = 0;
             _rotateAngle = 0;
         }
 
-
         /// <param name="path">Image path.</param>
         public ImageRenderer(string path)
         {
-            _path = path;
-            _image = new Bitmap(path);
-            _originalImage = new Bitmap(_image);
-            _editList = new List<Bitmap>();
-            _editListIterator = -1;
+            _path = path;          
+            _originalImage = new Bitmap(path);
+            _image = new Bitmap(_originalImage);
+            _editList = [new Bitmap(_originalImage)];
+            _editListIterator = 0;
             _scaleFactor = 1;
+            _scalePercent = 100;
             _widthRetreat = 0;
             _heightRetreat = 0;
             _rotateAngle = 0;
+        }
+        /// <summary>
+        /// Original size image.
+        /// </summary>
+        public Bitmap OriginalImage
+        {
+            get => _originalImage;
+            set
+            {
+                if (_originalImage != null && _originalImage != value)
+                    _image.Dispose();
+                _originalImage = value;
+            }
         }
 
         /// <summary>
         /// Current image.
         /// </summary>
-        public Bitmap? Image
+        public Bitmap Image
         {
             get => _image; 
             set
@@ -51,20 +68,11 @@ namespace PhotoChange.Renderer
         }
 
         /// <summary>
-        /// Original image.
-        /// </summary>
-        public Bitmap? OriginalImage
-        {
-            get => _originalImage;
-        }
-        
-
-        /// <summary>
         /// The list stores all image changes.
         /// </summary>
         public List<Bitmap> EditList
         {
-            get => _editList;
+            get => _editList;          
         }
 
         /// <summary>
@@ -72,7 +80,8 @@ namespace PhotoChange.Renderer
         /// </summary>
         public int EditListIterator
         {
-            get => _editListIterator; set => _editListIterator = value;
+            get => _editListIterator; 
+            set => _editListIterator = value;
         }
 
         /// <summary>
@@ -80,7 +89,8 @@ namespace PhotoChange.Renderer
         /// </summary>
         public string Path
         {
-            get => _path; set => _path = value;
+            get => _path; 
+            set => _path = value;
         }
 
         /// <summary>
@@ -88,7 +98,25 @@ namespace PhotoChange.Renderer
         /// </summary>
         public float ScaleFactor
         {
-            get => _scaleFactor; set => _scaleFactor = value;
+            get => _scaleFactor;
+            set
+            {
+                _scaleFactor = value;
+                _scalePercent = (float)(100.0f / _scaleFactor);
+            }
+        }
+
+        /// <summary>
+        /// Image scalability percentage.
+        /// </summary>
+        public float ScalePercent
+        {
+            get => _scalePercent;
+            set
+            {
+                _scalePercent = value;
+                _scaleFactor = (float)(100.0f / _scalePercent);
+            }
         }
 
         /// <summary>
@@ -96,7 +124,8 @@ namespace PhotoChange.Renderer
         /// </summary>
         public float WidthRetreat
         {
-            get => _widthRetreat; set => _widthRetreat = value;
+            get => _widthRetreat; 
+            set => _widthRetreat = value;
         }
 
         /// <summary>
@@ -104,7 +133,8 @@ namespace PhotoChange.Renderer
         /// </summary>
         public float HeightRetreat
         {
-            get => _heightRetreat; set => _heightRetreat = value;
+            get => _heightRetreat; 
+            set => _heightRetreat = value;
         }
 
         public float RotateAngle
@@ -118,16 +148,33 @@ namespace PhotoChange.Renderer
             } 
         }
 
-        private Bitmap? _image;
-        private Bitmap? _originalImage;
+        public enum ColorFilterTypes
+        {
+            Red,
+            Green,
+            Blue,
+            All
+        }
+
+        public enum ColorChannelTypes
+        {
+            RBG,
+            BGR,
+            BRG,
+            GRB,
+            GBR
+        }
+
+        private Bitmap _image;
+        private Bitmap _originalImage;
         private List<Bitmap> _editList;
         private int _editListIterator;
         private string _path;
         private float _scaleFactor;
+        private float _scalePercent;
         private float _widthRetreat;
         private float _heightRetreat;
         private float _rotateAngle;
-
 
         /// <param name="width">Canvas width.</param>
         /// <param name="height">Canvas height.</param>
@@ -141,8 +188,8 @@ namespace PhotoChange.Renderer
         /// <param name="height">Canvas height.</param>
         public void CalculateRetreat(int width, int height)
         {
-            WidthRetreat = (width - Image.Width / ScaleFactor) / 2;
-            HeightRetreat = (height - Image.Height / ScaleFactor) / 2;
+            WidthRetreat = (width - Image.Width) / 2;
+            HeightRetreat = (height - Image.Height) / 2;
         }
 
         /// <param name="point">Point position on screen</param>
@@ -169,23 +216,18 @@ namespace PhotoChange.Renderer
                 item.Dispose();
             _editList.Clear();
             _editListIterator = -1;
-            _image?.Dispose();
-            _image = null;
-            _originalImage?.Dispose();
-            _originalImage = null;
+            _image.Dispose();
+            _originalImage.Dispose();
         }
 
-
-        /// <param name="width">New image width.</param>
-        /// <param name="heignt">New image height.</param>
-        public void Resize(int width, int height)
+        public void EditScale()
         {
-            if (width == 0 || height == 0) return;   
+            int newWidth = (int)(OriginalImage.Width * ScalePercent / 100);
+            int newHeight = (int)(OriginalImage.Height * ScalePercent / 100);
+            Bitmap newImage = new Bitmap(newWidth, newHeight, OriginalImage.PixelFormat);
 
-            Bitmap newImage = new Bitmap(width, height, Image.PixelFormat);
-
-            float nWidthFactor = (float)Image.Width / width;
-            float nHeightFactor = (float)Image.Height / height;
+            double nWidthFactor = (double)OriginalImage.Width / (double)newWidth;
+            double nHeightFactor = (double)OriginalImage.Height / (double)newHeight;
 
             double fx, fy, nx, ny;
             int cx, cy, fr_x, fr_y;
@@ -205,49 +247,45 @@ namespace PhotoChange.Renderer
                     fr_x = (int)Math.Floor(x * nWidthFactor);
                     fr_y = (int)Math.Floor(y * nHeightFactor);
                     cx = fr_x + 1;
-                    if (cx >= Image.Width) cx = fr_x;
+                    if (cx >= OriginalImage.Width) cx = fr_x;
                     cy = fr_y + 1;
-                    if (cy >= Image.Height) cy = fr_y;
+                    if (cy >= OriginalImage.Height) cy = fr_y;
                     fx = x * nWidthFactor - fr_x;
                     fy = y * nHeightFactor - fr_y;
                     nx = 1.0 - fx;
                     ny = 1.0 - fy;
 
-                    color1 = Image.GetPixel(fr_x, fr_y);
-                    color2 = Image.GetPixel(cx, fr_y);
-                    color3 = Image.GetPixel(fr_x, cy);
-                    color4 = Image.GetPixel(cx, cy);
+                    color1 = OriginalImage.GetPixel(fr_x, fr_y);
+                    color2 = OriginalImage.GetPixel(cx, fr_y);
+                    color3 = OriginalImage.GetPixel(fr_x, cy);
+                    color4 = OriginalImage.GetPixel(cx, cy);
 
                     // Blue
                     bp1 = (byte)(nx * color1.B + fx * color2.B);
 
                     bp2 = (byte)(nx * color3.B + fx * color4.B);
 
-                    nBlue = (byte)(ny * (bp1) + fy * (bp2));
+                    nBlue = (byte)(ny * (double)(bp1) + fy * (double)(bp2));
 
                     // Green
                     bp1 = (byte)(nx * color1.G + fx * color2.G);
 
                     bp2 = (byte)(nx * color3.G + fx * color4.G);
 
-                    nGreen = (byte)(ny * (bp1) + fy * (bp2));
+                    nGreen = (byte)(ny * (double)(bp1) + fy * (double)(bp2));
 
                     // Red
                     bp1 = (byte)(nx * color1.R + fx * color2.R);
 
                     bp2 = (byte)(nx * color3.R + fx * color4.R);
 
-                    nRed = (byte)(ny * (bp1) + fy * (bp2));
+                    nRed = (byte)(ny * (double)(bp1) + fy * (double)(bp2));
 
-                    newImage.SetPixel(x, y, System.Drawing.Color.FromArgb(255, nRed, nGreen, nBlue));
+                    newImage.SetPixel(x, y, Color.FromArgb(255, nRed, nGreen, nBlue));
                 }
             }
-
             Image = newImage;
-            EditList.Add(new Bitmap(Image));
-            EditListIterator += 1;
         }
-
 
         /// <param name="angle">Angle of rotation.</param>
         public void Rotate(float angle)
@@ -268,70 +306,84 @@ namespace PhotoChange.Renderer
             {
                 graphics.TranslateTransform(rotatedImage.Width / 2, rotatedImage.Height / 2); // Смещение в центр
                 graphics.RotateTransform((float)angle); // Поворот изображения
-                graphics.TranslateTransform(-Image.Width / 2, -Image.Height / 2); // Смещение от центра
-                graphics.DrawImage(Image, new Point(0, 0));
+                graphics.TranslateTransform(-OriginalImage.Width / 2, -OriginalImage.Height / 2); // Смещение от центра
+                graphics.DrawImage(OriginalImage, new Point(0, 0));
             }
 
-            Image.Dispose();
-            Image = rotatedImage;
-            EditList.Add(new Bitmap(Image));
+            OriginalImage = rotatedImage;
+            EditList.Add(new Bitmap(OriginalImage));
             EditListIterator += 1;
         }
-
 
         /// <param name="flipType">Type of rotate or flip filter.</param>
         public void Flip(RotateFlipType flipType)
         {
-            Image.RotateFlip(flipType);
-            EditList.Add(new Bitmap(Image));
+            OriginalImage.RotateFlip(flipType);
+            EditList.Add(new Bitmap(OriginalImage));
             EditListIterator += 1;
         }
 
-        public enum ColorFilterTypes
+        public Histogram CalculateHistogram()
         {
-            Red,
-            Green,
-            Blue,
-            All
-        }
+            Histogram histogram = new Histogram();
 
-        public void IncreaseColorDepth()
-        {
+            int[] brightnessValuesRed = new int[256];
+            int[] brightnessValuesGreen = new int[256];
+            int[] brightnessValuesBlue = new int[256];
+            int[] brightnessValuesGray = new int[256];
 
-        }
+            for (int y = 0; y < OriginalImage.Height; y++)
+            {
+                for (int x = 0; x < OriginalImage.Width; x++)
+                {
+                    Color pixelColor = OriginalImage.GetPixel(x, y);
+                    int brightnessRed = pixelColor.R;
+                    int brightnessGreen = pixelColor.G;
+                    int brightnessBlue = pixelColor.B;
+                    int brightnessGray = (int)(0.2126 * pixelColor.R + 0.7152 * pixelColor.G + 0.0722 * pixelColor.B);
+                    brightnessValuesRed[brightnessRed]++;
+                    brightnessValuesGreen[brightnessGreen]++;
+                    brightnessValuesBlue[brightnessBlue]++;
+                    brightnessValuesGray[brightnessGray]++;
+                }
+            }
 
-        public void ReduceColorDepth()
-        {
-            
+            histogram.BrightnessValuesRed = brightnessValuesRed;
+            histogram.BrightnessValuesGreen = brightnessValuesGreen;
+            histogram.BrightnessValuesBlue = brightnessValuesBlue;
+            histogram.BrightnessValuesGray = brightnessValuesGray;
+            histogram.MaxPixels = OriginalImage.Width * OriginalImage.Height;
+
+            return histogram;
         }
 
         public void SetGrayscale()
         {
             Color color;
-            for (int i = 0; i < Image.Width; i++)
+            for (int i = 0; i < OriginalImage.Width; i++)
             {
-                for (int j = 0; j < Image.Height; j++)
+                for (int j = 0; j < OriginalImage.Height; j++)
                 {
-                    color = Image.GetPixel(i, j);
+                    color = OriginalImage.GetPixel(i, j);
                     byte gray = (byte)(.299 * color.R + .587 * color.G + .114 * color.B);
 
-                    Image.SetPixel(i, j, Color.FromArgb(gray, gray, gray));
+                    OriginalImage.SetPixel(i, j, Color.FromArgb(gray, gray, gray));
                 }
             }
 
-            EditList.Add(new Bitmap(Image));
+            EditList.Add(new Bitmap(OriginalImage));
             EditListIterator += 1;
-        }
+        }      
 
         /// <param name="colorFilterType">Type of color filter</param>
         public void SetColorFilter(ColorFilterTypes colorFilterType)
         {
             Color color;
-            for (int i = 0; i < Image.Width; i++)
+            for (int i = 0; i < OriginalImage.Width; i++)
             {
-                for (int j = 0; j < Image.Height; j++)
+                for (int j = 0; j < OriginalImage.Height; j++)
                 {
-                    color = Image.GetPixel(i, j);
+                    color = OriginalImage.GetPixel(i, j);
                     int nPixelR = 0;
                     int nPixelG = 0;
                     int nPixelB = 0;
@@ -362,12 +414,12 @@ namespace PhotoChange.Renderer
                     nPixelB = Math.Max(nPixelB, 0);
                     nPixelB = Math.Min(255, nPixelB);
 
-                    Image.SetPixel(i, j, Color.FromArgb((byte)nPixelR,
+                    OriginalImage.SetPixel(i, j, Color.FromArgb((byte)nPixelR,
                       (byte)nPixelG, (byte)nPixelB));
                 }
             }
 
-            EditList.Add(new Bitmap(Image));
+            EditList.Add(new Bitmap(OriginalImage));
             EditListIterator += 1;
         }      
 
@@ -375,66 +427,68 @@ namespace PhotoChange.Renderer
         public void SetInvert(ColorFilterTypes colorFilterType)
         {
             Color color;
-            for (int i = 0; i < Image.Width; i++)
+            for (int i = 0; i < OriginalImage.Width; i++)
             {
-                for (int j = 0; j < Image.Height; j++)
+                for (int j = 0; j < OriginalImage.Height; j++)
                 {
-                    color = Image.GetPixel(i, j);
+                    color = OriginalImage.GetPixel(i, j);
                     if (colorFilterType == ColorFilterTypes.Red)
                     {
-                        Image.SetPixel(i, j, Color.FromArgb(255 - color.R, color.G, color.B));
+                        OriginalImage.SetPixel(i, j, Color.FromArgb(255 - color.R, color.G, color.B));
                     }
                     else if (colorFilterType == ColorFilterTypes.Green)
                     {
-                        Image.SetPixel(i, j, Color.FromArgb(color.R, 255 - color.G, color.B));
+                        OriginalImage.SetPixel(i, j, Color.FromArgb(color.R, 255 - color.G, color.B));
                     }
                     else if (colorFilterType == ColorFilterTypes.Blue)
                     {
-                        Image.SetPixel(i, j, Color.FromArgb(color.R, color.G, 255 - color.B));
+                        OriginalImage.SetPixel(i, j, Color.FromArgb(color.R, color.G, 255 - color.B));
                     }
                     else if (colorFilterType == ColorFilterTypes.All)
                     {
-                        Image.SetPixel(i, j, Color.FromArgb(255 - color.R, 255 - color.G, 255 - color.B));
+                        OriginalImage.SetPixel(i, j, Color.FromArgb(255 - color.R, 255 - color.G, 255 - color.B));
                     }                    
                 }
             }
 
-            EditList.Add(new Bitmap(Image));
+            EditList.Add(new Bitmap(OriginalImage));
             EditListIterator += 1;
         }
 
-        public Histogram CalculateHistogram()
+        /// <param name="colorChannelType">Type of color channel.</param>
+        public void SwitchColorChannel(ColorChannelTypes colorChannelType)
         {
-            Histogram histogram = new Histogram();
-
-            int[] brightnessValuesRed = new int[256];
-            int[] brightnessValuesGreen = new int[256];
-            int[] brightnessValuesBlue = new int[256];
-            int[] brightnessValuesGray = new int[256];
-
-            for (int y = 0; y < Image.Height; y++)
+            Color color;
+            for (int i = 0; i < OriginalImage.Width; i++)
             {
-                for (int x = 0; x < Image.Width; x++)
+                for (int j = 0; j < OriginalImage.Height; j++)
                 {
-                    Color pixelColor = Image.GetPixel(x, y);
-                    int brightnessRed = pixelColor.R;
-                    int brightnessGreen = pixelColor.G;
-                    int brightnessBlue = pixelColor.B;
-                    int brightnessGray = (int)(0.2126 * pixelColor.R + 0.7152 * pixelColor.G + 0.0722 * pixelColor.B);
-                    brightnessValuesRed[brightnessRed]++;
-                    brightnessValuesGreen[brightnessGreen]++;
-                    brightnessValuesBlue[brightnessBlue]++;
-                    brightnessValuesGray[brightnessGray]++;
+                    color = OriginalImage.GetPixel(i, j);
+                    if (colorChannelType == ColorChannelTypes.RBG)
+                        OriginalImage.SetPixel(i, j, Color.FromArgb(color.R, color.B, color.G));
+
+                    else if (colorChannelType == ColorChannelTypes.BGR)
+                        OriginalImage.SetPixel(i, j, Color.FromArgb(color.B, color.G, color.R));
+
+                    else if (colorChannelType == ColorChannelTypes.BRG)
+                        OriginalImage.SetPixel(i, j, Color.FromArgb(color.B, color.R, color.G));
+
+                    else if (colorChannelType == ColorChannelTypes.GRB)
+                        OriginalImage.SetPixel(i, j, Color.FromArgb(color.G, color.R, color.B));
+
+                    else if (colorChannelType == ColorChannelTypes.GBR)
+                        OriginalImage.SetPixel(i, j, Color.FromArgb(color.G, color.B, color.R));
                 }
             }
 
-            histogram.BrightnessValuesRed = brightnessValuesRed;
-            histogram.BrightnessValuesGreen = brightnessValuesGreen;
-            histogram.BrightnessValuesBlue = brightnessValuesBlue;
-            histogram.BrightnessValuesGray = brightnessValuesGray;
-            histogram.MaxPixels = Image.Width * Image.Height;
+            EditList.Add(new Bitmap(OriginalImage));
+            EditListIterator += 1;
+        }
 
-            return histogram;
+        public void ChangeColorDepth(PixelFormat pixelFormat)
+        {
+            
+            
         }
     }
 }

@@ -23,7 +23,7 @@
                 if (index > -1 && index < _layers.Count)
                 {
                     _selectionController.CurrentLayer = _layers[index];
-                    layerPictureBox.Image = _selectionController.CurrentLayer.ImageRenderer.Image;
+                    layerPictureBox.Image = _selectionController.CurrentLayer.ImageRenderer.OriginalImage;
                 }
             }
 

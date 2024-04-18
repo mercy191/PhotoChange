@@ -10,32 +10,38 @@
 
         public float BrushSize
         {
-            get => _brushSize; set => _brushSize = value;
+            get => _brushSize; 
+            set => _brushSize = value;
         }
 
         public float ErazerSize
         {
-            get => _erazerSize; set => _erazerSize = value;
+            get => _erazerSize; 
+            set => _erazerSize = value;
         }
 
         public Color BrushColor
         {
-            get => _brushColor; set => _brushColor = value;
+            get => _brushColor; 
+            set => _brushColor = value;
         }
 
         public Color ErazerColor
         {
-            get => _erazerColor; set => _erazerColor = value;
+            get => _erazerColor; 
+            set => _erazerColor = value;
         }
 
         public Color PipetteColor
         {
-            get => _pipetteColor; set => _pipetteColor = value;
+            get => _pipetteColor; 
+            set => _pipetteColor = value;
         }
 
         public Color FillingColor
         {
-            get => _fillingColor; set => _fillingColor = value;
+            get => _fillingColor; 
+            set => _fillingColor = value;
         }
 
         public DrawingMode Mode
@@ -46,7 +52,8 @@
 
         public DrawingTools Tool
         {
-            get => _tool; set => _tool = value;
+            get => _tool; 
+            set => _tool = value;
         }
 
         public enum DrawingMode
@@ -66,7 +73,6 @@
             Line,
             Ellipse
         }
-
 
         private float _brushSize = 1f;
         private float _erazerSize = 1f;
