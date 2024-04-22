@@ -1,4 +1,5 @@
-﻿using PhotoChange.Renderer;
+﻿using PhotoChange.Common;
+using PhotoChange.Renderer;
 
 namespace PhotoChange
 {
@@ -64,6 +65,45 @@ namespace PhotoChange
             }
         }
 
+        private void CombineLayersMainToolsPanelButton_Click(object sender, EventArgs e)
+        {
+            var indexCollection = layersListBox.SelectedIndices;
+            List<Bitmap> images = new List<Bitmap>();
+
+            foreach (int index in indexCollection)
+            {
+                images.Add(new Bitmap(_layers[index].ImageRenderer.OriginalImage));
+
+                if (images[index].Width < images[index].Height)
+                {
+                    images[index] = CombineHelper.RotateImage(images[index], 270);
+                }
+            }
+
+            List<Bitmap> sortedImages = images.OrderBy(image => image.Width).ToList();
+            Bitmap newImage = new Bitmap(sortedImages.First().Width, sortedImages.First().Height);
+
+            for (int i = 0; i < sortedImages.Count; i++)
+            {
+                sortedImages[i] = CombineHelper.ResizeImage(sortedImages[i], newImage.Width, newImage.Height);
+                CombineHelper.CombineImage(newImage, sortedImages[i]);
+            }
+
+            _layers.Add(new Layer(
+                new ImageRenderer(newImage),
+                new ImageDrawing(),
+                new ImageInfo()
+                ));
+            _selectionController.IsImageCreated = true;
+            _selectionController.CurrentLayer = _layers.Last();
+            _selectionController.CurrentLayerNumber = _layers.LastIndexOf(_selectionController.CurrentLayer);
+            _selectionController.CurrentLayer.ImageRenderer.CalculateScaleFactor(pictureBoxCanvas.Width, pictureBoxCanvas.Height);
+            _selectionController.CurrentLayer.ImageRenderer.CalculateRetreat(pictureBoxCanvas.Width, pictureBoxCanvas.Height);
+
+            layersListBox.Items.Add("new_layer");
+            UpdateInterface();
+        }
+      
         #endregion
     }
 }

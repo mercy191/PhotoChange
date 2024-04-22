@@ -1,7 +1,5 @@
 ﻿using PhotoChange.Common;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using static PhotoChange.Renderer.ImageRenderer;
+using System.IO;
 
 namespace PhotoChange.Renderer
 {
@@ -13,10 +11,12 @@ namespace PhotoChange.Renderer
     {
         public ImageRenderer()
         {
-            _path = "";
+            _path = string.Empty;
             _originalImage = new Bitmap(1, 1);
-            _image = new Bitmap(1, 1);
+            _scaleImage = new Bitmap(1, 1);
             _editList = new List<Bitmap>();
+            _staticImageWidth = 1;
+            _staticImageHeight = 1;
             _editListIterator = -1;
             _scaleFactor = 1;
             _scalePercent = 100;
@@ -30,8 +30,10 @@ namespace PhotoChange.Renderer
         {
             _path = path;          
             _originalImage = new Bitmap(path);
-            _image = new Bitmap(_originalImage);
+            _scaleImage = new Bitmap(_originalImage);
             _editList = [new Bitmap(_originalImage)];
+            _staticImageWidth = _originalImage.Width;
+            _staticImageHeight = _originalImage.Height;
             _editListIterator = 0;
             _scaleFactor = 1;
             _scalePercent = 100;
@@ -39,6 +41,23 @@ namespace PhotoChange.Renderer
             _heightRetreat = 0;
             _rotateAngle = 0;
         }
+
+        public ImageRenderer(Bitmap image)
+        {
+            _path = string.Empty;
+            _originalImage = new Bitmap(image);
+            _scaleImage = new Bitmap(_originalImage);
+            _editList = [new Bitmap(_originalImage)];
+            _staticImageWidth = _originalImage.Width;
+            _staticImageHeight = _originalImage.Height;
+            _editListIterator = 0;
+            _scaleFactor = 1;
+            _scalePercent = 100;
+            _widthRetreat = 0;
+            _heightRetreat = 0;
+            _rotateAngle = 0;
+        }
+
         /// <summary>
         /// Original size image.
         /// </summary>
@@ -48,7 +67,7 @@ namespace PhotoChange.Renderer
             set
             {
                 if (_originalImage != null && _originalImage != value)
-                    _image.Dispose();
+                    _originalImage.Dispose();
                 _originalImage = value;
             }
         }
@@ -56,15 +75,33 @@ namespace PhotoChange.Renderer
         /// <summary>
         /// Current image.
         /// </summary>
-        public Bitmap Image
+        public Bitmap ScaleImage
         {
-            get => _image; 
+            get => _scaleImage; 
             set
             {
-                if (_image != null && _image != value ) 
-                    _image.Dispose();
-                _image = value;
+                if (_scaleImage != null && _scaleImage != value ) 
+                    _scaleImage.Dispose();
+                _scaleImage = value;
             }
+        }
+
+        /// <summary>
+        /// Widht of not rotated original image.
+        /// </summary>
+        public int StaticImageWidth
+        {
+            get => _staticImageWidth;
+            set => _staticImageWidth = value;
+        }
+
+        /// <summary>
+        /// Height of not rotated original image.
+        /// </summary>
+        public int StaticImageHeight
+        {
+            get => _staticImageHeight;
+            set => _staticImageHeight = value;
         }
 
         /// <summary>
@@ -165,9 +202,11 @@ namespace PhotoChange.Renderer
             GBR
         }
 
-        private Bitmap _image;
+        private Bitmap _scaleImage;
         private Bitmap _originalImage;
         private List<Bitmap> _editList;
+        private int _staticImageWidth;
+        private int _staticImageHeight;
         private int _editListIterator;
         private string _path;
         private float _scaleFactor;
@@ -175,21 +214,30 @@ namespace PhotoChange.Renderer
         private float _widthRetreat;
         private float _heightRetreat;
         private float _rotateAngle;
+        public void Dispose()
+        {
+            foreach (var item in _editList)
+                item.Dispose();
+            _editList.Clear();
+            _editListIterator = -1;
+            _scaleImage.Dispose();
+            _originalImage.Dispose();
+        }
 
         /// <param name="width">Canvas width.</param>
         /// <param name="height">Canvas height.</param>
         public void CalculateScaleFactor(int width, int height)
         {
-            ScaleFactor = (float)Image.Width / width > (float)Image.Height / height
-                ? (float)Image.Width / width : (float)Image.Height / height;
+            ScaleFactor = (float)OriginalImage.Width / width > (float)OriginalImage.Height / height
+                ? (float)OriginalImage.Width / width : (float)OriginalImage.Height / height;
         }
 
         /// <param name="width">Canvas width.</param>
         /// <param name="height">Canvas height.</param>
         public void CalculateRetreat(int width, int height)
         {
-            WidthRetreat = (width - Image.Width) / 2;
-            HeightRetreat = (height - Image.Height) / 2;
+            WidthRetreat = (width - ScaleImage.Width) / 2;
+            HeightRetreat = (height - ScaleImage.Height) / 2;
         }
 
         /// <param name="point">Point position on screen</param>
@@ -210,21 +258,11 @@ namespace PhotoChange.Renderer
             return (y - HeightRetreat) * ScaleFactor;
         }
 
-        public void Dispose()
-        {
-            foreach (var item in _editList)
-                item.Dispose();
-            _editList.Clear();
-            _editListIterator = -1;
-            _image.Dispose();
-            _originalImage.Dispose();
-        }
-
         public void EditScale()
         {
             int newWidth = (int)(OriginalImage.Width * ScalePercent / 100);
             int newHeight = (int)(OriginalImage.Height * ScalePercent / 100);
-            Bitmap newImage = new Bitmap(newWidth, newHeight, OriginalImage.PixelFormat);
+            Bitmap newImage = new Bitmap(newWidth, newHeight);
 
             double nWidthFactor = (double)OriginalImage.Width / (double)newWidth;
             double nHeightFactor = (double)OriginalImage.Height / (double)newHeight;
@@ -235,7 +273,7 @@ namespace PhotoChange.Renderer
             Color color2 = new Color();
             Color color3 = new Color();
             Color color4 = new Color();
-            byte nRed, nGreen, nBlue;
+            byte nRed, nGreen, nBlue, nAlpha;
 
             byte bp1, bp2;
 
@@ -260,6 +298,13 @@ namespace PhotoChange.Renderer
                     color3 = OriginalImage.GetPixel(fr_x, cy);
                     color4 = OriginalImage.GetPixel(cx, cy);
 
+                    // Alpha
+                    bp1 = (byte)(nx * color1.A + fx * color2.A);
+
+                    bp2 = (byte)(nx * color3.A + fx * color4.A);
+
+                    nAlpha = (byte)(ny * (double)(bp1) + fy * (double)(bp2));
+
                     // Blue
                     bp1 = (byte)(nx * color1.B + fx * color2.B);
 
@@ -281,10 +326,87 @@ namespace PhotoChange.Renderer
 
                     nRed = (byte)(ny * (double)(bp1) + fy * (double)(bp2));
 
-                    newImage.SetPixel(x, y, Color.FromArgb(255, nRed, nGreen, nBlue));
+                    newImage.SetPixel(x, y, Color.FromArgb(nAlpha, nRed, nGreen, nBlue));
                 }
             }
-            Image = newImage;
+            ScaleImage = newImage;
+        }
+
+        /// <param name="newWidth">New width of image.</param>
+        /// <param name="newHeight">New height of image.</param>
+        public void Resize(int newWidth, int newHeight)
+        {
+            if (newWidth != 0 && newHeight != 0)
+            {
+                Bitmap newImage = new Bitmap(newWidth, newHeight);
+
+                double nWidthFactor = (double)OriginalImage.Width / (double)newWidth;
+                double nHeightFactor = (double)OriginalImage.Height / (double)newHeight;
+
+                double fx, fy, nx, ny;
+                int cx, cy, fr_x, fr_y;
+                Color color1 = new Color();
+                Color color2 = new Color();
+                Color color3 = new Color();
+                Color color4 = new Color();
+                byte nRed, nGreen, nBlue, nAlpha;
+
+                byte bp1, bp2;
+
+                for (int x = 0; x < newImage.Width; ++x)
+                {
+                    for (int y = 0; y < newImage.Height; ++y)
+                    {
+
+                        fr_x = (int)Math.Floor(x * nWidthFactor);
+                        fr_y = (int)Math.Floor(y * nHeightFactor);
+                        cx = fr_x + 1;
+                        if (cx >= OriginalImage.Width) cx = fr_x;
+                        cy = fr_y + 1;
+                        if (cy >= OriginalImage.Height) cy = fr_y;
+                        fx = x * nWidthFactor - fr_x;
+                        fy = y * nHeightFactor - fr_y;
+                        nx = 1.0 - fx;
+                        ny = 1.0 - fy;
+
+                        color1 = OriginalImage.GetPixel(fr_x, fr_y);
+                        color2 = OriginalImage.GetPixel(cx, fr_y);
+                        color3 = OriginalImage.GetPixel(fr_x, cy);
+                        color4 = OriginalImage.GetPixel(cx, cy);
+
+                        // Alpha
+                        bp1 = (byte)(nx * color1.A + fx * color2.A);
+
+                        bp2 = (byte)(nx * color3.A + fx * color4.A);
+
+                        nAlpha = (byte)(ny * (double)(bp1) + fy * (double)(bp2));
+
+                        // Blue
+                        bp1 = (byte)(nx * color1.B + fx * color2.B);
+
+                        bp2 = (byte)(nx * color3.B + fx * color4.B);
+
+                        nBlue = (byte)(ny * (double)(bp1) + fy * (double)(bp2));
+
+                        // Green
+                        bp1 = (byte)(nx * color1.G + fx * color2.G);
+
+                        bp2 = (byte)(nx * color3.G + fx * color4.G);
+
+                        nGreen = (byte)(ny * (double)(bp1) + fy * (double)(bp2));
+
+                        // Red
+                        bp1 = (byte)(nx * color1.R + fx * color2.R);
+
+                        bp2 = (byte)(nx * color3.R + fx * color4.R);
+
+                        nRed = (byte)(ny * (double)(bp1) + fy * (double)(bp2));
+
+                        newImage.SetPixel(x, y, System.Drawing.Color.FromArgb(nAlpha, nRed, nGreen, nBlue));
+                    }
+                }
+                OriginalImage = newImage;
+            }
         }
 
         /// <param name="angle">Angle of rotation.</param>
@@ -295,8 +417,8 @@ namespace PhotoChange.Renderer
             double radianAngle = RotateAngle * Math.PI / 180;
             double sin = Math.Abs(Math.Sin(radianAngle));
             double cos = Math.Abs(Math.Cos(radianAngle));
-            int newWidth = (int)Math.Round(OriginalImage.Width * cos + OriginalImage.Height * sin);
-            int newHeight = (int)Math.Round(OriginalImage.Width * sin + OriginalImage.Height * cos);
+            int newWidth = (int)Math.Round(StaticImageWidth * cos + StaticImageHeight * sin);
+            int newHeight = (int)Math.Round(StaticImageWidth * sin + StaticImageHeight * cos);
 
             // Создание Bitmap для нового изображения
             Bitmap rotatedImage = new Bitmap(newWidth, newHeight);
@@ -485,7 +607,7 @@ namespace PhotoChange.Renderer
             EditListIterator += 1;
         }
 
-        public void ChangeColorDepth(PixelFormat pixelFormat)
+        public void ChangeColorDepth()
         {
             
             

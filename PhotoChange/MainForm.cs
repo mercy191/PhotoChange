@@ -68,11 +68,18 @@ namespace PhotoChange
                 redoMainMenuItem.Enabled = true;
             }
 
-            _selectionController.CurrentLayer.ImageRenderer.EditScale();
-            editScaleMainToolsPanelTextBox.Text = _selectionController.CurrentLayer.ImageRenderer.ScalePercent.ToString();
-            splitContainer2.Panel2.Controls.Clear();
-            pictureBoxCanvas.BackgroundImage = null;
-            pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.Image;
+            if (_selectionController.IsImageCreated)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.EditScale();
+                editScaleMainToolsPanelTextBox.Text = _selectionController.CurrentLayer.ImageRenderer.ScalePercent.ToString();
+                splitContainer2.Panel2.Controls.Clear();
+                pictureBoxCanvas.BackgroundImage = _selectionController.CurrentLayer.ImageRenderer.ScaleImage;
+            }
+            else
+            {
+                splitContainer2.Panel2.Controls.Clear();
+                pictureBoxCanvas.BackgroundImage = null;
+            }
         }
 
         private void UpdateDrawingControls()

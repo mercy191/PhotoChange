@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PhotoChange.Common
+﻿namespace PhotoChange.Common
 {
     /// <summary>
     /// Stores image color information for building a histogram.

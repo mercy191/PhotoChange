@@ -174,6 +174,7 @@ namespace PhotoChange
             {
                 _selectionController.CurrentLayer.ImageRenderer.OriginalImage = new Bitmap(_graphicsController.EditBitmap);               
                 _selectionController.CurrentLayer.ImageRenderer.EditList.Add(new Bitmap(_graphicsController.EditBitmap));
+                _selectionController.IsImageCreated = true;
                 _selectionController.IsMouseDown = false;
                 _selectionController.CurrentLayer.ImageRenderer.EditListIterator += 1;
 

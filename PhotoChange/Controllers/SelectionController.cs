@@ -1,5 +1,4 @@
 ﻿using PhotoChange.Common;
-using System.Collections;
 
 namespace PhotoChange.Controllers
 {
@@ -18,6 +17,12 @@ namespace PhotoChange.Controllers
         {
             get => _currentLayerNumber;
             set => _currentLayerNumber = value;
+        }
+
+        public bool IsImageCreated
+        {
+            get => _isImageCreated;
+            set => _isImageCreated = value;
         }
 
         public bool IsMouseDown
@@ -46,6 +51,7 @@ namespace PhotoChange.Controllers
 
         private Layer _currentLayer;
         private int _currentLayerNumber = 0;
+        private bool _isImageCreated = false;
         private bool _isMouseDown = false;
         private bool _isDrawing = false;
         private int _mouseClickNum = 1;

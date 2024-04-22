@@ -27,8 +27,7 @@ namespace PhotoChange
         {
             if (sender == rotateMainMenuItem)
             {
-                _selectionController.CurrentLayer.ImageRenderer.Rotate(30);
-                
+                _selectionController.CurrentLayer.ImageRenderer.Rotate(30);            
             }    
             
             else if (sender == rotateLeftMainMenuItem) 
@@ -40,6 +39,8 @@ namespace PhotoChange
             {
                 _selectionController.CurrentLayer.ImageRenderer.Rotate(90);
             }
+
+            _selectionController.CurrentLayer.ImageRenderer.CalculateScaleFactor(pictureBoxCanvas.Width, pictureBoxCanvas.Height);
 
             UpdateInterface();
         }
@@ -59,13 +60,13 @@ namespace PhotoChange
             UpdateInterface();
         }
 
-        private void InShadesOfGreyMainMenuItem_Click(object sender, EventArgs e)
+        private void InShadesOfGrayMainMenuItem_Click(object sender, EventArgs e)
         {
             _selectionController.CurrentLayer.ImageRenderer.SetGrayscale();
             UpdateInterface();
         }
 
-        private void ShowChannelMainMenuItemClick(object sender, EventArgs e)
+        private void ShowChannelMainMenuItem_Click(object sender, EventArgs e)
         {
             if (sender == redChannelMainMenuItem)
             {
@@ -109,21 +110,24 @@ namespace PhotoChange
             UpdateInterface();
         }
 
-        private void IncreaseColorDepthMainMenuItem_Click(object sender, EventArgs e)
+        private void ChangeColorDepthMainMenuItem_Click(object sender, EventArgs e)
         {
-            //_selectionController.CurrentLayer.ImageRenderer.IncreaseColorDepth();
-            UpdateInterface();
-        }
+            if (sender == increaseColorDepthMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.ChangeColorDepth();
+            }
 
-        private void ReduceColorDepthMainMenuItem_Click(object sender, EventArgs e)
-        {
-            //_selectionController.CurrentLayer.ImageRenderer.ReduceColorDepth();
+            else if (sender == reduceColorDepthMainMenuItem)
+            {
+                _selectionController.CurrentLayer.ImageRenderer.ChangeColorDepth();
+            }
+
             UpdateInterface();
         }
 
         private void ColorCorrectionMainMenuItem_Click(object sender, EventArgs e)
         {
-
+            UpdateInterface();
         }
 
         private void HistogramMainMenuItem_Click(object sender, EventArgs e)
@@ -134,11 +138,6 @@ namespace PhotoChange
             control.Histogram = _selectionController.CurrentLayer.ImageRenderer.CalculateHistogram();
 
             splitContainer2.Panel2.Controls.Add(control);
-        }
-
-        private void ReplaceColorMainMenuItem_Click(object sender, EventArgs e)
-        {
-            
         }
 
         private void SwitchColorChannelMainMenuItem_Click(object sender, EventArgs e)

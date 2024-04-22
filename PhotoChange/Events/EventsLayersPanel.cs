@@ -23,6 +23,7 @@
                 if (index > -1 && index < _layers.Count)
                 {
                     _selectionController.CurrentLayer = _layers[index];
+                    _selectionController.IsImageCreated = true;
                     layerPictureBox.Image = _selectionController.CurrentLayer.ImageRenderer.OriginalImage;
                 }
             }
@@ -31,6 +32,7 @@
             {
                 if (index > -1 && index < _layers.Count)
                 {
+                    _selectionController.IsImageCreated = false;
                     _selectionController.CurrentLayer = _layers[index];
                     _selectionController.CurrentLayer.ImageRenderer.Dispose();
                     _layers.RemoveAt(index);

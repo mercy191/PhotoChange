@@ -12,19 +12,17 @@ namespace PhotoChange
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 ImageRenderer imageRenderer = new ImageRenderer(openFileDialog.FileName);
-                ImageDrawing imageDrawing = new ImageDrawing();
-                ImageInfo imageInfo = new ImageInfo(imageRenderer);
                 _layers.Add(new Layer
                     (
                     imageRenderer,
-                    imageDrawing, 
-                    imageInfo
-                    ));              
+                    new ImageDrawing(),
+                    new ImageInfo(imageRenderer)
+                    ));
+                _selectionController.IsImageCreated = true;
                 _selectionController.CurrentLayer = _layers.Last();
                 _selectionController.CurrentLayerNumber = _layers.LastIndexOf(_selectionController.CurrentLayer);
                 _selectionController.CurrentLayer.ImageRenderer.CalculateScaleFactor(pictureBoxCanvas.Width, pictureBoxCanvas.Height);
                 _selectionController.CurrentLayer.ImageRenderer.CalculateRetreat(pictureBoxCanvas.Width, pictureBoxCanvas.Height);
-                _selectionController.CurrentLayer.ImageRenderer.EditScale();
 
                 layersListBox.Items.Add(_layers.Last().LayerName);
                 UpdateInterface();
@@ -42,16 +40,15 @@ namespace PhotoChange
             {
                 string newPath = string.Concat(_selectionController.CurrentLayer.ImageRenderer.Path.AsSpan(0, _selectionController.CurrentLayer.ImageRenderer.Path.LastIndexOf('\\') + 1), _newName, ".", _newExpansion);
 
-                _selectionController.CurrentLayer.ImageRenderer.OriginalImage = new Bitmap(pictureBoxCanvas.BackgroundImage);
-                pictureBoxCanvas.BackgroundImage.Dispose();
-                pictureBoxCanvas.BackgroundImage = null;
+                Bitmap tempBitmap = new Bitmap(_selectionController.CurrentLayer.ImageRenderer.OriginalImage);
+                _selectionController.CurrentLayer.ImageRenderer.OriginalImage.Dispose();
 
                 File.Delete(_selectionController.CurrentLayer.ImageRenderer.Path);
-                _selectionController.CurrentLayer.ImageRenderer.OriginalImage.Save(_selectionController.CurrentLayer.ImageRenderer.Path);
+                tempBitmap.Save(_selectionController.CurrentLayer.ImageRenderer.Path, tempBitmap.RawFormat);
+                _selectionController.CurrentLayer.ImageRenderer.OriginalImage = tempBitmap;
                 File.Move(_selectionController.CurrentLayer.ImageRenderer.Path, newPath);
 
                 _selectionController.CurrentLayer.ImageRenderer.Path = newPath;
-                UpdateInterface();
             }
         }
 
@@ -63,16 +60,15 @@ namespace PhotoChange
             {
                 string newPath = folderBrowserDialog.SelectedPath + string.Concat("\\", _selectionController.CurrentLayer.ImageRenderer.Path.Substring(_selectionController.CurrentLayer.ImageRenderer.Path.LastIndexOf('\\') + 1));
 
-                _selectionController.CurrentLayer.ImageRenderer.OriginalImage = new Bitmap(pictureBoxCanvas.BackgroundImage);
-                pictureBoxCanvas.BackgroundImage.Dispose();
-                pictureBoxCanvas.BackgroundImage = null;
+                Bitmap tempBitmap = new Bitmap(_selectionController.CurrentLayer.ImageRenderer.OriginalImage);
+                _selectionController.CurrentLayer.ImageRenderer.OriginalImage.Dispose();
 
                 File.Delete(_selectionController.CurrentLayer.ImageRenderer.Path);
-                _selectionController.CurrentLayer.ImageRenderer.OriginalImage.Save(_selectionController.CurrentLayer.ImageRenderer.Path);
+                tempBitmap.Save(_selectionController.CurrentLayer.ImageRenderer.Path, tempBitmap.RawFormat);
+                _selectionController.CurrentLayer.ImageRenderer.OriginalImage = tempBitmap;
                 File.Move(_selectionController.CurrentLayer.ImageRenderer.Path, newPath);
 
                 _selectionController.CurrentLayer.ImageRenderer.Path = newPath;
-                UpdateInterface();
             }
         }
 
@@ -85,15 +81,13 @@ namespace PhotoChange
             {
                 string newPath = folderBrowserDialog.SelectedPath + string.Concat("\\", _selectionController.CurrentLayer.ImageRenderer.Path.Substring(_selectionController.CurrentLayer.ImageRenderer.Path.LastIndexOf('\\') + 1));
 
-                _selectionController.CurrentLayer.ImageRenderer.OriginalImage = new Bitmap(pictureBoxCanvas.BackgroundImage);
-                pictureBoxCanvas.BackgroundImage.Dispose();
-                pictureBoxCanvas.BackgroundImage = null;
+                Bitmap tempBitmap = new Bitmap(_selectionController.CurrentLayer.ImageRenderer.OriginalImage);
+                _selectionController.CurrentLayer.ImageRenderer.OriginalImage.Dispose();
 
                 File.Delete(_selectionController.CurrentLayer.ImageRenderer.Path);
-                _selectionController.CurrentLayer.ImageRenderer.OriginalImage.Save(_selectionController.CurrentLayer.ImageRenderer.Path);
+                tempBitmap.Save(_selectionController.CurrentLayer.ImageRenderer.Path, tempBitmap.RawFormat);
+                _selectionController.CurrentLayer.ImageRenderer.OriginalImage = tempBitmap;
                 File.Copy(_selectionController.CurrentLayer.ImageRenderer.Path, newPath);
-
-                UpdateInterface();
             }
         }
 
@@ -101,29 +95,31 @@ namespace PhotoChange
         {
             if (pictureBoxCanvas.BackgroundImage == null) return;
 
-            pictureBoxCanvas.BackgroundImage.Dispose();
-            pictureBoxCanvas.BackgroundImage = null;
+            layersListBox.Items.Remove(_selectionController.CurrentLayer.ImageInfo.FileName);
+            _layers.Remove(_selectionController.CurrentLayer);
+            _selectionController.IsImageCreated = false;
+            _selectionController.CurrentLayer.ImageRenderer.Dispose();
             File.Delete(_selectionController.CurrentLayer.ImageRenderer.Path);
+
+            UpdateInterface();
         }
 
         private void SaveMainMenuItem_Click(object sender, EventArgs e)
         {
             if (pictureBoxCanvas.BackgroundImage == null) return;
 
-            else if (_selectionController.CurrentLayer.ImageRenderer.Path == null)
+            else if (_selectionController.CurrentLayer.ImageRenderer.Path == string.Empty)
             {
                 SaveAsMainMenuItem_Click(sender, e);
                 return;
             }
 
-            _selectionController.CurrentLayer.ImageRenderer.OriginalImage = new Bitmap(pictureBoxCanvas.BackgroundImage);
-            pictureBoxCanvas.BackgroundImage.Dispose();
-            pictureBoxCanvas.BackgroundImage = null;
+            Bitmap tempBitmap = new Bitmap(_selectionController.CurrentLayer.ImageRenderer.OriginalImage);
+            _selectionController.CurrentLayer.ImageRenderer.OriginalImage.Dispose();
 
             File.Delete(_selectionController.CurrentLayer.ImageRenderer.Path);
-            _selectionController.CurrentLayer.ImageRenderer.OriginalImage.Save(_selectionController.CurrentLayer.ImageRenderer.Path, _selectionController.CurrentLayer.ImageRenderer.Image.RawFormat);
-
-            UpdateInterface();
+            tempBitmap.Save(_selectionController.CurrentLayer.ImageRenderer.Path, tempBitmap.RawFormat);
+            _selectionController.CurrentLayer.ImageRenderer.OriginalImage = tempBitmap;
         }
 
         private void SaveAsMainMenuItem_Click(object sender, EventArgs e)
@@ -134,16 +130,15 @@ namespace PhotoChange
             {
                 if (saveFileDialog.FileName != "")
                 {
-                    _selectionController.CurrentLayer.ImageRenderer.Image = new Bitmap(pictureBoxCanvas.BackgroundImage);
-                    pictureBoxCanvas.BackgroundImage.Dispose();
-                    pictureBoxCanvas.BackgroundImage = null;
+                    Bitmap tempBitmap = new Bitmap(_selectionController.CurrentLayer.ImageRenderer.OriginalImage);
+                    _selectionController.CurrentLayer.ImageRenderer.OriginalImage.Dispose();
 
-
-                    if (_selectionController.CurrentLayer.ImageRenderer.Path != null)
+                    if (_selectionController.CurrentLayer.ImageRenderer.Path != string.Empty)
                         File.Delete(_selectionController.CurrentLayer.ImageRenderer.Path);
-                    _selectionController.CurrentLayer.ImageRenderer.OriginalImage.Save(saveFileDialog.FileName, _selectionController.CurrentLayer.ImageRenderer.Image.RawFormat);
-
-                    UpdateInterface();
+                    tempBitmap.Save(saveFileDialog.FileName, tempBitmap.RawFormat);
+                    _selectionController.CurrentLayer.ImageRenderer.OriginalImage = tempBitmap;
+                    _selectionController.CurrentLayer.ImageRenderer.Path = new string(saveFileDialog.FileName);
+                    _selectionController.CurrentLayer.ImageInfo = new ImageInfo(_selectionController.CurrentLayer.ImageRenderer);
                 }
             }
         }

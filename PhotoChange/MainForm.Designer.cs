@@ -110,7 +110,6 @@ namespace PhotoChange
             blueMainMenuItem = new ToolStripMenuItem();
             colorCorrectionMainMenuItem = new ToolStripMenuItem();
             histogramMainMenuItem = new ToolStripMenuItem();
-            replaceColorMainMenuItem = new ToolStripMenuItem();
             mainMenuSeparator8 = new ToolStripSeparator();
             switchColorChannelMainMenuItem = new ToolStripMenuItem();
             RGBtoRBGMainMenuItem = new ToolStripMenuItem();
@@ -274,6 +273,7 @@ namespace PhotoChange
             mainToolsPanelCombineLayersButton.Name = "mainToolsPanelCombineLayersButton";
             mainToolsPanelCombineLayersButton.Size = new Size(23, 22);
             mainToolsPanelCombineLayersButton.Text = "Combine layers";
+            mainToolsPanelCombineLayersButton.Click += CombineLayersMainToolsPanelButton_Click;
             // 
             // drawingToolsPanel
             // 
@@ -625,7 +625,7 @@ namespace PhotoChange
             // 
             // imageMainMenuItem
             // 
-            imageMainMenuItem.DropDownItems.AddRange(new ToolStripItem[] { imagePropertiesMainMenuItem, mainMenuSeparator5, rotateLeftMainMenuItem, rotateRightMainMenuItem, rotateMainMenuItem, flipVerticallyMainMenuItem, flipHorizontallyMainMenuItem, mainMenuSeparator6, increaseColorDepthMainMenuItem, reduceColorDepthMainMenuItem, mainMenuSeparator7, inShadesOfGreyMainMenuItem, showChannelMainMenuItem, invertNegativeMainMenuItem, colorCorrectionMainMenuItem, histogramMainMenuItem, replaceColorMainMenuItem, mainMenuSeparator8, switchColorChannelMainMenuItem });
+            imageMainMenuItem.DropDownItems.AddRange(new ToolStripItem[] { imagePropertiesMainMenuItem, mainMenuSeparator5, rotateLeftMainMenuItem, rotateRightMainMenuItem, rotateMainMenuItem, flipVerticallyMainMenuItem, flipHorizontallyMainMenuItem, mainMenuSeparator6, increaseColorDepthMainMenuItem, reduceColorDepthMainMenuItem, mainMenuSeparator7, inShadesOfGreyMainMenuItem, showChannelMainMenuItem, invertNegativeMainMenuItem, colorCorrectionMainMenuItem, histogramMainMenuItem, mainMenuSeparator8, switchColorChannelMainMenuItem });
             imageMainMenuItem.Name = "imageMainMenuItem";
             imageMainMenuItem.Size = new Size(52, 20);
             imageMainMenuItem.Text = "Image";
@@ -687,14 +687,14 @@ namespace PhotoChange
             increaseColorDepthMainMenuItem.Name = "increaseColorDepthMainMenuItem";
             increaseColorDepthMainMenuItem.Size = new Size(210, 22);
             increaseColorDepthMainMenuItem.Text = "Increase the color depth...";
-            increaseColorDepthMainMenuItem.Click += IncreaseColorDepthMainMenuItem_Click;
+            increaseColorDepthMainMenuItem.Click += ChangeColorDepthMainMenuItem_Click;
             // 
             // reduceColorDepthMainMenuItem
             // 
             reduceColorDepthMainMenuItem.Name = "reduceColorDepthMainMenuItem";
             reduceColorDepthMainMenuItem.Size = new Size(210, 22);
             reduceColorDepthMainMenuItem.Text = "Reduce the color depth...";
-            reduceColorDepthMainMenuItem.Click += ReduceColorDepthMainMenuItem_Click;
+            reduceColorDepthMainMenuItem.Click += ChangeColorDepthMainMenuItem_Click;
             // 
             // mainMenuSeparator7
             // 
@@ -706,7 +706,7 @@ namespace PhotoChange
             inShadesOfGreyMainMenuItem.Name = "inShadesOfGreyMainMenuItem";
             inShadesOfGreyMainMenuItem.Size = new Size(210, 22);
             inShadesOfGreyMainMenuItem.Text = "In shades of grey";
-            inShadesOfGreyMainMenuItem.Click += InShadesOfGreyMainMenuItem_Click;
+            inShadesOfGreyMainMenuItem.Click += InShadesOfGrayMainMenuItem_Click;
             // 
             // showChannelMainMenuItem
             // 
@@ -720,21 +720,21 @@ namespace PhotoChange
             redChannelMainMenuItem.Name = "redChannelMainMenuItem";
             redChannelMainMenuItem.Size = new Size(105, 22);
             redChannelMainMenuItem.Text = "Red";
-            redChannelMainMenuItem.Click += ShowChannelMainMenuItemClick;
+            redChannelMainMenuItem.Click += ShowChannelMainMenuItem_Click;
             // 
             // greenChannelMainMenuItem
             // 
             greenChannelMainMenuItem.Name = "greenChannelMainMenuItem";
             greenChannelMainMenuItem.Size = new Size(105, 22);
             greenChannelMainMenuItem.Text = "Green";
-            greenChannelMainMenuItem.Click += ShowChannelMainMenuItemClick;
+            greenChannelMainMenuItem.Click += ShowChannelMainMenuItem_Click;
             // 
             // blueChannelMainMenuItem
             // 
             blueChannelMainMenuItem.Name = "blueChannelMainMenuItem";
             blueChannelMainMenuItem.Size = new Size(105, 22);
             blueChannelMainMenuItem.Text = "Blue";
-            blueChannelMainMenuItem.Click += ShowChannelMainMenuItemClick;
+            blueChannelMainMenuItem.Click += ShowChannelMainMenuItem_Click;
             // 
             // invertNegativeMainMenuItem
             // 
@@ -789,13 +789,6 @@ namespace PhotoChange
             histogramMainMenuItem.Size = new Size(210, 22);
             histogramMainMenuItem.Text = "Histogram...";
             histogramMainMenuItem.Click += HistogramMainMenuItem_Click;
-            // 
-            // replaceColorMainMenuItem
-            // 
-            replaceColorMainMenuItem.Name = "replaceColorMainMenuItem";
-            replaceColorMainMenuItem.Size = new Size(210, 22);
-            replaceColorMainMenuItem.Text = "Replace the color";
-            replaceColorMainMenuItem.Click += ReplaceColorMainMenuItem_Click;
             // 
             // mainMenuSeparator8
             // 
@@ -980,7 +973,6 @@ namespace PhotoChange
         private ToolStripMenuItem blueMainMenuItem;
         private ToolStripMenuItem colorCorrectionMainMenuItem;
         private ToolStripMenuItem histogramMainMenuItem;
-        private ToolStripMenuItem replaceColorMainMenuItem;
         private ToolStripMenuItem switchColorChannelMainMenuItem;
         private ToolStripMenuItem RGBtoRBGMainMenuItem;
         private ToolStripMenuItem RGBtoBGRMainMenuItem;
