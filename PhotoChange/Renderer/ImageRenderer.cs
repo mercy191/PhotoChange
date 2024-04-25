@@ -645,6 +645,9 @@ namespace PhotoChange.Renderer
                     OriginalImage.SetPixel(i, j, Color.FromArgb((byte)pR, (byte)pG, (byte)pB));
                 }
             }
+
+            EditList.Add(new Bitmap(OriginalImage));
+            EditListIterator += 1;
         }
 
         public Histogram CalculateHistogram()
