@@ -8,7 +8,7 @@ namespace PhotoChange
 
         private void UndoRedoMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (pictureBoxCanvas.BackgroundImage == null) return;
+            if (!_selectionController.IsImageCreated) return;
 
             if (sender == undoMainMenuItem)
             {
@@ -27,13 +27,14 @@ namespace PhotoChange
         {
             if (sender == copyMainMenuItem)
             {
-                if (pictureBoxCanvas.BackgroundImage != null)
+                if (_selectionController.IsImageCreated) 
                     Clipboard.SetImage(_selectionController.CurrentLayer.ImageRenderer.OriginalImage);
             }
 
             else if (sender == pasteMainMenuItem)
             {
-                _selectionController.CurrentLayer.ImageRenderer.OriginalImage = new Bitmap(Clipboard.GetImage());
+                if (Clipboard.GetImage() != null)
+                    _selectionController.CurrentLayer.ImageRenderer.OriginalImage = new Bitmap(Clipboard.GetImage());
                 UpdateInterface();
             }
         }

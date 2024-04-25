@@ -9,6 +9,8 @@ namespace PhotoChange
 
         private void DrawingToolsPanelCursorButton_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             _selectionController.CurrentLayer.ImageDrawing.Mode = ImageDrawing.DrawingMode.None;
             _selectionController.CurrentLayer.ImageDrawing.Tool = ImageDrawing.DrawingTools.Cursor;                    
             UpdateDrawingControls();
@@ -17,6 +19,8 @@ namespace PhotoChange
 
         private void DrawingToolsPanelBrushButton_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             _selectionController.CurrentLayer.ImageDrawing.Mode = ImageDrawing.DrawingMode.Drawing;
             _selectionController.CurrentLayer.ImageDrawing.Tool = ImageDrawing.DrawingTools.Brush;
             UpdateDrawingControls();
@@ -26,6 +30,8 @@ namespace PhotoChange
 
         private void DrawingToolsPanelEraserButton_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             _selectionController.CurrentLayer.ImageDrawing.Mode = ImageDrawing.DrawingMode.Drawing;
             _selectionController.CurrentLayer.ImageDrawing.Tool = ImageDrawing.DrawingTools.Eraser;
             _selectionController.CurrentLayer.ImageDrawing.ErazerColor = pictureBoxCanvas.BackColor;
@@ -36,6 +42,8 @@ namespace PhotoChange
 
         private void DrawingToolsPanelPipetteButton_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             _selectionController.CurrentLayer.ImageDrawing.Mode = ImageDrawing.DrawingMode.None;
             _selectionController.CurrentLayer.ImageDrawing.Tool = ImageDrawing.DrawingTools.Pipette;
             UpdateDrawingControls();
@@ -44,6 +52,8 @@ namespace PhotoChange
 
         private void DrawingToolsPanelFillingButton_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             _selectionController.CurrentLayer.ImageDrawing.Mode = ImageDrawing.DrawingMode.Filling;
             _selectionController.CurrentLayer.ImageDrawing.Tool = ImageDrawing.DrawingTools.Filling;
             UpdateDrawingControls();
@@ -52,6 +62,8 @@ namespace PhotoChange
 
         private void DrawingToolsPanelLineButton_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             _selectionController.CurrentLayer.ImageDrawing.Mode = ImageDrawing.DrawingMode.Drawing;
             _selectionController.CurrentLayer.ImageDrawing.Tool = ImageDrawing.DrawingTools.Line;
             UpdateDrawingControls();
@@ -61,6 +73,8 @@ namespace PhotoChange
 
         private void DrawingToolsPanelEllipseButton_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             _selectionController.CurrentLayer.ImageDrawing.Mode = ImageDrawing.DrawingMode.Drawing;
             _selectionController.CurrentLayer.ImageDrawing.Tool = ImageDrawing.DrawingTools.Ellipse;
             UpdateDrawingControls();

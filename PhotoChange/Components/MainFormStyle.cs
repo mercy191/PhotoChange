@@ -170,7 +170,7 @@ namespace PhotoChange
 
         private void Form_HandleCreated(object? sender, EventArgs e)
         {
-            Apply();
+            Apply();           
         }
 
         private void Form_Paint(object? sender, PaintEventArgs e)
@@ -210,7 +210,15 @@ namespace PhotoChange
                 // Кнопка Close
                 if (RectangleButtonClose.Contains(e.Location))
                 {
-                    Form.Close();
+                    if (MessageBox.Show(
+                        "Are you sure you want to get out?\n" +
+                        "Unprotected data will be lost.",
+                        "Message",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        Form.Close();
+                    }
                 }
 
                 // Кнопка Max

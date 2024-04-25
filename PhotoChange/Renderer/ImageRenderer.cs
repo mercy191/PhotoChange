@@ -1,4 +1,6 @@
 ﻿using PhotoChange.Common;
+using System.Diagnostics.Contracts;
+using System.Drawing.Imaging;
 using System.IO;
 
 namespace PhotoChange.Renderer
@@ -443,41 +445,7 @@ namespace PhotoChange.Renderer
             OriginalImage.RotateFlip(flipType);
             EditList.Add(new Bitmap(OriginalImage));
             EditListIterator += 1;
-        }
-
-        public Histogram CalculateHistogram()
-        {
-            Histogram histogram = new Histogram();
-
-            int[] brightnessValuesRed = new int[256];
-            int[] brightnessValuesGreen = new int[256];
-            int[] brightnessValuesBlue = new int[256];
-            int[] brightnessValuesGray = new int[256];
-
-            for (int y = 0; y < OriginalImage.Height; y++)
-            {
-                for (int x = 0; x < OriginalImage.Width; x++)
-                {
-                    Color pixelColor = OriginalImage.GetPixel(x, y);
-                    int brightnessRed = pixelColor.R;
-                    int brightnessGreen = pixelColor.G;
-                    int brightnessBlue = pixelColor.B;
-                    int brightnessGray = (int)(0.2126 * pixelColor.R + 0.7152 * pixelColor.G + 0.0722 * pixelColor.B);
-                    brightnessValuesRed[brightnessRed]++;
-                    brightnessValuesGreen[brightnessGreen]++;
-                    brightnessValuesBlue[brightnessBlue]++;
-                    brightnessValuesGray[brightnessGray]++;
-                }
-            }
-
-            histogram.BrightnessValuesRed = brightnessValuesRed;
-            histogram.BrightnessValuesGreen = brightnessValuesGreen;
-            histogram.BrightnessValuesBlue = brightnessValuesBlue;
-            histogram.BrightnessValuesGray = brightnessValuesGray;
-            histogram.MaxPixels = OriginalImage.Width * OriginalImage.Height;
-
-            return histogram;
-        }
+        }       
 
         public void SetGrayscale()
         {
@@ -607,10 +575,110 @@ namespace PhotoChange.Renderer
             EditListIterator += 1;
         }
 
-        public void ChangeColorDepth()
+        /// <param name="colorCorrectionHelper">A class that stores changes received from the user.</param>
+        public void ColorCorrection(ColorCorrectionHelper colorCorrectionHelper)
         {
-            
-            
+            if (!colorCorrectionHelper.IsChanged) return;
+
+            float contr = (127.0f + colorCorrectionHelper.Contrast) / 127.0f;
+            contr *= contr;
+            Color c;
+            for (int i = 0; i < OriginalImage.Width; i++)
+            {
+                for (int j = 0; j < OriginalImage.Height; j++)
+                {
+                    c = OriginalImage.GetPixel(i, j);
+                    int cR = c.R + colorCorrectionHelper.Brightness;
+                    int cG = c.G + colorCorrectionHelper.Brightness;
+                    int cB = c.B + colorCorrectionHelper.Brightness;
+
+                    cR = Math.Max(0, Math.Min(255, cR));
+                    cG = Math.Max(0, Math.Min(255, cG));
+                    cB = Math.Max(0, Math.Min(255, cB));
+
+                    cR += colorCorrectionHelper.R;
+                    cG += colorCorrectionHelper.G;
+                    cB += colorCorrectionHelper.B;
+
+                    cR = Math.Max(0, Math.Min(255, cR));
+                    cG = Math.Max(0, Math.Min(255, cG));
+                    cB = Math.Max(0, Math.Min(255, cB));
+
+                    cR = (int)(Math.Pow(cR / 255.0, 1.0 / colorCorrectionHelper.Gamma) * 255.0);
+                    cG = (int)(Math.Pow(cG / 255.0, 1.0 / colorCorrectionHelper.Gamma) * 255.0);
+                    cB = (int)(Math.Pow(cB / 255.0, 1.0 / colorCorrectionHelper.Gamma) * 255.0);
+
+                    cR = Math.Max(0, Math.Min(255, cR));
+                    cG = Math.Max(0, Math.Min(255, cG));
+                    cB = Math.Max(0, Math.Min(255, cB));
+
+                    int cGr = (int)(cR * 0.2126f + cG * 0.7152f + cB * 0.0722f);
+                    cR += (cR - cGr) * colorCorrectionHelper.Saturation / 255;
+                    cG += (cG - cGr) * colorCorrectionHelper.Saturation / 255;
+                    cB += (cB - cGr) * colorCorrectionHelper.Saturation / 255;
+
+                    cR = Math.Max(0, Math.Min(255, cR));
+                    cG = Math.Max(0, Math.Min(255, cG));
+                    cB = Math.Max(0, Math.Min(255, cB));
+
+                    double pR = cR / 255.0;
+                    pR -= 0.5;
+                    pR *= contr;
+                    pR += 0.5;
+                    pR *= 255;
+                    pR = Math.Max(0, Math.Min(255, pR));
+
+                    double pG = cG / 255.0;
+                    pG -= 0.5;
+                    pG *= contr;
+                    pG += 0.5;
+                    pG *= 255;
+                    pG = Math.Max(0, Math.Min(255, pG));
+
+                    double pB = cB / 255.0;
+                    pB -= 0.5;
+                    pB *= contr;
+                    pB += 0.5;
+                    pB *= 255;
+                    pB = Math.Max(0, Math.Min(255, pB));
+
+                    OriginalImage.SetPixel(i, j, Color.FromArgb((byte)pR, (byte)pG, (byte)pB));
+                }
+            }
+        }
+
+        public Histogram CalculateHistogram()
+        {
+            Histogram histogram = new Histogram();
+
+            int[] brightnessValuesRed = new int[256];
+            int[] brightnessValuesGreen = new int[256];
+            int[] brightnessValuesBlue = new int[256];
+            int[] brightnessValuesGray = new int[256];
+
+            for (int y = 0; y < OriginalImage.Height; y++)
+            {
+                for (int x = 0; x < OriginalImage.Width; x++)
+                {
+                    Color pixelColor = OriginalImage.GetPixel(x, y);
+                    int brightnessRed = pixelColor.R;
+                    int brightnessGreen = pixelColor.G;
+                    int brightnessBlue = pixelColor.B;
+                    int brightnessGray = (int)(0.2126 * pixelColor.R + 0.7152 * pixelColor.G + 0.0722 * pixelColor.B);
+                    brightnessValuesRed[brightnessRed]++;
+                    brightnessValuesGreen[brightnessGreen]++;
+                    brightnessValuesBlue[brightnessBlue]++;
+                    brightnessValuesGray[brightnessGray]++;
+                }
+            }
+
+            histogram.BrightnessValuesRed = brightnessValuesRed;
+            histogram.BrightnessValuesGreen = brightnessValuesGreen;
+            histogram.BrightnessValuesBlue = brightnessValuesBlue;
+            histogram.BrightnessValuesGray = brightnessValuesGray;
+            histogram.MaxPixels = OriginalImage.Width * OriginalImage.Height;
+
+            return histogram;
         }
     }
 }

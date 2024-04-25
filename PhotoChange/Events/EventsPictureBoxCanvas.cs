@@ -7,15 +7,16 @@ namespace PhotoChange
         #region -- Picture Box Canvas Events --
 
         private void PictureBoxCanvas_Paint(object sender, PaintEventArgs e)
-        {         
-            if (pictureBoxCanvas.BackgroundImage != null)
-            {
-                _selectionController.CurrentLayer.ImageRenderer.CalculateRetreat(pictureBoxCanvas.Width, pictureBoxCanvas.Height);             
-            }
+        {
+            if (!_selectionController.IsImageCreated) return;
+            
+            _selectionController.CurrentLayer.ImageRenderer.CalculateRetreat(pictureBoxCanvas.Width, pictureBoxCanvas.Height);                     
         }
 
         private void PictureBoxCanvas_MouseDown(object sender, MouseEventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             if (e.Button == MouseButtons.Left)
             {
                 if (_selectionController.IsDrawing)
@@ -123,6 +124,8 @@ namespace PhotoChange
 
         private void PictureBoxCanvas_MouseMove(object sender, MouseEventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             if (_selectionController.IsDrawing && _selectionController.IsMouseDown)
             {
                 switch (_selectionController.CurrentLayer.ImageDrawing.Tool)
@@ -170,6 +173,8 @@ namespace PhotoChange
 
         private void PictureBoxCanvas_MouseUp(object sender, MouseEventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             if (_selectionController.IsDrawing && _selectionController.IsMouseDown)
             {
                 _selectionController.CurrentLayer.ImageRenderer.OriginalImage = new Bitmap(_graphicsController.EditBitmap);               

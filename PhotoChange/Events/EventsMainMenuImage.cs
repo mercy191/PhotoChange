@@ -1,14 +1,18 @@
-﻿using PhotoChange.Controls;
+﻿using PhotoChange.Common;
+using PhotoChange.Controls;
 using PhotoChange.Renderer;
+using System.Drawing.Imaging;
 
 namespace PhotoChange
 {   
     public partial class MainForm
     {
         #region -- Main Menu Image Events --
-        
+
         private void ImagePropertiesMainMenuItem_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             splitContainer2.Panel2.Controls.Clear();
             ImagePropertiesControl control = new ImagePropertiesControl();
 
@@ -25,6 +29,8 @@ namespace PhotoChange
 
         private void RotateMainMenuItem_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             if (sender == rotateMainMenuItem)
             {
                 _selectionController.CurrentLayer.ImageRenderer.Rotate(30);            
@@ -47,6 +53,8 @@ namespace PhotoChange
 
         private void FlipMainMenuItem_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             if (sender == flipVerticallyMainMenuItem)
             {
                 _selectionController.CurrentLayer.ImageRenderer.Flip(RotateFlipType.RotateNoneFlipX);              
@@ -62,12 +70,16 @@ namespace PhotoChange
 
         private void InShadesOfGrayMainMenuItem_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             _selectionController.CurrentLayer.ImageRenderer.SetGrayscale();
             UpdateInterface();
         }
 
         private void ShowChannelMainMenuItem_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             if (sender == redChannelMainMenuItem)
             {
                 _selectionController.CurrentLayer.ImageRenderer.SetColorFilter(ImageRenderer.ColorFilterTypes.Red);
@@ -87,6 +99,8 @@ namespace PhotoChange
 
         private void InvertMainMenuItem_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             if (sender == allChannelMainMenuItem)
             {
                 _selectionController.CurrentLayer.ImageRenderer.SetInvert(ImageRenderer.ColorFilterTypes.All);
@@ -110,28 +124,24 @@ namespace PhotoChange
             UpdateInterface();
         }
 
-        private void ChangeColorDepthMainMenuItem_Click(object sender, EventArgs e)
-        {
-            if (sender == increaseColorDepthMainMenuItem)
-            {
-                _selectionController.CurrentLayer.ImageRenderer.ChangeColorDepth();
-            }
-
-            else if (sender == reduceColorDepthMainMenuItem)
-            {
-                _selectionController.CurrentLayer.ImageRenderer.ChangeColorDepth();
-            }
-
-            UpdateInterface();
-        }
-
         private void ColorCorrectionMainMenuItem_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
+            ColorCorrectionHelper colorCorrectionHelper = new ColorCorrectionHelper();
+
+            ColorCorrectionForm colorCorrectionForm = new ColorCorrectionForm(colorCorrectionHelper, _selectionController.CurrentLayer.ImageRenderer.OriginalImage);
+            colorCorrectionForm.ShowDialog();
+
+            _selectionController.CurrentLayer.ImageRenderer.ColorCorrection(colorCorrectionHelper);
+
             UpdateInterface();
         }
 
         private void HistogramMainMenuItem_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             splitContainer2.Panel2.Controls.Clear();
             HistogramControl control = new HistogramControl();
 
@@ -142,6 +152,8 @@ namespace PhotoChange
 
         private void SwitchColorChannelMainMenuItem_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             if (sender == RGBtoRBGMainMenuItem)
             {
                 _selectionController.CurrentLayer.ImageRenderer.SwitchColorChannel(ImageRenderer.ColorChannelTypes.RBG);

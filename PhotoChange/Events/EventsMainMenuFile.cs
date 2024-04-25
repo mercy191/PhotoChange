@@ -25,13 +25,13 @@ namespace PhotoChange
                 _selectionController.CurrentLayer.ImageRenderer.CalculateRetreat(pictureBoxCanvas.Width, pictureBoxCanvas.Height);
 
                 layersListBox.Items.Add(_layers.Last().LayerName);
-                UpdateInterface();
+                UpdateInterface();             
             }
         }
 
         private void RenameMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (pictureBoxCanvas.BackgroundImage == null) return;
+            if (!_selectionController.IsImageCreated) return;
 
             RenameForm renameForm = new()
             { };
@@ -54,7 +54,7 @@ namespace PhotoChange
 
         private void MoveFileMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (pictureBoxCanvas.BackgroundImage == null) return;
+            if (!_selectionController.IsImageCreated) return;
 
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
@@ -75,7 +75,7 @@ namespace PhotoChange
 
         private void CopyFileMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (pictureBoxCanvas.BackgroundImage == null) return;
+            if (!_selectionController.IsImageCreated) return;
 
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
@@ -93,7 +93,7 @@ namespace PhotoChange
 
         private void DeleteFileMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (pictureBoxCanvas.BackgroundImage == null) return;
+            if (!_selectionController.IsImageCreated) return;
 
             layersListBox.Items.Remove(_selectionController.CurrentLayer.ImageInfo.FileName);
             _layers.Remove(_selectionController.CurrentLayer);
@@ -106,7 +106,7 @@ namespace PhotoChange
 
         private void SaveMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (pictureBoxCanvas.BackgroundImage == null) return;
+            if (!_selectionController.IsImageCreated) return;
 
             else if (_selectionController.CurrentLayer.ImageRenderer.Path == string.Empty)
             {
@@ -124,7 +124,7 @@ namespace PhotoChange
 
         private void SaveAsMainMenuItem_Click(object sender, EventArgs e)
         {
-            if (pictureBoxCanvas.BackgroundImage == null) return;
+            if (!_selectionController.IsImageCreated) return;
 
             if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
             {
@@ -146,7 +146,8 @@ namespace PhotoChange
         private void ExitMainMenuItem_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show(
-                "Are you sure you want to get out?",
+                "Are you sure you want to get out?\n" +
+                "Unprotected data will be lost.",
                 "Message",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question) == DialogResult.Yes)

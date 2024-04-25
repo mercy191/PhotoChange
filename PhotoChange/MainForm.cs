@@ -30,6 +30,8 @@ namespace PhotoChange
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             if (e.Control)
             {
                 switch (e.KeyCode)
@@ -84,6 +86,8 @@ namespace PhotoChange
 
         private void UpdateDrawingControls()
         {
+            if (!_selectionController.IsImageCreated) return;
+
             switch (_selectionController.CurrentLayer.ImageDrawing.Mode)
             {
                 case ImageDrawing.DrawingMode.None:
@@ -112,7 +116,5 @@ namespace PhotoChange
         }
 
         #endregion
-
-
     }
 }

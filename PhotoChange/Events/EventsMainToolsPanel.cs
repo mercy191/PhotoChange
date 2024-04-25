@@ -14,6 +14,8 @@ namespace PhotoChange
 
         private void MainToolsPanelColorButton_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
                 if (_selectionController.CurrentLayer.ImageDrawing.Tool == ImageDrawing.DrawingTools.Brush 
@@ -34,6 +36,8 @@ namespace PhotoChange
 
         private void SizeMainToolsPanelItem_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             ToolStripMenuItem item = (ToolStripMenuItem)sender;
 
             if (_selectionController.CurrentLayer.ImageDrawing.Tool == ImageDrawing.DrawingTools.Brush
@@ -58,6 +62,8 @@ namespace PhotoChange
 
         private void EditScaleMainToolsPanelTextBox_KeyUp(object sender, KeyEventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             if (e.KeyCode == Keys.Enter)
             {
                 _selectionController.CurrentLayer.ImageRenderer.ScalePercent = Convert.ToSingle(editScaleMainToolsPanelTextBox.Text);
@@ -67,6 +73,8 @@ namespace PhotoChange
 
         private void CombineLayersMainToolsPanelButton_Click(object sender, EventArgs e)
         {
+            if (!_selectionController.IsImageCreated) return;
+
             var indexCollection = layersListBox.SelectedIndices;
             List<Bitmap> images = new List<Bitmap>();
 
@@ -74,9 +82,10 @@ namespace PhotoChange
             {
                 images.Add(new Bitmap(_layers[index].ImageRenderer.OriginalImage));
 
-                if (images[index].Width < images[index].Height)
+                int i = images.IndexOf(images.Last());
+                if (images[i].Width < images[i].Height)
                 {
-                    images[index] = CombineHelper.RotateImage(images[index], 270);
+                    images[i] = ImageHelper.RotateImage(images[index], 270);
                 }
             }
 
@@ -85,8 +94,8 @@ namespace PhotoChange
 
             for (int i = 0; i < sortedImages.Count; i++)
             {
-                sortedImages[i] = CombineHelper.ResizeImage(sortedImages[i], newImage.Width, newImage.Height);
-                CombineHelper.CombineImage(newImage, sortedImages[i]);
+                sortedImages[i] = ImageHelper.ResizeImage(sortedImages[i], newImage.Width, newImage.Height);
+                ImageHelper.CombineImage(newImage, sortedImages[i]);
             }
 
             _layers.Add(new Layer(
