@@ -160,7 +160,7 @@ namespace PhotoChange
                             );
                         _graphicsController.VisualGraphics.DrawEllipse
                             (
-                            new Pen(pictureBoxCanvas.BackColor, _selectionController.CurrentLayer.ImageDrawing.ErazerSize / _selectionController.CurrentLayer.ImageRenderer.ScaleFactor),
+                            new Pen(_selectionController.CurrentLayer.ImageDrawing.ErazerColor, _selectionController.CurrentLayer.ImageDrawing.ErazerSize / _selectionController.CurrentLayer.ImageRenderer.ScaleFactor),
                             e.Location.X,
                             e.Location.Y,
                             _selectionController.CurrentLayer.ImageDrawing.ErazerSize / _selectionController.CurrentLayer.ImageRenderer.ScaleFactor,

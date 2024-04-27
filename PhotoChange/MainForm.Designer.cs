@@ -58,6 +58,7 @@ namespace PhotoChange
             drawingToolsPanelLineButton = new ToolStripButton();
             drawingToolsPanelEllipseButton = new ToolStripButton();
             splitContainer1 = new SplitContainer();
+            pictureBoxCanvasPanel = new Panel();
             pictureBoxCanvas = new PictureBox();
             splitContainer2 = new SplitContainer();
             splitContainer3 = new SplitContainer();
@@ -126,6 +127,7 @@ namespace PhotoChange
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            pictureBoxCanvasPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxCanvas).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
             splitContainer2.Panel1.SuspendLayout();
@@ -370,7 +372,7 @@ namespace PhotoChange
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(pictureBoxCanvas);
+            splitContainer1.Panel1.Controls.Add(pictureBoxCanvasPanel);
             // 
             // splitContainer1.Panel2
             // 
@@ -380,14 +382,23 @@ namespace PhotoChange
             splitContainer1.SplitterDistance = 824;
             splitContainer1.TabIndex = 2;
             // 
+            // pictureBoxCanvasPanel
+            // 
+            pictureBoxCanvasPanel.AutoScroll = true;
+            pictureBoxCanvasPanel.Controls.Add(pictureBoxCanvas);
+            pictureBoxCanvasPanel.Dock = DockStyle.Fill;
+            pictureBoxCanvasPanel.Location = new Point(0, 0);
+            pictureBoxCanvasPanel.Name = "pictureBoxCanvasPanel";
+            pictureBoxCanvasPanel.Size = new Size(820, 571);
+            pictureBoxCanvasPanel.TabIndex = 0;
+            // 
             // pictureBoxCanvas
             // 
-            pictureBoxCanvas.BackColor = Color.Transparent;
-            pictureBoxCanvas.BackgroundImageLayout = ImageLayout.Center;
-            pictureBoxCanvas.Dock = DockStyle.Fill;
+            pictureBoxCanvas.BackColor = SystemColors.Control;
             pictureBoxCanvas.Location = new Point(0, 0);
             pictureBoxCanvas.Name = "pictureBoxCanvas";
             pictureBoxCanvas.Size = new Size(820, 571);
+            pictureBoxCanvas.SizeMode = PictureBoxSizeMode.AutoSize;
             pictureBoxCanvas.TabIndex = 0;
             pictureBoxCanvas.TabStop = false;
             pictureBoxCanvas.Paint += PictureBoxCanvas_Paint;
@@ -875,6 +886,8 @@ namespace PhotoChange
             splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            pictureBoxCanvasPanel.ResumeLayout(false);
+            pictureBoxCanvasPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxCanvas).EndInit();
             splitContainer2.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
@@ -903,6 +916,7 @@ namespace PhotoChange
         private TextBox layersTextBox;
         private PictureBox layerPictureBox;
         private PictureBox pictureBoxCanvas;
+        private Panel pictureBoxCanvasPanel;
 
         private ContextMenuStrip contextMenuIcon;
         private ToolStrip mainToolsPanel;
