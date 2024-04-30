@@ -36,6 +36,7 @@ namespace PhotoChange.Controls
                 _secondImage = value;
             }
         }
+
         public Bitmap ResultImage
         {
             get => _resultImage;
@@ -47,6 +48,9 @@ namespace PhotoChange.Controls
             }
         }
 
+        /// <summary>
+        /// Stores modified data for gluing images.
+        /// </summary>
         public GlueImagesHelper GlueImagesHelper
         {
             get => _glueImagesHelper;
@@ -77,12 +81,18 @@ namespace PhotoChange.Controls
             set => _secondImageSecondPoint = value;
         }
 
+        /// <summary>
+        /// The point from which the gluing of two images begins.
+        /// </summary>
         public Point GlueLocation
         {
             get => _glueLocation;
             set => _glueLocation = value;
         }
 
+        /// <summary>
+        /// The scaling factor of the original images.
+        /// </summary>
         public PointF ReductionCoefficient
         {
             get => _reductionCoefficient;
@@ -95,6 +105,9 @@ namespace PhotoChange.Controls
             set => _step = value;
         }
 
+        /// <summary>
+        /// The scaling coefficient of one image relative to another.
+        /// </summary>
         public PointF ScaleFactor
         {
             get => _scaleFactor;
@@ -137,17 +150,27 @@ namespace PhotoChange.Controls
             set => _firstClickNumber = value;
         }
 
+        /// <summary>
+        /// Shows which image to glue on top.
+        /// </summary>
         public bool SecondImageOnTop
         {
             get => _secondImageOnTop;
             set => _secondImageOnTop = value;
         }
+
+        /// <summary>
+        /// Horizontal image offset.
+        /// </summary>
         public int HorizontalExpension
         {
             get => _horizontalExpension;
             set => _horizontalExpension = value;
         }
 
+        /// <summary>
+        /// Vertical image offset.
+        /// </summary>
         public int VerticalExpension
         {
             get => _verticalExpension;
@@ -406,6 +429,8 @@ namespace PhotoChange.Controls
         private void OKButton_Click(object sender, EventArgs e)
         {
             GlueImagesHelper.GlueLocation = new Point((int)(GlueLocation.X * ReductionCoefficient.X), (int)(GlueLocation.Y * ReductionCoefficient.Y));
+            GlueImagesHelper.HorizontalExpension = (int)(HorizontalExpension * ReductionCoefficient.X);
+            GlueImagesHelper.VerticalExpension = (int)(VerticalExpension * ReductionCoefficient.Y);
             GlueImagesHelper.ScaleFactor = ScaleFactor;
             GlueImagesHelper.SecondImageOnTop = SecondImageOnTop;
             GlueImagesHelper.IsChanged = true;

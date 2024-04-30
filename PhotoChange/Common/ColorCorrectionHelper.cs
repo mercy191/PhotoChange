@@ -6,23 +6,35 @@ using System.Threading.Tasks;
 
 namespace PhotoChange.Common
 {
+    /// <summary>
+    /// Stores the data needed for the final correction of image colors.
+    /// </summary>
     public class ColorCorrectionHelper
     {
         public ColorCorrectionHelper() 
         { }
 
+        /// <summary>
+        /// Red balance.
+        /// </summary>
         public int R
         {
             get => _r; 
             set => _r = value;
         }
 
+        /// <summary>
+        /// Green balance.
+        /// </summary>
         public int G
         {
             get => _g; 
             set => _g = value;
         }
 
+        /// <summary>
+        /// Blue balance.
+        /// </summary>
         public int B
         {
             get => _b; 
@@ -53,6 +65,9 @@ namespace PhotoChange.Common
             set => _gamma = value; 
         }
 
+        /// <summary>
+        /// Has the image changed.
+        /// </summary>
         public bool IsChanged 
         { 
             get => _isChanged; 

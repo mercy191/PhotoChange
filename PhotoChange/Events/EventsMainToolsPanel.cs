@@ -142,13 +142,13 @@ namespace PhotoChange
                 Bitmap resultImage;
                 if (glueImagesHelper.SecondImageOnTop)
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(secondImage, (int)(secondImage.Width / glueImagesHelper.ScaleFactor.X), (int)(secondImage.Height / glueImagesHelper.ScaleFactor.Y));
+                    Bitmap temp = ImageHelper.ResizeImage(secondImage, (int)(secondImage.Width / glueImagesHelper.ScaleFactor.X) + glueImagesHelper.HorizontalExpension, (int)(secondImage.Height / glueImagesHelper.ScaleFactor.Y) + glueImagesHelper.VerticalExpension);
                     resultImage = new Bitmap(firstImage);
                     ImageHelper.GlueImage(resultImage, temp, glueImagesHelper.GlueLocation);
                 }
                 else
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(firstImage, (int)(firstImage.Width * glueImagesHelper.ScaleFactor.X), (int)(firstImage.Height * glueImagesHelper.ScaleFactor.Y));
+                    Bitmap temp = ImageHelper.ResizeImage(firstImage, (int)(firstImage.Width * glueImagesHelper.ScaleFactor.X) + glueImagesHelper.HorizontalExpension, (int)(firstImage.Height * glueImagesHelper.ScaleFactor.Y) + glueImagesHelper.VerticalExpension);
                     resultImage = new Bitmap(secondImage);
                     ImageHelper.GlueImage(resultImage, temp, glueImagesHelper.GlueLocation);
                 }

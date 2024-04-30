@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 namespace PhotoChange.Common
 {
+    /// <summary>
+    /// Contains image processing algorithms.
+    /// </summary>
     public class ImageHelper
     {
         static public Bitmap RotateImage(Bitmap image, float angle)
@@ -215,17 +218,17 @@ namespace PhotoChange.Common
             }
         }
 
-        static public void SetRBalance(Bitmap oldImage, Bitmap newImage, int balance)
+        static public void SetRBalance(Bitmap oldImage, Bitmap newImage, int Rbalance)
         {
-            if (balance < -255) balance = -255;
-            if (balance > 255) balance = 255;
+            if (Rbalance < -255) Rbalance = -255;
+            if (Rbalance > 255) Rbalance = 255;
             Color c;
             for (int i = 0; i < oldImage.Width; i++)
             {
                 for (int j = 0; j < oldImage.Height; j++)
                 {
                     c = oldImage.GetPixel(i, j);
-                    int cR = c.R + balance;
+                    int cR = c.R + Rbalance;
                     int cG = c.G;
                     int cB = c.B;
                     cB = Math.Max(0, Math.Min(255, cB));
@@ -235,10 +238,10 @@ namespace PhotoChange.Common
             }
         }
 
-        static public void SetGBalance(Bitmap oldImage, Bitmap newImage, int balance)
+        static public void SetGBalance(Bitmap oldImage, Bitmap newImage, int Gbalance)
         { 
-            if (balance < -255) balance = -255;
-            if (balance > 255) balance = 255;
+            if (Gbalance < -255) Gbalance = -255;
+            if (Gbalance > 255) Gbalance = 255;
             Color c;
             for (int i = 0; i < oldImage.Width; i++)
             {
@@ -246,7 +249,7 @@ namespace PhotoChange.Common
                 {
                     c = oldImage.GetPixel(i, j);
                     int cR = c.R;
-                    int cG = c.G + balance;
+                    int cG = c.G + Gbalance;
                     int cB = c.B;
                     cG = Math.Max(0, Math.Min(255, cG));
 
@@ -255,10 +258,10 @@ namespace PhotoChange.Common
             }
         }
 
-        static public void SetBBalance(Bitmap oldImage, Bitmap newImage, int balance)
+        static public void SetBBalance(Bitmap oldImage, Bitmap newImage, int Bbalance)
         {
-            if (balance < -255) balance = -255;
-            if (balance > 255) balance = 255;
+            if (Bbalance < -255) Bbalance = -255;
+            if (Bbalance > 255) Bbalance = 255;
             Color c;
             for (int i = 0; i < oldImage.Width; i++)
             {
@@ -267,7 +270,7 @@ namespace PhotoChange.Common
                     c = oldImage.GetPixel(i, j);
                     int cR = c.R;
                     int cG = c.G;
-                    int cB = c.B + balance;
+                    int cB = c.B + Bbalance;
                     cR = Math.Max(0, Math.Min(255, cR));
 
                     newImage.SetPixel(i, j, Color.FromArgb((byte)cR, (byte)cG, (byte)cB));

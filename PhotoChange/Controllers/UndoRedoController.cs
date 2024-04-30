@@ -1,5 +1,8 @@
 ﻿namespace PhotoChange.Controllers
 {
+    /// <summary>
+    /// Processes display of image changes in the program.
+    /// </summary>
     public class UndoRedoController
     {
         public static void Undo(SelectionController selectionController)

@@ -14,12 +14,18 @@ namespace PhotoChange.Controls
             newPictureBox.Image = NewImage;
         }
 
+        /// <summary>
+        /// Stores modified data for color correction.
+        /// </summary>
         public ColorCorrectionHelper ColorCorrectionHelper
         {
             get => _colorCorrectionHelper;
             set => _colorCorrectionHelper = value;
         }
 
+        /// <summary>
+        /// Stores the original image color.
+        /// </summary>
         public Bitmap OldImage
         {
             get => _oldImage;
@@ -31,6 +37,9 @@ namespace PhotoChange.Controls
             }
         }
 
+        /// <summary>
+        /// Stores a modified image color.
+        /// </summary>
         public Bitmap NewImage
         {
             get => _newImage;
