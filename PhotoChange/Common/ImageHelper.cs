@@ -131,6 +131,27 @@ namespace PhotoChange.Common
             }
         }
 
+        static public void GlueImage(Bitmap image1, Bitmap image2, Point location)
+        {
+            Color color1;
+            Color color2;
+            for (int x = 0; x < image2.Width; ++x)
+            {
+                for (int y = 0; y < image2.Height; ++y)
+                {
+                    color1 = image1.GetPixel(location.X + x, location.Y + y);
+                    color2 = image2.GetPixel(x, y);
+
+                    int nPixelA = Math.Min(255, color1.A + color2.A);
+                    int nPixelR = Math.Min(255, color1.R + color2.R);
+                    int nPixelG = Math.Min(255, color1.G + color2.G);
+                    int nPixelB = Math.Min(255, color1.B + color2.B);
+
+                    image1.SetPixel(location.X + x, location.Y + y, Color.FromArgb(nPixelA, nPixelR, nPixelG, nPixelB));
+                }
+            }
+        }
+
         static public void SetBrightness(Bitmap oldImage, Bitmap newImage, int brightness)
         {
             if (brightness < -255) brightness = -255;

@@ -49,6 +49,8 @@ namespace PhotoChange
             editScaleMainToolsPanelTextBox = new ToolStripTextBox();
             mainToolsPanelSeparator5 = new ToolStripSeparator();
             mainToolsPanelCombineLayersButton = new ToolStripButton();
+            mainToolsPanelSeparator6 = new ToolStripSeparator();
+            mainToolsPanelGlueImagesButton = new ToolStripButton();
             drawingToolsPanel = new ToolStrip();
             drawingToolsPanelCursorButton = new ToolStripButton();
             drawingToolsPanelBrushButton = new ToolStripButton();
@@ -151,7 +153,7 @@ namespace PhotoChange
             // 
             mainToolsPanel.BackColor = SystemColors.Control;
             mainToolsPanel.ImageScalingSize = new Size(30, 25);
-            mainToolsPanel.Items.AddRange(new ToolStripItem[] { mainToolsPanelHomeButton, mainToolsPanelSeparator1, mainToolsPanelSizeSplitButton, mainToolsPanelSeparator2, mainToolsPanelColorButton, mainToolsPanelSeparator3, mainToolsPanelSizeModeLabel, mainToolsPanelSeparator4, mainToolsPanelEditScaleLabel, editScaleMainToolsPanelTextBox, mainToolsPanelSeparator5, mainToolsPanelCombineLayersButton });
+            mainToolsPanel.Items.AddRange(new ToolStripItem[] { mainToolsPanelHomeButton, mainToolsPanelSeparator1, mainToolsPanelSizeSplitButton, mainToolsPanelSeparator2, mainToolsPanelColorButton, mainToolsPanelSeparator3, mainToolsPanelSizeModeLabel, mainToolsPanelSeparator4, mainToolsPanelEditScaleLabel, editScaleMainToolsPanelTextBox, mainToolsPanelSeparator5, mainToolsPanelCombineLayersButton, mainToolsPanelSeparator6, mainToolsPanelGlueImagesButton });
             mainToolsPanel.Location = new Point(0, 24);
             mainToolsPanel.Name = "mainToolsPanel";
             mainToolsPanel.Size = new Size(1145, 31);
@@ -224,7 +226,8 @@ namespace PhotoChange
             // mainToolsPanelColorButton
             // 
             mainToolsPanelColorButton.BackColor = SystemColors.ControlText;
-            mainToolsPanelColorButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            mainToolsPanelColorButton.BackgroundImageLayout = ImageLayout.None;
+            mainToolsPanelColorButton.DisplayStyle = ToolStripItemDisplayStyle.None;
             mainToolsPanelColorButton.Enabled = false;
             mainToolsPanelColorButton.ImageScaling = ToolStripItemImageScaling.None;
             mainToolsPanelColorButton.ImageTransparentColor = Color.Magenta;
@@ -259,7 +262,7 @@ namespace PhotoChange
             // 
             editScaleMainToolsPanelTextBox.AutoSize = false;
             editScaleMainToolsPanelTextBox.Name = "editScaleMainToolsPanelTextBox";
-            editScaleMainToolsPanelTextBox.Size = new Size(100, 25);
+            editScaleMainToolsPanelTextBox.Size = new Size(50, 23);
             editScaleMainToolsPanelTextBox.Text = "100";
             editScaleMainToolsPanelTextBox.KeyUp += EditScaleMainToolsPanelTextBox_KeyUp;
             // 
@@ -278,6 +281,22 @@ namespace PhotoChange
             mainToolsPanelCombineLayersButton.Size = new Size(28, 28);
             mainToolsPanelCombineLayersButton.Text = "Combine layers";
             mainToolsPanelCombineLayersButton.Click += CombineLayersMainToolsPanelButton_Click;
+            // 
+            // mainToolsPanelSeparator6
+            // 
+            mainToolsPanelSeparator6.Name = "mainToolsPanelSeparator6";
+            mainToolsPanelSeparator6.Size = new Size(6, 31);
+            // 
+            // mainToolsPanelGlueImagesButton
+            // 
+            mainToolsPanelGlueImagesButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            mainToolsPanelGlueImagesButton.Image = (Image)resources.GetObject("mainToolsPanelGlueImagesButton.Image");
+            mainToolsPanelGlueImagesButton.ImageScaling = ToolStripItemImageScaling.None;
+            mainToolsPanelGlueImagesButton.ImageTransparentColor = Color.Magenta;
+            mainToolsPanelGlueImagesButton.Name = "mainToolsPanelGlueImagesButton";
+            mainToolsPanelGlueImagesButton.Size = new Size(28, 28);
+            mainToolsPanelGlueImagesButton.Text = "Glue the images";
+            mainToolsPanelGlueImagesButton.Click += GlueImagesMainToolsPanelButton_Click;
             // 
             // drawingToolsPanel
             // 
@@ -379,7 +398,7 @@ namespace PhotoChange
             splitContainer1.Panel2.Controls.Add(splitContainer2);
             splitContainer1.Panel2.Controls.Add(cursorPosition);
             splitContainer1.Size = new Size(1120, 575);
-            splitContainer1.SplitterDistance = 824;
+            splitContainer1.SplitterDistance = 823;
             splitContainer1.TabIndex = 2;
             // 
             // pictureBoxCanvasPanel
@@ -389,7 +408,7 @@ namespace PhotoChange
             pictureBoxCanvasPanel.Dock = DockStyle.Fill;
             pictureBoxCanvasPanel.Location = new Point(0, 0);
             pictureBoxCanvasPanel.Name = "pictureBoxCanvasPanel";
-            pictureBoxCanvasPanel.Size = new Size(820, 571);
+            pictureBoxCanvasPanel.Size = new Size(819, 571);
             pictureBoxCanvasPanel.TabIndex = 0;
             // 
             // pictureBoxCanvas
@@ -422,8 +441,8 @@ namespace PhotoChange
             // splitContainer2.Panel2
             // 
             splitContainer2.Panel2.BackColor = SystemColors.Window;
-            splitContainer2.Size = new Size(292, 575);
-            splitContainer2.SplitterDistance = 345;
+            splitContainer2.Size = new Size(293, 575);
+            splitContainer2.SplitterDistance = 344;
             splitContainer2.TabIndex = 1;
             // 
             // splitContainer3
@@ -441,8 +460,8 @@ namespace PhotoChange
             // splitContainer3.Panel2
             // 
             splitContainer3.Panel2.Controls.Add(layerPictureBox);
-            splitContainer3.Size = new Size(292, 345);
-            splitContainer3.SplitterDistance = 254;
+            splitContainer3.Size = new Size(293, 344);
+            splitContainer3.SplitterDistance = 252;
             splitContainer3.SplitterWidth = 1;
             splitContainer3.TabIndex = 0;
             // 
@@ -459,7 +478,7 @@ namespace PhotoChange
             layersLayoutPanel.RowCount = 2;
             layersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 11.328125F));
             layersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 88.671875F));
-            layersLayoutPanel.Size = new Size(288, 250);
+            layersLayoutPanel.Size = new Size(289, 248);
             layersLayoutPanel.TabIndex = 0;
             // 
             // layersTextBox
@@ -468,7 +487,7 @@ namespace PhotoChange
             layersTextBox.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             layersTextBox.Location = new Point(3, 3);
             layersTextBox.Name = "layersTextBox";
-            layersTextBox.Size = new Size(282, 29);
+            layersTextBox.Size = new Size(283, 29);
             layersTextBox.TabIndex = 1;
             layersTextBox.Text = "Layers:";
             // 
@@ -481,7 +500,7 @@ namespace PhotoChange
             layersListBox.Location = new Point(3, 31);
             layersListBox.Name = "layersListBox";
             layersListBox.SelectionMode = SelectionMode.MultiExtended;
-            layersListBox.Size = new Size(282, 216);
+            layersListBox.Size = new Size(283, 214);
             layersListBox.TabIndex = 0;
             layersListBox.MouseDoubleClick += LayersListBox_MouseDoubleClick;
             layersListBox.MouseDown += LayersListBox_MouseDown;
@@ -492,7 +511,7 @@ namespace PhotoChange
             layerPictureBox.Dock = DockStyle.Fill;
             layerPictureBox.Location = new Point(0, 0);
             layerPictureBox.Name = "layerPictureBox";
-            layerPictureBox.Size = new Size(288, 86);
+            layerPictureBox.Size = new Size(289, 87);
             layerPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             layerPictureBox.TabIndex = 0;
             layerPictureBox.TabStop = false;
@@ -926,6 +945,7 @@ namespace PhotoChange
         private ToolStripButton mainToolsPanelHomeButton;
         private ToolStripButton mainToolsPanelColorButton;
         private ToolStripButton mainToolsPanelCombineLayersButton;
+        private ToolStripButton mainToolsPanelGlueImagesButton;
         private ToolStripSplitButton mainToolsPanelSizeSplitButton;
         private ToolStripButton drawingToolsPanelEraserButton;
         private ToolStripButton drawingToolsPanelPipetteButton;
@@ -986,6 +1006,7 @@ namespace PhotoChange
         private ToolStripSeparator mainToolsPanelSeparator3;
         private ToolStripSeparator mainToolsPanelSeparator4;
         private ToolStripSeparator mainToolsPanelSeparator5;
+        private ToolStripSeparator mainToolsPanelSeparator6;
         private ToolStripSeparator mainMenuSeparator1;
         private ToolStripSeparator mainMenuSeparator2;
         private ToolStripSeparator mainMenuSeparator3;
@@ -1002,6 +1023,6 @@ namespace PhotoChange
 
         private Label cursorPosition;        
         private ToolStripLabel mainToolsPanelSizeModeLabel;
-        private ToolStripLabel mainToolsPanelEditScaleLabel;
+        private ToolStripLabel mainToolsPanelEditScaleLabel;       
     }
 }

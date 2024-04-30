@@ -142,6 +142,20 @@
         lDSoKnEJbciXwzY0teImnNsBJWSxK6RLINcAAAAASUVORK5CYII=
 </value>
   </data>
+  <data name="mainToolsPanelGlueImagesButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAG9SURBVEhL5ZY7LwVBGIZP4hIaCiQKDZGT6FQuP4AKDc0J
+        /oRStC4/QKJWqP0NBZUgGpVao6FweZ5JNmd2z87JbMubPMXszsw7O/t+O9tCbbiGT/hpwDc8wSb0lZN/
+        wQvcwl0m9+CiHmAWkrKTky/CGIxnMglX4NNsQ1J2cEUOaqoTcPxeaCX0tw2GYAXWYQBmwMmWQBUGF9AB
+        7+2D72QOglIGg3AE73ADI7AF9j8HVRhUMcKPECLshTqDZXiDVzgADRfgFDRSPtkZaFRwDKbrA4xw0mAD
+        nuEwtJppCqwT504aDMMEjIZWvXbgElZDqyvncs6+BtOwBvOhVS+3w/G7odVVloGDvOckKWnuIlxMrCwD
+        H9vHdxtScvvcRrczVo+BL8QX01QGwCAYiFglA6NkpIyW2xFHzggaRWU0jahRNbJG1wgbZSMdq2RgMVgU
+        FocXqmikLC7bGll0Fp9FaDFqGKtkoCxry9syt9wte8s/NvDz4D0/F342fDI/I35OquoxqJOTxQZN9E8M
+        fCd2MF0ejw7KwWPX49dj2OM4KQ9yI2wn68QV5eCPg5P7I+EPRV8ZYX9NUhFO4aKYvNX+BXbJuNGvtd5F
+        AAAAAElFTkSuQmCC
+</value>
+  </data>
   <metadata name="drawingToolsPanel.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>551, 17</value>
   </metadata>

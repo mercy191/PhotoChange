@@ -1,4 +1,5 @@
 ﻿using PhotoChange.Common;
+using PhotoChange.Controls;
 using PhotoChange.Renderer;
 
 namespace PhotoChange
@@ -112,7 +113,48 @@ namespace PhotoChange
             layersListBox.Items.Add("new_layer");
             UpdateInterface();
         }
-      
+
+        private void GlueImagesMainToolsPanelButton_Click(object sender, EventArgs e)
+        {
+            if (!_selectionController.IsImageCreated) return;
+
+            var indexCollection = layersListBox.SelectedIndices;
+            if (indexCollection.Count > 2 ) 
+            {
+                MessageBox.Show("Enter 2 images!", "Message");
+                return;
+            }
+
+            List<Bitmap> images = new List<Bitmap>();
+            foreach (int index in indexCollection)
+            {
+                images.Add(new Bitmap(_layers[index].ImageRenderer.OriginalImage));
+            }
+            Bitmap firstImage = images[0];
+            Bitmap secondImage = images[1];
+
+            GlueImagesHelper glueImagesHelper = new GlueImagesHelper();
+            GlueImagesForm glueImagesForm = new GlueImagesForm(glueImagesHelper, firstImage, secondImage);
+            glueImagesForm.ShowDialog();
+
+            if (glueImagesHelper.IsChanged)
+            {
+                _layers.Add(new Layer(
+                new ImageRenderer(glueImagesHelper.ResultImage),
+                new ImageDrawing(),
+                new ImageInfo()
+                ));
+                _selectionController.IsImageCreated = true;
+                _selectionController.CurrentLayer = _layers.Last();
+                _selectionController.CurrentLayerNumber = _layers.LastIndexOf(_selectionController.CurrentLayer);
+                _selectionController.CurrentLayer.ImageRenderer.CalculateScaleFactor(pictureBoxCanvas.Width, pictureBoxCanvas.Height);
+                _selectionController.CurrentLayer.ImageRenderer.CalculateRetreat(pictureBoxCanvas.Width, pictureBoxCanvas.Height);
+
+                layersListBox.Items.Add("new_layer");
+                UpdateInterface();
+            }         
+        }
+
         #endregion
     }
 }
