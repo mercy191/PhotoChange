@@ -119,7 +119,7 @@ namespace PhotoChange
             if (!_selectionController.IsImageCreated) return;
 
             var indexCollection = layersListBox.SelectedIndices;
-            if (indexCollection.Count > 2 ) 
+            if (indexCollection.Count != 2) 
             {
                 MessageBox.Show("Enter 2 images!", "Message");
                 return;
@@ -139,8 +139,22 @@ namespace PhotoChange
 
             if (glueImagesHelper.IsChanged)
             {
+                Bitmap resultImage;
+                if (glueImagesHelper.SecondImageOnTop)
+                {
+                    Bitmap temp = ImageHelper.ResizeImage(secondImage, (int)(secondImage.Width / glueImagesHelper.ScaleFactor.X), (int)(secondImage.Height / glueImagesHelper.ScaleFactor.Y));
+                    resultImage = new Bitmap(firstImage);
+                    ImageHelper.GlueImage(resultImage, temp, glueImagesHelper.GlueLocation);
+                }
+                else
+                {
+                    Bitmap temp = ImageHelper.ResizeImage(firstImage, (int)(firstImage.Width * glueImagesHelper.ScaleFactor.X), (int)(firstImage.Height * glueImagesHelper.ScaleFactor.Y));
+                    resultImage = new Bitmap(secondImage);
+                    ImageHelper.GlueImage(resultImage, temp, glueImagesHelper.GlueLocation);
+                }
+
                 _layers.Add(new Layer(
-                new ImageRenderer(glueImagesHelper.ResultImage),
+                new ImageRenderer(resultImage),
                 new ImageDrawing(),
                 new ImageInfo()
                 ));

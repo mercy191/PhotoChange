@@ -7,10 +7,9 @@ namespace PhotoChange.Controls
         public GlueImagesForm(GlueImagesHelper glueImagesHelper, Bitmap firstImage, Bitmap secondImage)
         {
             InitializeComponent();
-            //FirstImage = new Bitmap(firstImage);
-            //SecondImage = new Bitmap(secondImage);
-            FirstImage = ImageHelper.ResizeImage(firstImage, 1000, 1000);
-            SecondImage = ImageHelper.ResizeImage(secondImage, 1000, 1000);
+            ReductionCoefficient = new PointF(4.0f, 4.0f);
+            FirstImage = ImageHelper.ResizeImage(firstImage, (int)(firstImage.Width / ReductionCoefficient.X), (int)(firstImage.Height / ReductionCoefficient.Y));
+            SecondImage = ImageHelper.ResizeImage(secondImage, (int)(secondImage.Width / ReductionCoefficient.X), (int)(secondImage.Height / ReductionCoefficient.Y));
             GlueImagesHelper = glueImagesHelper;
             firstPictureBox.Image = FirstImage;
             secondPictureBox.Image = SecondImage;
@@ -84,16 +83,22 @@ namespace PhotoChange.Controls
             set => _glueLocation = value;
         }
 
-        public PointF ImageStep
+        public PointF ReductionCoefficient
         {
-            get => _imageStep;
-            set => _imageStep = value;
+            get => _reductionCoefficient;
+            set => _reductionCoefficient = value;
         }
 
-        public PointF ImageScale
+        public PointF Step
         {
-            get => _imageScale;
-            set => _imageScale = value;
+            get => _step;
+            set => _step = value;
+        }
+
+        public PointF ScaleFactor
+        {
+            get => _scaleFactor;
+            set => _scaleFactor = value;
         }
 
         public float FirstImageLineWidth
@@ -158,8 +163,9 @@ namespace PhotoChange.Controls
         private PointF _firstImageSecondPoint;
         private PointF _secondImageFirstPoint;
         private PointF _secondImageSecondPoint;
-        private PointF _imageStep;
-        private PointF _imageScale;
+        private PointF _reductionCoefficient;
+        private PointF _step;
+        private PointF _scaleFactor;
         private float _firstImageLineWidth;
         private float _fisrtImageLineHeight;
         private float _secondImageLineWidth;
@@ -208,25 +214,25 @@ namespace PhotoChange.Controls
         {
             if (FirstImageLineWidth > 0 && SecondImageLineWidth > 0)
             {
-                ImageScale = new PointF(SecondImageLineWidth / FirstImageLineWidth, SecondImageLineHeight / FirstImageLineHeight);
-                ImageStep = new PointF(0, 0);
+                ScaleFactor = new PointF(SecondImageLineWidth / FirstImageLineWidth, SecondImageLineHeight / FirstImageLineHeight);
+                Step = new PointF(0, 0);
                 VerticalExpension = 0;
                 HorizontalExpension = 0;
-                if (ImageScale.X > 1 && ImageScale.Y > 1)
+                if (ScaleFactor.X > 1 && ScaleFactor.Y > 1)
                 {
                     SecondImageOnTop = true;
-                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ImageScale.X), (int)(SecondImage.Height / ImageScale.Y));
-                    ImageStep = new PointF((FirstImage.Width - temp.Width) / 2, (FirstImage.Height - temp.Height) / 2);
-                    GlueLocation = new Point((int)ImageStep.X, (int)ImageStep.Y);
+                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ScaleFactor.X), (int)(SecondImage.Height / ScaleFactor.Y));
+                    Step = new PointF((FirstImage.Width - temp.Width) / 2, (FirstImage.Height - temp.Height) / 2);
+                    GlueLocation = new Point((int)Step.X, (int)Step.Y);
                     ResultImage = new Bitmap(FirstImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
                 else
                 {
                     SecondImageOnTop = false;
-                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ImageScale.X), (int)(FirstImage.Height * ImageScale.Y));
-                    ImageStep = new PointF((SecondImage.Width - temp.Width) / 2, (SecondImage.Height - temp.Height) / 2);
-                    GlueLocation = new Point((int)ImageStep.X, (int)ImageStep.Y);
+                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ScaleFactor.X), (int)(FirstImage.Height * ScaleFactor.Y));
+                    Step = new PointF((SecondImage.Width - temp.Width) / 2, (SecondImage.Height - temp.Height) / 2);
+                    GlueLocation = new Point((int)Step.X, (int)Step.Y);
                     ResultImage = new Bitmap(SecondImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
@@ -239,18 +245,18 @@ namespace PhotoChange.Controls
         {
             if (sender == leftIncreaseButton)
             {
-                ImageStep = new PointF(ImageStep.X - 1, ImageStep.Y);
-                GlueLocation = new Point((int)ImageStep.X, (int)ImageStep.Y);
+                Step = new PointF(Step.X - 1, Step.Y);
+                GlueLocation = new Point((int)Step.X, (int)Step.Y);
                 HorizontalExpension += 1;
                 if (SecondImageOnTop)
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ImageScale.X) + HorizontalExpension, (int)(SecondImage.Height / ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ScaleFactor.X) + HorizontalExpension, (int)(SecondImage.Height / ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(FirstImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
                 else
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ImageScale.X) + HorizontalExpension, (int)(FirstImage.Height * ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ScaleFactor.X) + HorizontalExpension, (int)(FirstImage.Height * ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(SecondImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
@@ -258,18 +264,18 @@ namespace PhotoChange.Controls
 
             else if (sender == leftReduceButton)
             {
-                ImageStep = new PointF(ImageStep.X + 1, ImageStep.Y);
-                GlueLocation = new Point((int)ImageStep.X, (int)ImageStep.Y);
+                Step = new PointF(Step.X + 1, Step.Y);
+                GlueLocation = new Point((int)Step.X, (int)Step.Y);
                 HorizontalExpension -= 1;
                 if (SecondImageOnTop)
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ImageScale.X) + HorizontalExpension, (int)(SecondImage.Height / ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ScaleFactor.X) + HorizontalExpension, (int)(SecondImage.Height / ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(FirstImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
                 else
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ImageScale.X) + HorizontalExpension, (int)(FirstImage.Height * ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ScaleFactor.X) + HorizontalExpension, (int)(FirstImage.Height * ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(SecondImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
@@ -277,18 +283,18 @@ namespace PhotoChange.Controls
 
             else if (sender == rightIncreaseButton)
             {
-                ImageStep = new PointF(ImageStep.X, ImageStep.Y);
-                GlueLocation = new Point((int)ImageStep.X, (int)ImageStep.Y);
+                Step = new PointF(Step.X, Step.Y);
+                GlueLocation = new Point((int)Step.X, (int)Step.Y);
                 HorizontalExpension += 1;
                 if (SecondImageOnTop)
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ImageScale.X) + HorizontalExpension, (int)(SecondImage.Height / ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ScaleFactor.X) + HorizontalExpension, (int)(SecondImage.Height / ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(FirstImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
                 else
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ImageScale.X) + HorizontalExpension, (int)(FirstImage.Height * ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ScaleFactor.X) + HorizontalExpension, (int)(FirstImage.Height * ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(SecondImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
@@ -296,18 +302,18 @@ namespace PhotoChange.Controls
 
             else if (sender == rightReduceButton)
             {
-                ImageStep = new PointF(ImageStep.X, ImageStep.Y);
-                GlueLocation = new Point((int)ImageStep.X, (int)ImageStep.Y);
+                Step = new PointF(Step.X, Step.Y);
+                GlueLocation = new Point((int)Step.X, (int)Step.Y);
                 HorizontalExpension -= 1;
                 if (SecondImageOnTop)
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ImageScale.X) + HorizontalExpension, (int)(SecondImage.Height / ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ScaleFactor.X) + HorizontalExpension, (int)(SecondImage.Height / ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(FirstImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
                 else
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ImageScale.X) + HorizontalExpension, (int)(FirstImage.Height * ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ScaleFactor.X) + HorizontalExpension, (int)(FirstImage.Height * ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(SecondImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
@@ -320,18 +326,18 @@ namespace PhotoChange.Controls
         {
             if (sender == upIncreaseButton)
             {
-                ImageStep = new PointF(ImageStep.X, ImageStep.Y - 1);
-                GlueLocation = new Point((int)ImageStep.X, (int)ImageStep.Y);
+                Step = new PointF(Step.X, Step.Y - 1);
+                GlueLocation = new Point((int)Step.X, (int)Step.Y);
                 VerticalExpension += 1;
                 if (SecondImageOnTop)
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ImageScale.X) + HorizontalExpension, (int)(SecondImage.Height / ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ScaleFactor.X) + HorizontalExpension, (int)(SecondImage.Height / ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(FirstImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
                 else
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ImageScale.X) + HorizontalExpension, (int)(FirstImage.Height * ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ScaleFactor.X) + HorizontalExpension, (int)(FirstImage.Height * ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(SecondImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
@@ -339,18 +345,18 @@ namespace PhotoChange.Controls
 
             else if (sender == upReduceButton)
             {
-                ImageStep = new PointF(ImageStep.X, ImageStep.Y + 1);
-                GlueLocation = new Point((int)ImageStep.X, (int)ImageStep.Y);
+                Step = new PointF(Step.X, Step.Y + 1);
+                GlueLocation = new Point((int)Step.X, (int)Step.Y);
                 VerticalExpension -= 1;
                 if (SecondImageOnTop)
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ImageScale.X) + HorizontalExpension, (int)(SecondImage.Height / ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ScaleFactor.X) + HorizontalExpension, (int)(SecondImage.Height / ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(FirstImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
                 else
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ImageScale.X) + HorizontalExpension, (int)(FirstImage.Height * ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ScaleFactor.X) + HorizontalExpension, (int)(FirstImage.Height * ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(SecondImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
@@ -358,18 +364,18 @@ namespace PhotoChange.Controls
 
             else if (sender == downIncreaseButton)
             {
-                ImageStep = new PointF(ImageStep.X, ImageStep.Y);
-                GlueLocation = new Point((int)ImageStep.X, (int)ImageStep.Y);
+                Step = new PointF(Step.X, Step.Y);
+                GlueLocation = new Point((int)Step.X, (int)Step.Y);
                 VerticalExpension += 1;
                 if (SecondImageOnTop)
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ImageScale.X) + HorizontalExpension, (int)(SecondImage.Height / ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ScaleFactor.X) + HorizontalExpension, (int)(SecondImage.Height / ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(FirstImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
                 else
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ImageScale.X) + HorizontalExpension, (int)(FirstImage.Height * ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ScaleFactor.X) + HorizontalExpension, (int)(FirstImage.Height * ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(SecondImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
@@ -377,18 +383,18 @@ namespace PhotoChange.Controls
 
             else if (sender == downReduceButton)
             {
-                ImageStep = new PointF(ImageStep.X, ImageStep.Y);
-                GlueLocation = new Point((int)ImageStep.X, (int)ImageStep.Y);
+                Step = new PointF(Step.X, Step.Y);
+                GlueLocation = new Point((int)Step.X, (int)Step.Y);
                 VerticalExpension -= 1;
                 if (SecondImageOnTop)
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ImageScale.X) + HorizontalExpension, (int)(SecondImage.Height / ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(SecondImage, (int)(SecondImage.Width / ScaleFactor.X) + HorizontalExpension, (int)(SecondImage.Height / ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(FirstImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
                 else
                 {
-                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ImageScale.X) + HorizontalExpension, (int)(FirstImage.Height * ImageScale.Y) + VerticalExpension);
+                    Bitmap temp = ImageHelper.ResizeImage(FirstImage, (int)(FirstImage.Width * ScaleFactor.X) + HorizontalExpension, (int)(FirstImage.Height * ScaleFactor.Y) + VerticalExpension);
                     ResultImage = new Bitmap(SecondImage);
                     ImageHelper.GlueImage(ResultImage, temp, GlueLocation);
                 }
@@ -399,12 +405,14 @@ namespace PhotoChange.Controls
 
         private void OKButton_Click(object sender, EventArgs e)
         {
-            GlueImagesHelper.ResultImage = new Bitmap(ResultImage);
+            GlueImagesHelper.GlueLocation = new Point((int)(GlueLocation.X * ReductionCoefficient.X), (int)(GlueLocation.Y * ReductionCoefficient.Y));
+            GlueImagesHelper.ScaleFactor = ScaleFactor;
+            GlueImagesHelper.SecondImageOnTop = SecondImageOnTop;
             GlueImagesHelper.IsChanged = true;
             Close();
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             Close();
         }
