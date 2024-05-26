@@ -1,4 +1,5 @@
 ﻿using PhotoChange.Common;
+using System.Security.Cryptography.Xml;
 
 namespace PhotoChange.Controls
 {
@@ -7,14 +8,18 @@ namespace PhotoChange.Controls
         public GlueImagesForm(GlueImagesHelper glueImagesHelper, Bitmap firstImage, Bitmap secondImage)
         {
             InitializeComponent();
-            ReductionCoefficient = new PointF(4.0f, 4.0f);
-            FirstImage = ImageHelper.ResizeImage(firstImage, (int)(firstImage.Width / ReductionCoefficient.X), (int)(firstImage.Height / ReductionCoefficient.Y));
-            SecondImage = ImageHelper.ResizeImage(secondImage, (int)(secondImage.Width / ReductionCoefficient.X), (int)(secondImage.Height / ReductionCoefficient.Y));
-            GlueImagesHelper = glueImagesHelper;
+            _reductionCoefficient = new PointF(4.0f, 4.0f);
+            _firstImage = ImageHelper.ResizeImage(firstImage, (int)(firstImage.Width / ReductionCoefficient.X), (int)(firstImage.Height / ReductionCoefficient.Y));
+            _secondImage = ImageHelper.ResizeImage(secondImage, (int)(secondImage.Width / ReductionCoefficient.X), (int)(secondImage.Height / ReductionCoefficient.Y));
+            _resultImage = new Bitmap(1, 1);
+            _glueImagesHelper = glueImagesHelper;
             firstPictureBox.Image = FirstImage;
             secondPictureBox.Image = SecondImage;
         }
 
+        /// <summary>
+        /// Stores one of the images.
+        /// </summary>
         public Bitmap FirstImage
         {
             get => _firstImage;
@@ -26,6 +31,9 @@ namespace PhotoChange.Controls
             }
         }
 
+        /// <summary>
+        /// Stores one of the images.
+        /// </summary>
         public Bitmap SecondImage
         {
             get => _secondImage;
@@ -37,6 +45,9 @@ namespace PhotoChange.Controls
             }
         }
 
+        /// <summary>
+        /// Final glued image.
+        /// </summary>
         public Bitmap ResultImage
         {
             get => _resultImage;
@@ -57,24 +68,36 @@ namespace PhotoChange.Controls
             set => _glueImagesHelper = value;
         }
 
+        /// <summary>
+        /// The first reference point.
+        /// </summary>
         public PointF FirstImageFirstPoint
         {
             get => _firstImageFirstPoint;
             set => _firstImageFirstPoint = value;
         }
 
+        /// <summary>
+        /// The second reference point
+        /// </summary>
         public PointF FirstImageSecondPoint
         {
             get => _firstImageSecondPoint;
             set => _firstImageSecondPoint = value;
         }
 
+        /// <summary>
+        /// The first reference point.
+        /// </summary>
         public PointF SecondImageFirstPoint
         {
             get => _secondImageFirstPoint;
             set => _secondImageFirstPoint = value;
         }
 
+        /// <summary>
+        /// The second reference point
+        /// </summary>
         public PointF SecondImageSecondPoint
         {
             get => _secondImageSecondPoint;

@@ -216,6 +216,8 @@ namespace PhotoChange.Renderer
         private float _widthRetreat;
         private float _heightRetreat;
         private float _rotateAngle;
+
+
         public void Dispose()
         {
             foreach (var item in _editList)
